@@ -1,0 +1,58 @@
+<server description="demo liberty server">
+    <featureManager>
+        <feature>cdi-4.0</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>jsonp-2.1</feature>
+        <feature>mpConfig-3.1</feature>
+        <feature>mpHealth-4.0</feature>
+        <feature>mpMetrics-5.1</feature>
+        <feature>restfulWS-3.1</feature>
+    </featureManager>
+
+    <variable name="http.port" defaultValue="9080"/>
+    <variable name="https.port" defaultValue="9443"/>
+
+    <mpMetrics authentication="false"/>
+
+    <httpEndpoint id       ="defaultHttpEndpoint"
+                  httpPort ="${default_http_port}"
+                  httpsPort="${default_https_port}"
+                  host     ="${default_host_name}"/>
+
+    <dataSource id           ="PostgresDS"
+                jndiName     ="jdbc/PostgresDS"
+                jdbcDriverRef="postgresql-driver"
+                type         ="javax.sql.ConnectionPoolDataSource"
+                transactional="true">
+        <properties serverName  ="${datasource_server_host}"
+                    portNumber  ="${datasource_server_port}"
+                    databaseName="${datasource_database}"
+                    user        ="${datasource_database_username}"
+                    password    ="${datasource_database_password}"/>
+    </dataSource>
+
+    <jdbcDriver id                                  ="postgresql-driver"
+                jakarta.sql.XADataSource            ="org.postgresql.xa.PGXADataSource"
+                jakarta.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"
+                libraryRef                          ="postgresql-driver-library"/>
+
+    <library id="postgresql-driver-library">
+        <fileset id      ="PostgreSQLFileset"
+                 dir     ="${shared_resource_dir}/"
+                 includes="${shared_resource_file}"/>
+    </library>
+
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true"/>
+
+    <variable name="io_openliberty_guides_system_inMaintenance" value="false"/>
+
+    <!-- configures the application on a specified context root -->
+    <webApplication contextRoot="/"
+                    location="ruu.app.demo.server.war"
+                    name="demo"/>
+
+    <!-- Default SSL configuration enables trust for default certificates from the Java runtime -->
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true"/>
+
+</server>
