@@ -1,12 +1,12 @@
-module ruu.app.demo.server
+module r.uu.app.demo.server
 {
-//	exports de.ruu.lib.cdi.common;
-//	opens   de.ruu.lib.cdi.common;
-
+	requires de.ruu.app.demo.common;
+	requires java.management;
+	requires microprofile.config.api;
+	requires microprofile.health.api;
 	requires microprofile.metrics.api;
-	requires jakarta.jakartaee.api;
-//	requires jakarta.ws.rs;
-//	requires lombok;
-//requires slf4j.api;
-//	requires org.slf4j;
+	requires jakarta.ws.rs;
+	requires jakarta.cdi;
+	requires microprofile.openapi.api;
+	requires de.ruu.lib.util;
 }

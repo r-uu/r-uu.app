@@ -5,16 +5,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>ruu.app.demo</artifactId>
+    <artifactId>r-uu.app-demo</artifactId>
     <packaging>pom</packaging>
 
     <parent>
-        <groupId>ruu</groupId>
-        <artifactId>ruu.app</artifactId>
+        <groupId>r-uu</groupId>
+        <artifactId>r-uu.app</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <modules>
+        <module>common</module>
+        <module>common.jpa.se</module>
         <module>client</module>
         <module>server</module>
     </modules>

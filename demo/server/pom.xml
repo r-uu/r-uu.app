@@ -5,36 +5,66 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ruu.app.demo.server</artifactId>
+	<artifactId>r-uu.app-demo-server</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<parent>
-		<groupId>ruu</groupId>
-		<artifactId>ruu.app.demo</artifactId>
+		<groupId>r-uu</groupId>
+		<artifactId>r-uu.maven-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../../../r-uu.maven-parent</relativePath>
 	</parent>
 
 	<properties>
 		<!-- overwrite possible definition of properties in parent modules -->
-		<maven.compiler.source></maven.compiler.source>
-		<maven.compiler.target></maven.compiler.target>
-		<maven.compiler.release>${java.version}</maven.compiler.release>
+<!--		<maven.compiler.source></maven.compiler.source>-->
+<!--		<maven.compiler.target></maven.compiler.target>-->
+<!--		<maven.compiler.release>${java.version}</maven.compiler.release>-->
 		<!-- Liberty configuration -->
 		<liberty.var.http.port>9080</liberty.var.http.port>
 		<liberty.var.https.port>9443</liberty.var.https.port>
 	</properties>
 
 	<dependencies>
+		<!-- Provided dependencies -->
+		<!-- IMPORTANT: Do _NOT_ include jakarta.jakartaee-api and microprofile dependencies. This will end up in a
+		     nightmare of split packages and so on if java module system (JPMS) is in charge.
+		 -->
+<!--		<dependency>-->
+<!--			<groupId>jakarta.platform</groupId>-->
+<!--			<artifactId>jakarta.jakartaee-api</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.eclipse.microprofile</groupId>-->
+<!--			<artifactId>microprofile</artifactId>-->
+<!--			<type>pom</type>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>jakarta.platform</groupId>
-			<artifactId>jakarta.jakartaee-api</artifactId>
+			<groupId>jakarta.enterprise</groupId>
+			<artifactId>jakarta.enterprise.cdi-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.microprofile</groupId>
-			<artifactId>microprofile</artifactId>
-			<type>pom</type>
+			<groupId>org.eclipse.microprofile.health</groupId>
+			<artifactId>microprofile-health-api</artifactId>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>org.eclipse.microprofile.metrics</groupId>
+			<artifactId>microprofile-metrics-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.microprofile.openapi</groupId>
+			<artifactId>microprofile-openapi-api</artifactId>
+		</dependency>
+
+		<!-- own dependencies -->
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-demo-common</artifactId>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -43,14 +73,15 @@
 			<plugin>
 				<groupId>io.openliberty.tools</groupId>
 				<artifactId>liberty-maven-plugin</artifactId>
-				<version>3.10.2</version>
+				<version>3.10.3</version>
 				<configuration>
+					<jvmOptions>--enable-preview</jvmOptions>
 					<copyDependencies>
 						<location>${project.build.directory}/liberty/wlp/usr/shared/resources</location>
 						<dependency>
 							<groupId>org.postgresql</groupId>
 							<artifactId>postgresql</artifactId>
-							<version>42.5.0</version>
+<!--							<version>42.7.3</version>-->
 						</dependency>
 					</copyDependencies>
 				</configuration>
@@ -58,6 +89,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
