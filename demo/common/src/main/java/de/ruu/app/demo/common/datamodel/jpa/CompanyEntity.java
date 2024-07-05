@@ -84,6 +84,7 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	public void beforeMapping(@NonNull CompanyDTO input)
 	{
 		log.debug("before mapping starting");
+		super.beforeMapping(input);
 		if (input.optionalDepartments().isPresent())
 				input.optionalDepartments().get().forEach(e -> add(e.toSource()));
 		name(input.name());

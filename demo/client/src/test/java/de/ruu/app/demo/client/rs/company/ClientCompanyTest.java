@@ -61,7 +61,7 @@ class ClientCompanyTest
 			assertThat(dto.name(), is(name));
 
 			assertThat(dto.version(), is(not(nullValue())));
-			assertThat(dto.version(), is((short) 1       ));
+			assertThat(dto.version(), is((short) 0       ));
 
 			assertThat(dto.optionalDepartments()            , is(not(nullValue())));
 			assertThat(dto.optionalDepartments().isPresent(), is(false));
@@ -95,7 +95,7 @@ class ClientCompanyTest
 			assertThat(dto.name(), is(name));
 
 			assertThat(dto.version(), is(not(nullValue())));
-			assertThat(dto.version(), is((short) 1       ));
+			assertThat(dto.version(), is((short) 0       ));
 
 			assertThat(dto.optionalDepartments()            , is(not(nullValue())));
 			assertThat(dto.optionalDepartments().isPresent(), is(false));

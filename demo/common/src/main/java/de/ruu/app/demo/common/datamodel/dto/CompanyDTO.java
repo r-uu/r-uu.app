@@ -55,6 +55,7 @@ public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Comp
 
 	@Override public void beforeMapping(@NonNull CompanyEntity input)
 	{
+		super.beforeMapping(input);
 		if (input.optionalDepartments().isPresent())
 				input.optionalDepartments().get().forEach(d -> add(d.toTarget()));
 		name(input.name());

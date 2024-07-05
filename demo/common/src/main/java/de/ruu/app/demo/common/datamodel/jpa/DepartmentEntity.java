@@ -77,6 +77,7 @@ public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implem
 	@Override public void beforeMapping(@NonNull DepartmentDTO input)
 	{
 		log.debug("before mapping starting");
+		super.beforeMapping(input);
 		name(input.name());
 		log.debug("before mapping finished");
 	}

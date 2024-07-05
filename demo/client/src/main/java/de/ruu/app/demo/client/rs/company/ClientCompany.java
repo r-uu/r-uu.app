@@ -68,7 +68,7 @@ public class ClientCompany implements CompanyService<Company>
 		log.debug("host          : {}", host);
 		log.debug("port          : {}", port);
 		log.debug("schemaHostPort: {}", schemaHostPort);
-		log.debug("uriDocuments  : {}", uri);
+		log.debug("uri           : {}", uri);
 
 		client = ClientBuilder.newClient();
 		client.register(new JsonbConfigurator());
@@ -95,15 +95,24 @@ public class ClientCompany implements CompanyService<Company>
 
 	@Override public Optional<Company> read(Long id)
 	{
-		WebTarget target   = client.target(Paths.BY_ID);
+		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().get();
 
-		if (not(response.getStatus() == Status.OK.getStatusCode()))
+		int status = response.getStatus();
+
+		if (status == Status.OK.getStatusCode())
 		{
-			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + target.getUri(), response);
+			return Optional.of(response.readEntity(CompanyDTO.class));
+		}
+		else if (status == Status.NOT_FOUND.getStatusCode())
+		{
+			return Optional.empty();
+		}
+		else
+		{
+			throw new RestClientCallException(UNEXPECTED_STATUS + status + "\nuri: " + target.getUri(), response);
 		}
 
-		return Optional.of(response.readEntity(CompanyDTO.class));
 	}
 
 	@Override public Company update(Company company)
@@ -120,7 +129,7 @@ public class ClientCompany implements CompanyService<Company>
 
 	@Override public void delete(Long id)
 	{
-		WebTarget target   = client.target(Paths.BY_ID);
+		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().delete();
 
 		if (not(response.getStatus() == Status.OK.getStatusCode()))
@@ -143,7 +152,7 @@ public class ClientCompany implements CompanyService<Company>
 
 	@Override public Optional<Company> findWithDepartments(Long id)
 	{
-		WebTarget target   = client.target(Paths.BY_ID_WITH_DEPARTMENTS);
+		WebTarget target   = client.target(uri + Paths.BY_ID_WITH_DEPARTMENTS);
 		Response  response = target.resolveTemplate("id", id).request().get();
 
 		if (not(response.getStatus() == Status.OK.getStatusCode()))

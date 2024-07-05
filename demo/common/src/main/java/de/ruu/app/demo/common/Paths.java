@@ -8,5 +8,5 @@ public interface Paths
 
 	String COMPANY                = "/company";
 	String BY_ID                  = "/{id}";
-	String BY_ID_WITH_DEPARTMENTS = "/{id}/optionalDepartments";
+	String BY_ID_WITH_DEPARTMENTS = BY_ID + "/optionalDepartments";
 }

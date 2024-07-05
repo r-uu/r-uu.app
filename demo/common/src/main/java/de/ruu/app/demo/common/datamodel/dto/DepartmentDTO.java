@@ -60,6 +60,7 @@ public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implement
 	@Override public void beforeMapping(@NonNull DepartmentEntity input)
 	{
 		log.debug("before mapping starting");
+		super.beforeMapping(input);
 		name(input.name());
 		log.debug("before mapping finished");
 	}
