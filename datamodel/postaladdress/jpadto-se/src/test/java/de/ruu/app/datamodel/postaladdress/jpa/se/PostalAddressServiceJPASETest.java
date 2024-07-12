@@ -1,9 +1,9 @@
 package de.ruu.app.datamodel.postaladdress.jpa.se;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
-import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
 import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
 import de.ruu.lib.cdi.common.CDIExtension;
+import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.jpa.se.TransactionalInterceptorCDI;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.se.SeContainer;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 		propertyNamePort = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbport"
 )
 @Slf4j
-class ClientPostalAddressTest
+class PostalAddressServiceJPASETest
 {
 	private static SeContainer seContainer; // initialisation and closure handled in before/after all methods
 
@@ -46,8 +46,10 @@ class ClientPostalAddressTest
 							.newInstance()
 							.addExtensions     (CDIExtension.class               )
 							.addBeanClasses    (TransactionalInterceptorCDI.class)
+							.addBeanClasses    (EntityManagerProducer.class      )
 							.enableInterceptors(TransactionalInterceptorCDI.class)
 							.initialize();
+			CDIContainer.bootstrap(PostalAddressServiceJPASETest.class.getClassLoader());
 		}
 		catch (Exception e)
 		{
@@ -76,12 +78,12 @@ class ClientPostalAddressTest
 
 		assertThat(all, is(not(nullValue())));
 
-		log.info("\nreceived {} tag groups", all.size());
+		log.info("\nreceived {} postal addresses", all.size());
 	}
 
 	@Test void testCreate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		PostalAddress postalAddress =
 				service.create(
@@ -92,15 +94,15 @@ class ClientPostalAddressTest
 
 		log.info("\nreceived postalAddress\n{}", postalAddress);
 
-		if (postalAddress instanceof PostalAddressDTO)
+		if (postalAddress instanceof PostalAddressEntity)
 		{
-			PostalAddressDTO dto = (PostalAddressDTO) postalAddress;
+			PostalAddressEntity entity = (PostalAddressEntity) postalAddress;
 
-			assertThat(dto.id  (), is(not(nullValue())));
-			assertThat(dto.city(), is(name));
+			assertThat(entity.id  (), is(not(nullValue())));
+			assertThat(entity.city(), is(name));
 
-			assertThat(dto.version(), is(not(nullValue())));
-			assertThat(dto.version(), is((short) 0       ));
+			assertThat(entity.version(), is(not(nullValue())));
+			assertThat(entity.version(), is((short) 0       ));
 		}
 		else
 		{
@@ -110,7 +112,7 @@ class ClientPostalAddressTest
 
 	@Test void testRead()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		PostalAddress postalAddressIn =
 				service.create(
@@ -151,7 +153,7 @@ class ClientPostalAddressTest
 
 	@Test void testUpdate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		PostalAddressEntity postalAddressIn = service.create(PostalAddressEntity.builder().city(name).build());
 
@@ -182,7 +184,7 @@ class ClientPostalAddressTest
 
 	@Test void testDelete()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		PostalAddressEntity postalAddress = service.create(PostalAddressEntity.builder().city(name).build());;
 

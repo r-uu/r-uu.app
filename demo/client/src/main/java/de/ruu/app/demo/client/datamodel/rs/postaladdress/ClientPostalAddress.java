@@ -1,10 +1,9 @@
-package company;
+package de.ruu.app.demo.client.datamodel.rs.postaladdress;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.PostalAddressService;
-import de.ruu.app.demo.common.Company;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
 import de.ruu.app.demo.common.Paths;
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
 import de.ruu.lib.util.jsonb.JsonbConfigurator;
 import de.ruu.lib.util.rs.RestClientCallException;
 import de.ruu.lib.util.rs.filter.logging.ClientRequestLoggingFilter;
@@ -55,7 +54,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 	{
 		String schemaHostPort = scheme + "://" + host + ":" + port;
 
-		uri = URI.create(schemaHostPort + Paths.DEMO + Paths.COMPANY);
+		uri = URI.create(schemaHostPort + Paths.DEMO + Paths.POSTAL_ADDRESS);
 
 		log.debug("scheme        : {}", scheme);
 		log.debug("host          : {}", host);
@@ -86,7 +85,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		return response.readEntity(PostalAddressDTO.class);
 	}
 
-	@Override public Optional<Company> read(Long id)
+	@Override public Optional<PostalAddress> read(Long id)
 	{
 		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().get();
@@ -95,7 +94,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 
 		if (status == Status.OK.getStatusCode())
 		{
-			return Optional.of(response.readEntity(CompanyDTO.class));
+			return Optional.of(response.readEntity(PostalAddressDTO.class));
 		}
 		else if (status == Status.NOT_FOUND.getStatusCode())
 		{
@@ -108,16 +107,16 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 
 	}
 
-	@Override public Company update(Company company)
+	@Override public PostalAddress update(PostalAddress postalAddress)
 	{
-		Response response = client.target(uri).request().put(Entity.entity(company, APPLICATION_JSON));
+		Response response = client.target(uri).request().put(Entity.entity(postalAddress, APPLICATION_JSON));
 
 		if (not(response.getStatus() == Status.OK.getStatusCode()))
 		{
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + uri, response);
 		}
 
-		return response.readEntity(CompanyDTO.class);
+		return response.readEntity(PostalAddressDTO.class);
 	}
 
 	@Override public void delete(Long id)
@@ -131,7 +130,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		}
 	}
 
-	@Override public Set<Company> findAll()
+	@Override public Set<PostalAddress> findAll()
 	{
 		Response response = client.target(uri).request().get();
 
@@ -140,19 +139,6 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + uri, response);
 		}
 
-		return new HashSet<>(response.readEntity(new GenericType<HashSet<CompanyDTO>>() {}));
-	}
-
-	@Override public Optional<Company> findWithDepartments(Long id)
-	{
-		WebTarget target   = client.target(uri + Paths.BY_ID_WITH_DEPARTMENTS);
-		Response  response = target.resolveTemplate("id", id).request().get();
-
-		if (not(response.getStatus() == Status.OK.getStatusCode()))
-		{
-			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + target.getUri(), response);
-		}
-
-		return Optional.of(response.readEntity(CompanyDTO.class));
+		return new HashSet<>(response.readEntity(new GenericType<HashSet<PostalAddressDTO>>() {}));
 	}
 }

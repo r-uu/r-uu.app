@@ -17,6 +17,7 @@
 
   <modules>
     <module>demo</module>
+      <module>datamodel</module>
   </modules>
 
 </project>

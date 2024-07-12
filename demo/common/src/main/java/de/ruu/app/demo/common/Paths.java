@@ -2,11 +2,20 @@ package de.ruu.app.demo.common;
 
 public interface Paths
 {
-	String DEMO    = "/demo";
+	/** general purpose constants */
+	String BY_ID = "/{id}";
 
-	String SYSTEM  = "/system";
+	/** constants for demo domain */
+	String DEMO = "/demo";
 
+	/** constants for company domain */
 	String COMPANY                = "/company";
-	String BY_ID                  = "/{id}";
 	String BY_ID_WITH_DEPARTMENTS = BY_ID + "/optionalDepartments";
+
+	/** constants for datamodel domain */
+	String DATAMODEL      = "/datamodel";
+	String POSTAL_ADDRESS = DATAMODEL + "/postaladdress";
+
+	/** constants for system domain */
+	String SYSTEM  = "/system";
 }

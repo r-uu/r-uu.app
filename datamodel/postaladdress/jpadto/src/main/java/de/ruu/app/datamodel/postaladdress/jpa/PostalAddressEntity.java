@@ -1,8 +1,8 @@
-package de.ruu.app.datamodel.postaladdress.jpadto.jpa;
+package de.ruu.app.datamodel.postaladdress.jpa;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.jpadto.Mapper;
-import de.ruu.app.datamodel.postaladdress.jpadto.dto.PostalAddressDTO;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Entity
-@Table(name = "postal_address", schema = "test")
+@Table(name = "postal_address", schema = "demo_test")
 @Getter
 @Setter
 @Accessors(fluent = true) // generate fluent style getters but also implement java bean style getters

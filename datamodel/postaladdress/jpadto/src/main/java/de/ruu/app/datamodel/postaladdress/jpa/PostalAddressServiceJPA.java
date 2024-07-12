@@ -1,4 +1,4 @@
-package de.ruu.app.datamodel.postaladdress.jpadto.jpa;
+package de.ruu.app.datamodel.postaladdress.jpa;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddressService;
 

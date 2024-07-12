@@ -1,19 +1,19 @@
 package de.ruu.app.datamodel.company.jpa.se;
 
-import de.ruu.app.datamodel.postaladdress.PostalAddress;
-import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
+import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.jpa.CompanyEntity;
 import de.ruu.lib.cdi.common.CDIExtension;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.jpa.se.TransactionalInterceptorCDI;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
-import jakarta.enterprise.inject.se.SeContainer;
-import jakarta.enterprise.inject.se.SeContainerInitializer;
+import jakarta.enterprise.inject.spi.CDI;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,181 +29,176 @@ import static org.junit.jupiter.api.Assertions.fail;
 		propertyNamePort = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbport"
 )
 @Slf4j
-class PostalAddressServiceJPASETest
+class CompanyServiceJPASETest
 {
-	private static SeContainer seContainer; // initialisation and closure handled in before/after all methods
+//	private static SeContainer seContainer; // initialisation and closure handled in before/after all methods
 
-	private PostalAddressServiceJPASE service; // initialisation handled in before each method
+	private CompanyServiceJPASE service; // initialisation handled in before each method
 
 	@SuppressWarnings("unchecked")
 	@BeforeAll static void beforeAll()
 	{
 		log.debug("cdi container initialisation");
-		try
-		{
-			seContainer =
-					SeContainerInitializer
-							.newInstance()
-							.addExtensions     (CDIExtension.class               )
-							.addBeanClasses    (TransactionalInterceptorCDI.class)
-							.addBeanClasses    (EntityManagerProducer.class      )
-							.enableInterceptors(TransactionalInterceptorCDI.class)
-							.initialize();
-			CDIContainer.bootstrap(PostalAddressServiceJPASETest.class.getClassLoader());
-		}
-		catch (Exception e)
-		{
-			log.error("failure initialising seContainer", e);
-		}
-		log.debug("cdi container initialisation {}", seContainer == null ? "unsuccessful" : "successful");
+		CDIContainer.bootstrap
+				(
+						  CompanyServiceJPASETest.class.getClassLoader()
+						, List.of(TransactionalInterceptorCDI.class)
+						, List.of(CDIExtension.class)
+				);
+//		try
+//		{
+//			seContainer =
+//					SeContainerInitializer
+//							.newInstance()
+//							.addExtensions     (CDIExtension.class               )
+//							.addBeanClasses    (TransactionalInterceptorCDI.class)
+//							.addBeanClasses    (EntityManagerProducer.class      )
+//							.enableInterceptors(TransactionalInterceptorCDI.class)
+//							.initialize();
+//		}
+//		catch (Exception e)
+//		{
+//			log.error("failure initialising seContainer", e);
+//		}
+//		log.debug("cdi container initialisation {}", seContainer == null ? "unsuccessful" : "successful");
 	}
 
 	@AfterAll
 	static void afterAll()
 	{
-		log.debug("cdi container shut down");
-		seContainer.close();
-		log.debug("cdi container shut down {}", seContainer.isRunning() ? "unsuccessful" : "successful");
+//		log.debug("cdi container shut down");
+//		seContainer.close();
+//		log.debug("cdi container shut down {}", seContainer.isRunning() ? "unsuccessful" : "successful");
 	}
 
 	@BeforeEach
 	void beforeEach()
 	{
-		service = seContainer.select(PostalAddressServiceJPASE.class).get();
+		service = CDI.current().select(CompanyServiceJPASE.class).get();
 	}
 
 	@Test void testFindAll()
 	{
-		Set<PostalAddressEntity> all = service.findAll();
+		Set<CompanyEntity> all = service.findAll();
 
 		assertThat(all, is(not(nullValue())));
 
-		log.info("\nreceived {} tag groups", all.size());
+		log.info("\nreceived {} companies", all.size());
 	}
 
 	@Test void testCreate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
-		PostalAddress postalAddress =
-				service.create(
-						PostalAddressEntity
-								.builder()
-										.city(name)
-								.build());
+		Company company = service.create(new CompanyEntity(name));
 
-		log.info("\nreceived postalAddress\n{}", postalAddress);
+		log.info("\nreceived company\n{}", company);
 
-		if (postalAddress instanceof PostalAddressEntity)
+		if (company instanceof CompanyEntity)
 		{
-			PostalAddressEntity entity = (PostalAddressEntity) postalAddress;
+			CompanyEntity entity = (CompanyEntity) company;
 
 			assertThat(entity.id  (), is(not(nullValue())));
-			assertThat(entity.city(), is(name));
+			assertThat(entity.name(), is(name));
 
 			assertThat(entity.version(), is(not(nullValue())));
 			assertThat(entity.version(), is((short) 0       ));
 		}
 		else
 		{
-			fail("unexpected type: " + postalAddress.getClass().getName());
+			fail("unexpected type: " + company.getClass().getName());
 		}
 	}
 
 	@Test void testRead()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
-		PostalAddress postalAddressIn =
-				service.create(
-						PostalAddressEntity
-								.builder()
-								.city(name)
-								.build());
+		Company companyIn = service.create(new CompanyEntity(name));
 
-		if (postalAddressIn instanceof PostalAddressEntity)
+		if (companyIn instanceof CompanyEntity)
 		{
-			PostalAddressEntity entity = (PostalAddressEntity) postalAddressIn;
+			CompanyEntity entity = (CompanyEntity) companyIn;
 
-			Optional<PostalAddressEntity> optional = service.read(entity.id());
+			Optional<CompanyEntity> optional = service.read(entity.id());
 
 			assertThat(optional            , is(not(nullValue())));
 			assertThat(optional.isPresent(), is(not(false)));
 
-			PostalAddress postalAddressOut = optional.get();
+			CompanyEntity entityOut = optional.get();
 
-			log.info("\nreceived postal address\n{}" + postalAddressOut);
+			log.info("\nreceived company\n{}" + entityOut);
 
-			if (postalAddressOut instanceof PostalAddressEntity)
+			if (entityOut instanceof CompanyEntity)
 			{
-				entity = (PostalAddressEntity) postalAddressOut;
+				entity = (CompanyEntity) entityOut;
 
 				assertThat(entity.id  (), is(not(nullValue())));
-				assertThat(entity.city(), is(name));
+				assertThat(entity.name(), is(name));
 
 				assertThat(entity.version(), is(not(nullValue())));
 				assertThat(entity.version(), is((short) 0       ));
 			}
 			else
 			{
-				fail("unexpected type: " + postalAddressOut.getClass().getName());
+				fail("unexpected type: " + entityOut.getClass().getName());
 			}
 		}
 	}
 
 	@Test void testUpdate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
-		PostalAddressEntity postalAddressIn = service.create(PostalAddressEntity.builder().city(name).build());
+		CompanyEntity companyIn = service.create(new CompanyEntity(name));
 
 		name = "modified " + System.currentTimeMillis();
 
-		postalAddressIn.setCity(name);
+		companyIn.name(name);
 
-		PostalAddress postalAddressOut = service.update(postalAddressIn);
+		Company companyOut = service.update(companyIn);
 
-		log.info("\nreceived postal address\n{}" + postalAddressOut);
+		log.info("\nreceived company\n{}" + companyOut);
 
-		if (postalAddressOut instanceof PostalAddressEntity)
+		if (companyOut instanceof CompanyEntity)
 		{
-			PostalAddressEntity entity = (PostalAddressEntity) postalAddressOut;
+			CompanyEntity entity = (CompanyEntity) companyOut;
 
 			assertThat(entity.id(), is(not(nullValue())));
 
 			assertThat(entity.version(), is(not(nullValue())));
 			assertThat(entity.version(), is((short) 1       ));
 
-			assertThat(entity.city(), is(name));
+			assertThat(entity.name(), is(name));
 		}
 		else
 		{
-			fail("unexpected type: " + postalAddressOut.getClass().getName());
+			fail("unexpected type: " + companyOut.getClass().getName());
 		}
 	}
 
 	@Test void testDelete()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
-		PostalAddressEntity postalAddress = service.create(PostalAddressEntity.builder().city(name).build());;
+		Company company = service.create(new CompanyEntity(name));
 
-		log.info("\nreceived postal address\n{}", postalAddress);
+		log.info("\nreceived company\n{}", company);
 
-		if (postalAddress instanceof PostalAddressEntity)
+		if (company instanceof CompanyEntity)
 		{
-			PostalAddressEntity entity = (PostalAddressEntity) postalAddress;
+			CompanyEntity entity = (CompanyEntity) company;
 
 			service.delete(entity.id());
 
-			Optional<PostalAddressEntity> optional = service.read(entity.id());
+			Optional<CompanyEntity> optional = service.read(entity.id());
 
 			assertThat(optional            , is(not(nullValue())));
 			assertThat(optional.isPresent(), is(false));
 		}
 		else
 		{
-			fail("unexpected type: " + postalAddress.getClass().getName());
+			fail("unexpected type: " + company.getClass().getName());
 		}
 	}
 }

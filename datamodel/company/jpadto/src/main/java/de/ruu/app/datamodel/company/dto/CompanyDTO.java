@@ -1,11 +1,12 @@
-package de.ruu.app.demo.common.datamodel.dto;
+package de.ruu.app.datamodel.company.dto;
 
-import de.ruu.app.demo.common.Company;
-import de.ruu.app.demo.common.Department;
-import de.ruu.app.demo.common.datamodel.Mapper;
-import de.ruu.app.demo.common.datamodel.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.Department;
+import de.ruu.app.datamodel.company.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -33,13 +32,13 @@ import static lombok.AccessLevel.PROTECTED;
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
 @RequiredArgsConstructor
-@NoArgsConstructor(access = PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
 public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Company
 {
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
-	@Setter(NONE)
+	@Setter(AccessLevel.NONE)
 	private String name;
 
 	/**
@@ -49,7 +48,7 @@ public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Comp
 	 */
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@Getter(NONE)
+	@Getter(AccessLevel.NONE)
 	private Set<DepartmentDTO> departments;
 
 	@Override public void beforeMapping(@NonNull CompanyEntity input)

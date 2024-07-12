@@ -1,4 +1,4 @@
-package de.ruu.app.demo.common;
+package de.ruu.app.datamodel.company;
 
 import java.util.Optional;
 import java.util.Set;

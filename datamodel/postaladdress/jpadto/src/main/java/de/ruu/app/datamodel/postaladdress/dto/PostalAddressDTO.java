@@ -1,9 +1,8 @@
-package de.ruu.app.datamodel.postaladdress.jpadto.dto;
+package de.ruu.app.datamodel.postaladdress.dto;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.jpadto.Mapper;
-import de.ruu.app.datamodel.postaladdress.jpadto.jpa.PostalAddressEntity;
-import de.ruu.lib.jpa.core.AbstractDTO;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
 
 @Slf4j
 @Getter

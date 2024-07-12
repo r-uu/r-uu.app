@@ -1,9 +1,8 @@
-package de.ruu.app.demo.common.datamodel.jpa;
+package de.ruu.app.datamodel.company.jpa;
 
-import de.ruu.app.demo.common.Company;
-import de.ruu.app.demo.common.Department;
-import de.ruu.app.demo.common.datamodel.Mapper;
-import de.ruu.app.demo.common.datamodel.dto.DepartmentDTO;
+import de.ruu.app.datamodel.company.Department;
+import de.ruu.app.datamodel.company.dto.DepartmentDTO;
+import de.ruu.app.datamodel.company.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedEntity;
 import de.ruu.lib.util.Strings;
 import jakarta.persistence.Column;
@@ -11,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +20,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
-
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Slf4j
@@ -30,7 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
                           // @Getter(AccessLevel.NONE}))
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
-@NoArgsConstructor(access = PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
 @Entity
 @Table(schema = "test", name = "department")
 public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implements Department
@@ -38,7 +35,7 @@ public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implem
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
-	@Setter(NONE)
+	@Setter(AccessLevel.NONE)
 	@Column(unique=true, nullable=false)
 	private String name;
 

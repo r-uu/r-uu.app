@@ -1,4 +1,4 @@
-package de.ruu.app.datamodel.postaladdress.jpa.se;
+package de.ruu.app.datamodel.postaladdress.jpa.se.se;
 
 import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
 import de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer;

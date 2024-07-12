@@ -1,15 +1,14 @@
-package de.ruu.app.demo.common;
+package de.ruu.app.datamodel.postaladdress;
 
 import java.util.Optional;
 import java.util.Set;
 
-public interface CompanyService<C extends Company>
+public interface PostalAddressService<A extends PostalAddress>
 {
-	C           create(C company);
-	Optional<C> read(Long id);
-	C           update(C company);
+	A           create(A address);
+	Optional<A> read(Long id);
+	A           update(A company);
 	void        delete(Long id);
 
-	Set<C>      findAll();
-	Optional<C> findWithDepartments(Long id);
+	Set<A>      findAll();
 }

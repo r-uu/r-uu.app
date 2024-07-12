@@ -1,7 +1,7 @@
-package de.ruu.app.datamodel.postaladdress.jpadto.jpa.ee;
+package de.ruu.app.datamodel.postaladdress.jpa.ee;
 
-import de.ruu.app.datamodel.postaladdress.jpadto.jpa.PostalAddressEntity;
-import de.ruu.app.datamodel.postaladdress.jpadto.jpa.PostalAddressServiceJPA;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressServiceJPA;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,7 +23,7 @@ public class PostalAddressServiceJPAEE implements PostalAddressServiceJPA
 	@PostConstruct
 	private void postConstruct() { log.debug("injected repository: {}", repository); }
 
-	@Override public          PostalAddressEntity  create(PostalAddressEntity entity) { return repository.save  (entity); }
+	@Override public PostalAddressEntity create(PostalAddressEntity entity) { return repository.save  (entity); }
 	@Override public Optional<PostalAddressEntity> read  (Long id)                    { return repository.find  (id);     }
 	@Override public          PostalAddressEntity  update(PostalAddressEntity entity) { return repository.save  (entity); }
 	@Override public void                          delete(Long id)                    {        repository.delete(id);     }

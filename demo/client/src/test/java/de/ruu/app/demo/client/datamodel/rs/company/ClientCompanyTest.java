@@ -1,7 +1,7 @@
-package de.ruu.app.demo.client.rs.company;
+package de.ruu.app.demo.client.datamodel.rs.company;
 
-import de.ruu.app.demo.common.Company;
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
+import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.dto.CompanyDTO;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.spi.CDI;
@@ -46,7 +46,7 @@ class ClientCompanyTest
 
 	@Test void testCreate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		Company company = client.create(new CompanyDTO(name));
 
@@ -73,7 +73,7 @@ class ClientCompanyTest
 
 	@Test void testRead()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String name = "name " + System.currentTimeMillis();
 
 		Company companyIn = client.create(new CompanyDTO(name));
 
@@ -107,7 +107,7 @@ class ClientCompanyTest
 
 	@Test void testUpdate()
 	{
-		Company companyIn = client.create(new CompanyDTO("de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis()));
+		Company companyIn = client.create(new CompanyDTO("name " + System.currentTimeMillis()));
 
 		String name = "modified " + System.currentTimeMillis();
 
@@ -139,7 +139,7 @@ class ClientCompanyTest
 
 	@Test void testDelete()
 	{
-		Company company = client.create(new CompanyDTO("de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis()));
+		Company company = client.create(new CompanyDTO("name " + System.currentTimeMillis()));
 
 		log.info("\nreceived company\n{}", company);
 

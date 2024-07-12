@@ -1,4 +1,17 @@
-package de.ruu.app.demo.client.rs.company;
+package de.ruu.app.demo.client.datamodel.rs.postaladdress;
+
+import de.ruu.app.datamodel.postaladdress.PostalAddress;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
+import de.ruu.lib.cdi.se.CDIContainer;
+import de.ruu.lib.junit.DisabledOnServerNotListening;
+import jakarta.enterprise.inject.spi.CDI;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -6,39 +19,25 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.Optional;
-import java.util.Set;
-
-import de.ruu.app.demo.common.Company;
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
-import de.ruu.lib.junit.DisabledOnServerNotListening;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import de.ruu.lib.cdi.se.CDIContainer;
-import jakarta.enterprise.inject.spi.CDI;
-import lombok.extern.slf4j.Slf4j;
-
-@DisabledOnServerNotListening(propertyNameHost = "company.rest-api.host", propertyNamePort = "company.rest-api.port")
+@DisabledOnServerNotListening(propertyNameHost = "postal-address.rest-api.host", propertyNamePort = "postal-address.rest-api.port")
 @Slf4j
-class ClientCompanyTest
+class ClientPostalAddressTest
 {
-	private ClientCompany client;
+	private ClientPostalAddress client;
 
 	@BeforeAll static void beforeAll()
 	{
-		CDIContainer.bootstrap(ClientCompanyTest.class.getClassLoader());
+		CDIContainer.bootstrap(ClientPostalAddressTest.class.getClassLoader());
 	}
 
 	@BeforeEach void beforeEach()
 	{
-		client = CDI.current().select(ClientCompany.class).get();
+		client = CDI.current().select(ClientPostalAddress.class).get();
 	}
 
 	@Test void testFindAll()
 	{
-		Set<Company> all = client.findAll();
+		Set<PostalAddress> all = client.findAll();
 
 		assertThat(all, is(not(nullValue())));
 
@@ -49,26 +48,28 @@ class ClientCompanyTest
 	{
 		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
 
-		Company company = client.create(new CompanyDTO(name));
+		PostalAddress postalAddress =
+				client.create(
+						PostalAddressDTO
+								.builder()
+										.city(name)
+								.build());
 
-		log.info("\nreceived company\n{}", company);
+		log.info("\nreceived postalAddress\n{}", postalAddress);
 
-		if (company instanceof CompanyDTO)
+		if (postalAddress instanceof PostalAddressDTO)
 		{
-			CompanyDTO dto = (CompanyDTO) company;
+			PostalAddressDTO dto = (PostalAddressDTO) postalAddress;
 
 			assertThat(dto.id  (), is(not(nullValue())));
-			assertThat(dto.name(), is(name));
+			assertThat(dto.city(), is(name));
 
 			assertThat(dto.version(), is(not(nullValue())));
 			assertThat(dto.version(), is((short) 0       ));
-
-			assertThat(dto.optionalDepartments()            , is(not(nullValue())));
-			assertThat(dto.optionalDepartments().isPresent(), is(false));
 		}
 		else
 		{
-			fail("unexpected type: " + company.getClass().getName());
+			fail("unexpected type: " + postalAddress.getClass().getName());
 		}
 	}
 
@@ -76,79 +77,96 @@ class ClientCompanyTest
 	{
 		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
 
-		Company companyIn = client.create(new CompanyDTO(name));
+		PostalAddress postalAddressIn =
+				client.create(
+						PostalAddressDTO
+								.builder()
+								.city(name)
+								.build());
 
-		Optional<Company> optional = client.read(companyIn.id());
-
-		assertThat(optional            , is(not(nullValue())));
-		assertThat(optional.isPresent(), is(not(false)));
-
-		Company companyOut = optional.get();
-
-		log.info("\nreceived company\n{}" + companyOut);
-
-		if (companyOut instanceof CompanyDTO)
+		if (postalAddressIn instanceof PostalAddressDTO)
 		{
-			CompanyDTO dto = (CompanyDTO) companyOut;
+			PostalAddressDTO dto = (PostalAddressDTO) postalAddressIn;
 
-			assertThat(dto.id  (), is(not(nullValue())));
-			assertThat(dto.name(), is(name));
+			Optional<PostalAddress> optional = client.read(dto.id());
 
-			assertThat(dto.version(), is(not(nullValue())));
-			assertThat(dto.version(), is((short) 0       ));
+			assertThat(optional            , is(not(nullValue())));
+			assertThat(optional.isPresent(), is(not(false)));
 
-			assertThat(dto.optionalDepartments()            , is(not(nullValue())));
-			assertThat(dto.optionalDepartments().isPresent(), is(false));
-		}
-		else
-		{
-			fail("unexpected type: " + companyOut.getClass().getName());
+			PostalAddress postalAddressOut = optional.get();
+
+			log.info("\nreceived postal address\n{}" + postalAddressOut);
+
+			if (postalAddressOut instanceof PostalAddressDTO)
+			{
+				dto = (PostalAddressDTO) postalAddressOut;
+
+				assertThat(dto.id  (), is(not(nullValue())));
+				assertThat(dto.city(), is(name));
+
+				assertThat(dto.version(), is(not(nullValue())));
+				assertThat(dto.version(), is((short) 0       ));
+			}
+			else
+			{
+				fail("unexpected type: " + postalAddressOut.getClass().getName());
+			}
 		}
 	}
 
 	@Test void testUpdate()
 	{
-		Company companyIn = client.create(new CompanyDTO("de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis()));
+		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
 
-		String name = "modified " + System.currentTimeMillis();
+		PostalAddress postalAddressIn = client.create(PostalAddressDTO.builder().city(name).build());
 
-		companyIn.name(name);
+		name = "modified " + System.currentTimeMillis();
 
-		Company companyOut = client.update(companyIn);
+		postalAddressIn.setCity(name);
 
-		log.info("\nreceived company\n{}" + companyOut);
+		PostalAddress postalAddressOut = client.update(postalAddressIn);
 
-		if (companyOut instanceof CompanyDTO)
+		log.info("\nreceived postal address\n{}" + postalAddressOut);
+
+		if (postalAddressOut instanceof PostalAddressDTO)
 		{
-			CompanyDTO dto = (CompanyDTO) companyOut;
+			PostalAddressDTO dto = (PostalAddressDTO) postalAddressOut;
 
 			assertThat(dto.id(), is(not(nullValue())));
 
 			assertThat(dto.version(), is(not(nullValue())));
 			assertThat(dto.version(), is((short) 1       ));
 
-			assertThat(dto.optionalDepartments()            , is(not(nullValue())));
-			assertThat(dto.optionalDepartments().isPresent(), is(false));
-
-			assertThat(dto.name(), is(name));
+			assertThat(dto.city(), is(name));
 		}
 		else
 		{
-			fail("unexpected type: " + companyOut.getClass().getName());
+			fail("unexpected type: " + postalAddressOut.getClass().getName());
 		}
 	}
 
 	@Test void testDelete()
 	{
-		Company company = client.create(new CompanyDTO("de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis()));
+		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
 
-		log.info("\nreceived company\n{}", company);
+		PostalAddress postalAddress = client.create(PostalAddressDTO.builder().city(name).build());;
 
-		client.delete(company.id());
+		log.info("\nreceived postal address\n{}", postalAddress);
 
-		Optional<Company> optional = client.read(company.id());
+		if (postalAddress instanceof PostalAddressDTO)
+		{
+			PostalAddressDTO dto = (PostalAddressDTO) postalAddress;
 
-		assertThat(optional            , is(not(nullValue())));
-		assertThat(optional.isPresent(), is(false));
+			client.delete(dto.id());
+
+			Optional<PostalAddress> optional = client.read(dto.id());
+
+			assertThat(optional            , is(not(nullValue())));
+			assertThat(optional.isPresent(), is(false));
+		}
+		else
+		{
+			fail("unexpected type: " + postalAddress.getClass().getName());
+		}
 	}
 }

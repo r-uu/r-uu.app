@@ -14,10 +14,6 @@
     </parent>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>jakarta.platform</groupId>-->
-<!--            <artifactId>jakarta.jakartaee-api</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
@@ -30,6 +26,10 @@
             <groupId>r-uu</groupId>
             <artifactId>r-uu.lib-jpa-core-mapstruct</artifactId>
         </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-datamodel-postaladdress-jpadto</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -40,6 +40,10 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-datamodel-company-jpadto</artifactId>
         </dependency>
     </dependencies>
 

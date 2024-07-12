@@ -16,7 +16,7 @@ import java.util.Set;
 @ApplicationScoped
 @Transactional
 @Slf4j
-public class CompanyServiceJPAEditionEE implements CompanyServiceJPA
+public class CompanyServiceJPAEE implements CompanyServiceJPA
 {
 	@Inject
 	private CompanyRepository repository;
@@ -24,7 +24,7 @@ public class CompanyServiceJPAEditionEE implements CompanyServiceJPA
 	@PostConstruct
 	private void postConstruct() { log.debug("injected repository: {}", repository); }
 
-	@Override public CompanyEntity           create(CompanyEntity entity) { return repository.save  (entity); }
+	@Override public          CompanyEntity  create(CompanyEntity entity) { return repository.save  (entity); }
 	@Override public Optional<CompanyEntity> read  (Long id)              { return repository.find  (id);     }
 	@Override public          CompanyEntity  update(CompanyEntity entity) { return repository.save  (entity); }
 	@Override public void                    delete(Long id)              {        repository.delete(id);     }

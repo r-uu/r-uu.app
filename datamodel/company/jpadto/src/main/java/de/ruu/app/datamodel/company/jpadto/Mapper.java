@@ -1,15 +1,14 @@
-package de.ruu.app.demo.common.datamodel;
+package de.ruu.app.datamodel.company.jpadto;
 
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
-import de.ruu.app.demo.common.datamodel.dto.DepartmentDTO;
-import de.ruu.app.demo.common.datamodel.jpa.CompanyEntity;
-import de.ruu.app.demo.common.datamodel.jpa.DepartmentEntity;
+import de.ruu.app.datamodel.company.dto.CompanyDTO;
+import de.ruu.app.datamodel.company.dto.DepartmentDTO;
+import de.ruu.app.datamodel.company.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
 import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
-import org.mapstruct.Context;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
@@ -22,8 +21,8 @@ public abstract class Mapper
 
 	private static ReferenceCycleTracking CONTEXT  = new ReferenceCycleTracking();
 
-	public abstract CompanyEntity    map(CompanyDTO       dto   );
-	public abstract CompanyDTO       map(CompanyEntity    entity);
+	public abstract CompanyEntity map(CompanyDTO       dto   );
+	public abstract CompanyDTO map(CompanyEntity    entity);
 	public abstract DepartmentEntity map(DepartmentDTO    dto   );
 	public abstract DepartmentDTO    map(DepartmentEntity entity);
 

@@ -1,6 +1,6 @@
-package de.ruu.app.datamodel.postaladdress.jpadto.jpa.ee;
+package de.ruu.app.datamodel.postaladdress.jpa.ee;
 
-import de.ruu.app.datamodel.postaladdress.jpadto.jpa.PostalAddressEntity;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
 import de.ruu.lib.jpa.core.AbstractRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;

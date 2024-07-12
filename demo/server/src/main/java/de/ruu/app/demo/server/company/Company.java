@@ -1,11 +1,18 @@
 package de.ruu.app.demo.server.company;
 
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
-import de.ruu.app.demo.common.datamodel.jpa.CompanyEntity;
-import de.ruu.app.demo.common.jpa.CompanyServiceJPA;
+import de.ruu.app.datamodel.company.dto.CompanyDTO;
+import de.ruu.app.datamodel.company.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.jpadto.CompanyServiceJPA;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
@@ -14,10 +21,14 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static de.ruu.app.demo.common.Paths.*;
+import static de.ruu.app.demo.common.Paths.BY_ID;
+import static de.ruu.app.demo.common.Paths.BY_ID_WITH_DEPARTMENTS;
+import static de.ruu.app.demo.common.Paths.COMPANY;
 import static de.ruu.lib.util.BooleanFunctions.not;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static jakarta.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.CONFLICT;
+import static jakarta.ws.rs.core.Response.Status.CREATED;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 import static jakarta.ws.rs.core.Response.ok;
 import static jakarta.ws.rs.core.Response.status;
 

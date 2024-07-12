@@ -1,17 +1,20 @@
-package de.ruu.app.demo.common.datamodel.dto;
+package de.ruu.app.datamodel.company.dto;
 
-import de.ruu.app.demo.common.Company;
-import de.ruu.app.demo.common.Department;
-import de.ruu.app.demo.common.datamodel.Mapper;
-import de.ruu.app.demo.common.datamodel.jpa.DepartmentEntity;
+import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.Department;
+import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
+import de.ruu.app.datamodel.company.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -20,13 +23,13 @@ import static lombok.AccessLevel.PROTECTED;
                           // @Getter(AccessLevel.NONE}))
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
-@NoArgsConstructor(access = PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
 public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implements Department
 {
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
-	@Setter(NONE)
+	@Setter(AccessLevel.NONE)
 	private String name;
 
 	/** mutable non-null */

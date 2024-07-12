@@ -1,11 +1,18 @@
-package de.ruu.app.demo.server.company;
+package de.ruu.app.demo.server.datamodel.postaladdress;
 
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
-import de.ruu.app.demo.common.datamodel.jpa.CompanyEntity;
-import de.ruu.app.demo.common.jpa.CompanyServiceJPA;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressServiceJPA;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
@@ -14,10 +21,13 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static de.ruu.app.demo.common.Paths.*;
+import static de.ruu.app.demo.common.Paths.BY_ID;
+import static de.ruu.app.demo.common.Paths.POSTAL_ADDRESS;
 import static de.ruu.lib.util.BooleanFunctions.not;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static jakarta.ws.rs.core.Response.Status.*;
+import static jakarta.ws.rs.core.Response.Status.CONFLICT;
+import static jakarta.ws.rs.core.Response.Status.CREATED;
+import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 import static jakarta.ws.rs.core.Response.ok;
 import static jakarta.ws.rs.core.Response.status;
 
@@ -33,15 +43,14 @@ import static jakarta.ws.rs.core.Response.status;
  */
 
 @RequestScoped
-@Path(COMPANY)
+@Path(POSTAL_ADDRESS)
 @OpenAPIDefinition(info = @Info(version = "a version", title = "a title"))
 @Timed
-public class Company
+public class PostalAddress
 {
-	@Inject private CompanyServiceJPA service;
+	@Inject private PostalAddressServiceJPA service;
 
 	@GET
-//	@Path(COMPANY)
 	@Produces(APPLICATION_JSON)
 	public Response findAll()
 	{
@@ -51,7 +60,7 @@ public class Company
 								service
 										.findAll()
 										.stream()
-										.map(company -> company.toTarget())
+										.map(entity -> entity.toTarget())
 										.collect(Collectors.toSet())
 						)
 						.build();
@@ -62,27 +71,9 @@ public class Company
 	@Produces(APPLICATION_JSON)
 	public Response find(@PathParam("id") Long id)
 	{
-		Optional<CompanyEntity> result = service.read(id);
+		Optional<PostalAddressEntity> result = service.read(id);
 		if (not(result.isPresent()))
-				return status(NOT_FOUND).entity("company with id " + id + " not found").build();
-		else
-			return
-					ok
-							(
-									result
-											.get()
-											.toTarget()
-							).build();
-	}
-
-	@GET
-	@Path(BY_ID_WITH_DEPARTMENTS)
-	@Produces(APPLICATION_JSON)
-	public Response findWithDepartments(@PathParam("id") Long id)
-	{
-		Optional<CompanyEntity> result = service.findWithDepartments(id);
-		if (not(result.isPresent()))
-			return status(NOT_FOUND).entity("company with id " + id + " not found").build();
+				return status(NOT_FOUND).entity("address with id " + id + " not found").build();
 		else
 			return
 					ok
@@ -94,32 +85,30 @@ public class Company
 	}
 
 	@POST
-//	@Path(COMPANY)
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response create(CompanyDTO company)
+	public Response create(PostalAddressDTO dto)
 	{
 		return
 				status(CREATED)
 						.entity
 								(
 										service
-												.create(company.toSource())
+												.create(dto.toSource())
 												.toTarget()
 								).build();
 	}
 
 	@PUT
-//	@Path(COMPANY)
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response update(CompanyDTO company)
+	public Response update(PostalAddressDTO dto)
 	{
 		return
 				ok
 						(
 								service
-										.create(company.toSource())
+										.create(dto.toSource())
 										.toTarget()
 						).build();
 	}

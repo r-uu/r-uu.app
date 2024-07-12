@@ -1,27 +1,26 @@
-package de.ruu.app.demo.common;
+package de.ruu.app.datamodel.company.jpadto;
 
-import de.ruu.app.demo.common.datamodel.Mapper;
-import de.ruu.app.demo.common.datamodel.dto.CompanyDTO;
-import de.ruu.app.demo.common.datamodel.dto.DepartmentDTO;
-import de.ruu.app.demo.common.datamodel.jpa.CompanyEntity;
-import de.ruu.app.demo.common.datamodel.jpa.DepartmentEntity;
+import de.ruu.app.datamodel.company.dto.CompanyDTO;
+import de.ruu.app.datamodel.company.dto.DepartmentDTO;
+import de.ruu.app.datamodel.company.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestMapStruct
 {
-	@Test void mapValidCompanyDTO()
+	@Test
+	void mapValidCompanyDTO()
 	{
 		String     name = "name";
 		CompanyDTO dto  = new CompanyDTO(name);
 
 		CompanyEntity entity = Mapper.INSTANCE.map(dto);
 
-		assertThat(entity       , is(not(nullValue())));
-		assertThat(entity.name(), is(name));
+		assertThat(entity       , Matchers.is(Matchers.not(Matchers.nullValue())));
+		assertThat(entity.name(), Matchers.is(name));
 	}
 
 	@Test void mapValidCompanyEntity()
@@ -31,8 +30,8 @@ class TestMapStruct
 
 		CompanyDTO dto = Mapper.INSTANCE.map(entity);
 
-		assertThat(dto       , is(not(nullValue())));
-		assertThat(dto.name(), is(name));
+		assertThat(dto       , Matchers.is(Matchers.not(Matchers.nullValue())));
+		assertThat(dto.name(), Matchers.is(name));
 	}
 
 	@Test void mapValidDepartmentDTO()
@@ -43,10 +42,10 @@ class TestMapStruct
 
 		DepartmentEntity departmentEntity = Mapper.INSTANCE.map(dto);
 
-		assertThat(departmentEntity       , is(not(nullValue())));
-		assertThat(departmentEntity.name(), is(name));
+		assertThat(departmentEntity       , Matchers.is(Matchers.not(Matchers.nullValue())));
+		assertThat(departmentEntity.name(), Matchers.is(name));
 
-		assertThat(departmentEntity.company().name(), is(name));
+		assertThat(departmentEntity.company().name(), Matchers.is(name));
 	}
 
 	@Test void mapValidDepartmentEntity()
@@ -57,9 +56,9 @@ class TestMapStruct
 
 		DepartmentDTO dto = Mapper.INSTANCE.map(entity);
 
-		assertThat(dto       , is(not(nullValue())));
-		assertThat(dto.name(), is(name));
+		assertThat(dto       , Matchers.is(Matchers.not(Matchers.nullValue())));
+		assertThat(dto.name(), Matchers.is(name));
 
-		assertThat(dto.company().name(), is(name));
+		assertThat(dto.company().name(), Matchers.is(name));
 	}
 }

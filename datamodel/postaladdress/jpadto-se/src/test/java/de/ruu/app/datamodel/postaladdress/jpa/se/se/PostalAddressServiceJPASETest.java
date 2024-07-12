@@ -1,7 +1,8 @@
-package de.ruu.app.datamodel.postaladdress.jpa.se;
+package de.ruu.app.datamodel.postaladdress.jpa.se.se;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
+import de.ruu.app.datamodel.postaladdress.jpa.se.PostalAddressServiceJPASE;
 import de.ruu.lib.cdi.common.CDIExtension;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.jpa.se.TransactionalInterceptorCDI;
