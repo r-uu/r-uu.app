@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cd70d268-5377-403f-8c4c-5dca286c9e98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/de/ruu/app/demo/client/system/SystemClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/CompanyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/CompanyServiceDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/CompanyServiceJPASimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/DepartmentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/DepartmentServiceJPASimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/de/ruu/app/demo/jpa/se/EntityManagerProducer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.demo/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/CompanyService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/Department.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/DepartmentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/Mapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/MapperUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/dto/CompanyDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/dto/DepartmentDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/jpa/CompanyEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/datamodel/jpa/DepartmentEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/jpa/CompanyServiceJPA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/de/ruu/app/server/demo/company/jpa/DepartmentServiceJPA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/module-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/resources/META-INF/beans.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/resources/log4j2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/test/java/de/ruu/app/server/demo/company/TestLombok.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/test/java/de/ruu/app/server/demo/company/TestMapStruct.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/Paths.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/company/Company.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/system/health/SystemLiveness.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/system/health/SystemReadiness.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/r-uu.app.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/8/7/870526f8332acfe4f4abc13377ddf98fbaf1de69" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/8/7/870526f8332acfe4f4abc13377ddf98fbaf1de69" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/system/SystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/Demo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/system/SystemResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/de/ruu/app/demo/server/system/System.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/liberty/config/server.env" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/liberty/config/server.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/liberty/config/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/liberty/config/server.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2hx31cmxzMp70C4r97hSGBLAhUR" />
+  <component name="ProjectViewState">
+    <option name="compactDirectories" value="true" />
+    <option name="flattenModules" value="true" />
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/r-uu/develop/github/r-uu.app",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="maven-archiver (1)" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="maven-archiver (1)" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cd70d268-5377-403f-8c4c-5dca286c9e98" name="Changes" comment="" />
+      <created>1718521686906</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718521686906</updated>
+    </task>
+    <servers />
+  </component>
+</project>

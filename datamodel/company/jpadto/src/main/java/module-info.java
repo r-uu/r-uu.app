@@ -1,8 +1,11 @@
-module r.uu.app.datamodel.company.jpadto
+module de.ruu.app.datamodel.company.jpadto
 {
 	exports de.ruu.app.datamodel.company.dto;
 	exports de.ruu.app.datamodel.company.jpa;
 	exports de.ruu.app.datamodel.company.jpadto;
+
+	opens de.ruu.app.datamodel.company.dto;
+
 	requires static lombok;
 	requires org.slf4j;
 

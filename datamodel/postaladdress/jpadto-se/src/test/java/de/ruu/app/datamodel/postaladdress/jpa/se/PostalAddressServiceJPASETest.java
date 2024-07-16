@@ -83,14 +83,15 @@ class PostalAddressServiceJPASETest
 
 	@Test void testCreate()
 	{
-		String name = "name " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
 		PostalAddress postalAddress =
 				service.create(
-						PostalAddressEntity
-								.builder()
-										.city(name)
-								.build());
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		log.info("\nreceived postalAddress\n{}", postalAddress);
 
@@ -99,10 +100,15 @@ class PostalAddressServiceJPASETest
 			PostalAddressEntity entity = (PostalAddressEntity) postalAddress;
 
 			assertThat(entity.id  (), is(not(nullValue())));
-			assertThat(entity.city(), is(name));
 
 			assertThat(entity.version(), is(not(nullValue())));
 			assertThat(entity.version(), is((short) 0       ));
+
+			assertThat(entity.street      (), is(street      ));
+			assertThat(entity.streetNumber(), is(streetNumber));
+			assertThat(entity.city        (), is(city        ));
+			assertThat(entity.postalCode  (), is(postalCode  ));
+			assertThat(entity.country     (), is(country     ));
 		}
 		else
 		{
@@ -112,14 +118,15 @@ class PostalAddressServiceJPASETest
 
 	@Test void testRead()
 	{
-		String name = "name " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
 		PostalAddress postalAddressIn =
 				service.create(
-						PostalAddressEntity
-								.builder()
-								.city(name)
-								.build());
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		if (postalAddressIn instanceof PostalAddressEntity)
 		{
@@ -139,10 +146,17 @@ class PostalAddressServiceJPASETest
 				entity = (PostalAddressEntity) postalAddressOut;
 
 				assertThat(entity.id  (), is(not(nullValue())));
-				assertThat(entity.city(), is(name));
 
 				assertThat(entity.version(), is(not(nullValue())));
 				assertThat(entity.version(), is((short) 0       ));
+
+				assertThat(entity.id  (), is(not(nullValue())));
+
+				assertThat(entity.street      (), is(street      ));
+				assertThat(entity.streetNumber(), is(streetNumber));
+				assertThat(entity.city        (), is(city        ));
+				assertThat(entity.postalCode  (), is(postalCode  ));
+				assertThat(entity.country     (), is(country     ));
 			}
 			else
 			{
@@ -153,13 +167,19 @@ class PostalAddressServiceJPASETest
 
 	@Test void testUpdate()
 	{
-		String name = "name " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
-		PostalAddressEntity postalAddressIn = service.create(PostalAddressEntity.builder().city(name).build());
+		PostalAddressEntity postalAddressIn =
+				service.create(
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
-		name = "modified " + System.currentTimeMillis();
+		city = "modified " + System.currentTimeMillis();
 
-		postalAddressIn.setCity(name);
+		postalAddressIn.setCity(city);
 
 		PostalAddress postalAddressOut = service.update(postalAddressIn);
 
@@ -174,7 +194,11 @@ class PostalAddressServiceJPASETest
 			assertThat(entity.version(), is(not(nullValue())));
 			assertThat(entity.version(), is((short) 1       ));
 
-			assertThat(entity.city(), is(name));
+			assertThat(entity.street      (), is(street      ));
+			assertThat(entity.streetNumber(), is(streetNumber));
+			assertThat(entity.city        (), is(city        ));
+			assertThat(entity.postalCode  (), is(postalCode  ));
+			assertThat(entity.country     (), is(country     ));
 		}
 		else
 		{
@@ -184,9 +208,15 @@ class PostalAddressServiceJPASETest
 
 	@Test void testDelete()
 	{
-		String name = "name " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
-		PostalAddressEntity postalAddress = service.create(PostalAddressEntity.builder().city(name).build());;
+		PostalAddressEntity postalAddress =
+				service.create(
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		log.info("\nreceived postal address\n{}", postalAddress);
 

@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
 @Entity
-@Table(schema = "test", name = "department")
+@Table(schema = "demo_test", name = "department")
 public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implements Department
 {
 	/** mutable non-null */
@@ -56,6 +56,7 @@ public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implem
 		this(); // just in case something important happens in the default constructor
 		name(name); // use fluent setter with its validation
 		company(company);
+		company.add(this);
 	}
 
 	@Override public @NonNull Department name(@NonNull String name)

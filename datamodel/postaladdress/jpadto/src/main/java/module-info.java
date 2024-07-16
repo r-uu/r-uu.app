@@ -4,6 +4,8 @@ module de.ruu.app.datamodel.postaladdress.jpadto
 	exports de.ruu.app.datamodel.postaladdress.jpa;
 	exports de.ruu.app.datamodel.postaladdress.dto;
 
+	opens de.ruu.app.datamodel.postaladdress.dto;
+
 	requires static lombok;
 
 	requires jakarta.annotation;

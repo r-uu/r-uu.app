@@ -24,15 +24,15 @@ import java.util.Set;
 
 import static java.util.Objects.isNull;
 
+@Slf4j
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Slf4j
 @Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
                           // @Getter(AccessLevel.NONE}))
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
+@RequiredArgsConstructor
 public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Company
 {
 	/** mutable non-null */

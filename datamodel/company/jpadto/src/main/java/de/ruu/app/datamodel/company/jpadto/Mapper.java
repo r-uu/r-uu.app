@@ -22,7 +22,7 @@ public abstract class Mapper
 	private static ReferenceCycleTracking CONTEXT  = new ReferenceCycleTracking();
 
 	public abstract CompanyEntity map(CompanyDTO       dto   );
-	public abstract CompanyDTO map(CompanyEntity    entity);
+	public abstract CompanyDTO    map(CompanyEntity    entity);
 	public abstract DepartmentEntity map(DepartmentDTO    dto   );
 	public abstract DepartmentDTO    map(DepartmentEntity entity);
 

@@ -26,5 +26,5 @@ module de.ruu.app.demo.client
 	requires de.ruu.app.datamodel.postaladdress.common;
 	requires de.ruu.app.datamodel.postaladdress.jpadto;
 	requires de.ruu.app.datamodel.company.common;
-	requires r.uu.app.datamodel.company.jpadto;
+	requires de.ruu.app.datamodel.company.jpadto;
 }

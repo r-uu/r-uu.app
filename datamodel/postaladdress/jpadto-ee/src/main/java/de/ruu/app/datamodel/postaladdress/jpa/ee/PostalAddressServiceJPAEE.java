@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -23,10 +24,10 @@ public class PostalAddressServiceJPAEE implements PostalAddressServiceJPA
 	@PostConstruct
 	private void postConstruct() { log.debug("injected repository: {}", repository); }
 
-	@Override public PostalAddressEntity create(PostalAddressEntity entity) { return repository.save  (entity); }
-	@Override public Optional<PostalAddressEntity> read  (Long id)                    { return repository.find  (id);     }
-	@Override public          PostalAddressEntity  update(PostalAddressEntity entity) { return repository.save  (entity); }
-	@Override public void                          delete(Long id)                    {        repository.delete(id);     }
+	@Override public @NonNull          PostalAddressEntity  create(@NonNull PostalAddressEntity entity) { return repository.save  (entity); }
+	@Override public @NonNull Optional<PostalAddressEntity> read  (@NonNull Long id                   ) { return repository.find  (id    ); }
+	@Override public @NonNull          PostalAddressEntity  update(@NonNull PostalAddressEntity entity) { return repository.save  (entity); }
+	@Override public          void                          delete(@NonNull Long id                   ) {        repository.delete(id    ); }
 
-	@Override public Set<PostalAddressEntity> findAll() { return new HashSet<>(repository.findAll()); }
+	@Override public @NonNull Set<PostalAddressEntity> findAll() { return new HashSet<>(repository.findAll()); }
 }

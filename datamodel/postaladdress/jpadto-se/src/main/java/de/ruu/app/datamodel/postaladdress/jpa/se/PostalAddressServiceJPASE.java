@@ -23,7 +23,7 @@ public class PostalAddressServiceJPASE implements PostalAddressServiceJPA
 
 	@Override public          PostalAddressEntity  create(PostalAddressEntity entity) { return repository.save(entity); }
 	@Override public Optional<PostalAddressEntity> read  (Long id)                    { return repository.find(id);     }
-	@Override public          PostalAddressEntity  update(PostalAddressEntity entity) { return repository.save(entity); }
+	@Override public          PostalAddressEntity  update(PostalAddressEntity address) { return repository.save(address); }
 	@Override public void                          delete(Long id)                    {        repository.delete(id);   }
 
 	@Override public Set<PostalAddressEntity> findAll() { return new HashSet<>(repository.findAll()); }

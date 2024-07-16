@@ -2,6 +2,7 @@ package de.ruu.app.demo.client.datamodel.rs.postaladdress;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
+import de.ruu.app.datamodel.postaladdress.jpa.PostalAddressEntity;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.spi.CDI;
@@ -41,19 +42,20 @@ class ClientPostalAddressTest
 
 		assertThat(all, is(not(nullValue())));
 
-		log.info("\nreceived {} tag groups", all.size());
+		log.info("\nreceived {} postal addresses", all.size());
 	}
 
 	@Test void testCreate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
 		PostalAddress postalAddress =
 				client.create(
-						PostalAddressDTO
-								.builder()
-										.city(name)
-								.build());
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		log.info("\nreceived postalAddress\n{}", postalAddress);
 
@@ -62,10 +64,15 @@ class ClientPostalAddressTest
 			PostalAddressDTO dto = (PostalAddressDTO) postalAddress;
 
 			assertThat(dto.id  (), is(not(nullValue())));
-			assertThat(dto.city(), is(name));
 
 			assertThat(dto.version(), is(not(nullValue())));
 			assertThat(dto.version(), is((short) 0       ));
+
+			assertThat(dto.street      (), is(street      ));
+			assertThat(dto.streetNumber(), is(streetNumber));
+			assertThat(dto.city        (), is(city        ));
+			assertThat(dto.postalCode  (), is(postalCode  ));
+			assertThat(dto.country     (), is(country     ));
 		}
 		else
 		{
@@ -75,14 +82,15 @@ class ClientPostalAddressTest
 
 	@Test void testRead()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
 		PostalAddress postalAddressIn =
 				client.create(
-						PostalAddressDTO
-								.builder()
-								.city(name)
-								.build());
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		if (postalAddressIn instanceof PostalAddressDTO)
 		{
@@ -95,17 +103,24 @@ class ClientPostalAddressTest
 
 			PostalAddress postalAddressOut = optional.get();
 
-			log.info("\nreceived postal address\n{}" + postalAddressOut);
+			log.info("\nreceived postal address\n{}", postalAddressOut);
 
 			if (postalAddressOut instanceof PostalAddressDTO)
 			{
 				dto = (PostalAddressDTO) postalAddressOut;
 
 				assertThat(dto.id  (), is(not(nullValue())));
-				assertThat(dto.city(), is(name));
 
 				assertThat(dto.version(), is(not(nullValue())));
 				assertThat(dto.version(), is((short) 0       ));
+
+				assertThat(dto.id  (), is(not(nullValue())));
+
+				assertThat(dto.street      (), is(street      ));
+				assertThat(dto.streetNumber(), is(streetNumber));
+				assertThat(dto.city        (), is(city        ));
+				assertThat(dto.postalCode  (), is(postalCode  ));
+				assertThat(dto.country     (), is(country     ));
 			}
 			else
 			{
@@ -116,17 +131,23 @@ class ClientPostalAddressTest
 
 	@Test void testUpdate()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
-		PostalAddress postalAddressIn = client.create(PostalAddressDTO.builder().city(name).build());
+		PostalAddress postalAddressIn =
+				client.create(
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
-		name = "modified " + System.currentTimeMillis();
+		city = "modified " + System.currentTimeMillis();
 
-		postalAddressIn.setCity(name);
+		postalAddressIn.setCity(city);
 
 		PostalAddress postalAddressOut = client.update(postalAddressIn);
 
-		log.info("\nreceived postal address\n{}" + postalAddressOut);
+		log.info("\nreceived postal address\n{}", postalAddressOut);
 
 		if (postalAddressOut instanceof PostalAddressDTO)
 		{
@@ -137,7 +158,11 @@ class ClientPostalAddressTest
 			assertThat(dto.version(), is(not(nullValue())));
 			assertThat(dto.version(), is((short) 1       ));
 
-			assertThat(dto.city(), is(name));
+			assertThat(dto.street      (), is(street      ));
+			assertThat(dto.streetNumber(), is(streetNumber));
+			assertThat(dto.city        (), is(city        ));
+			assertThat(dto.postalCode  (), is(postalCode  ));
+			assertThat(dto.country     (), is(country     ));
 		}
 		else
 		{
@@ -147,9 +172,15 @@ class ClientPostalAddressTest
 
 	@Test void testDelete()
 	{
-		String name = "de/ruu/app/demo/client/datamodel/rs/postaladdress " + System.currentTimeMillis();
+		String street       = "street "       + System.currentTimeMillis();
+		String streetNumber = "streetNumber " + System.currentTimeMillis();
+		String city         = "city "         + System.currentTimeMillis();
+		String postalCode   = "postalCode "   + System.currentTimeMillis();
+		String country      = "country "      + System.currentTimeMillis();
 
-		PostalAddress postalAddress = client.create(PostalAddressDTO.builder().city(name).build());;
+		PostalAddress postalAddress =
+				client.create(
+						new PostalAddressEntity(street, streetNumber, city, postalCode, country));
 
 		log.info("\nreceived postal address\n{}", postalAddress);
 

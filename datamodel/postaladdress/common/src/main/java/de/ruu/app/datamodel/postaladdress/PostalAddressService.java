@@ -1,14 +1,16 @@
 package de.ruu.app.datamodel.postaladdress;
 
+import lombok.NonNull;
+
 import java.util.Optional;
 import java.util.Set;
 
 public interface PostalAddressService<A extends PostalAddress>
 {
-	A           create(A address);
-	Optional<A> read(Long id);
-	A           update(A company);
-	void        delete(Long id);
+	@NonNull A           create(@NonNull A    address);
+	@NonNull Optional<A> read  (@NonNull Long id);
+	@NonNull A           update(@NonNull A    address);
+	         void        delete(@NonNull Long id);
 
-	Set<A>      findAll();
+	@NonNull Set<A>      findAll();
 }

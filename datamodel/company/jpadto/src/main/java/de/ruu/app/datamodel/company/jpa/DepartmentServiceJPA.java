@@ -1,6 +1,5 @@
-package de.ruu.app.datamodel.company.jpadto;
+package de.ruu.app.datamodel.company.jpa;
 
 import de.ruu.app.datamodel.company.DepartmentService;
-import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
 
 public interface DepartmentServiceJPA extends DepartmentService<DepartmentEntity> { }

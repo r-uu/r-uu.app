@@ -17,6 +17,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.ConfigProvider;
 
@@ -73,7 +74,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 	// interface implementations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override public PostalAddress create(PostalAddress postalAddress)
+	@Override public @NonNull PostalAddress create(@NonNull PostalAddress postalAddress)
 	{
 		Response response = client.target(uri).request().post(Entity.entity(postalAddress, APPLICATION_JSON));
 
@@ -85,7 +86,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		return response.readEntity(PostalAddressDTO.class);
 	}
 
-	@Override public Optional<PostalAddress> read(Long id)
+	@Override public @NonNull Optional<PostalAddress> read(@NonNull Long id)
 	{
 		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().get();
@@ -104,12 +105,11 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		{
 			throw new RestClientCallException(UNEXPECTED_STATUS + status + "\nuri: " + target.getUri(), response);
 		}
-
 	}
 
-	@Override public PostalAddress update(PostalAddress postalAddress)
+	@Override public @NonNull PostalAddress update(@NonNull PostalAddress address)
 	{
-		Response response = client.target(uri).request().put(Entity.entity(postalAddress, APPLICATION_JSON));
+		Response response = client.target(uri).request().put(Entity.entity(address, APPLICATION_JSON));
 
 		if (not(response.getStatus() == Status.OK.getStatusCode()))
 		{
@@ -119,7 +119,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		return response.readEntity(PostalAddressDTO.class);
 	}
 
-	@Override public void delete(Long id)
+	@Override public void delete(@NonNull Long id)
 	{
 		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().delete();
@@ -130,7 +130,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		}
 	}
 
-	@Override public Set<PostalAddress> findAll()
+	@Override public @NonNull Set<PostalAddress> findAll()
 	{
 		Response response = client.target(uri).request().get();
 

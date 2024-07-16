@@ -1,5 +1,7 @@
-module r.uu.app.demo.server
+module de.ruu.app.demo.server
 {
+	exports de.ruu.app.demo.server;
+
 	requires java.management;
 
 	requires jakarta.ws.rs;
@@ -15,5 +17,6 @@ module r.uu.app.demo.server
 	requires de.ruu.app.demo.common;
 	requires de.ruu.app.datamodel.postaladdress.jpadto;
 	requires de.ruu.app.datamodel.postaladdress.jpadto.ee;
-	requires r.uu.app.datamodel.company.jpadto;
+	requires de.ruu.app.datamodel.company.jpadto;
+	requires static lombok;
 }

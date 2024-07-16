@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PostalAddressRepository extends AbstractRepository<PostalAddressEntity, Long>
 {
-	@PersistenceContext(name = "demo") private EntityManager entityManager;
+	@PersistenceContext(name = "demo_test") private EntityManager entityManager;
 
 	@PostConstruct public void postConstruct() { log.debug("injected entity manager successfully: {}", entityManager != null); }
 

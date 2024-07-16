@@ -67,15 +67,15 @@
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-datamodel-postaladdress-jpadto</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-datamodel-postaladdress-jpadto-ee</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>r-uu</groupId>
+			<artifactId>r-uu.app-datamodel-company-jpadto-ee</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>

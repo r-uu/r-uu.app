@@ -1,8 +1,8 @@
-package de.ruu.app.demo.server.company;
+package de.ruu.app.demo.server.datamodel.company;
 
 import de.ruu.app.datamodel.company.dto.CompanyDTO;
 import de.ruu.app.datamodel.company.jpa.CompanyEntity;
-import de.ruu.app.datamodel.company.jpadto.CompanyServiceJPA;
+import de.ruu.app.datamodel.company.jpa.CompanyServiceJPA;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;

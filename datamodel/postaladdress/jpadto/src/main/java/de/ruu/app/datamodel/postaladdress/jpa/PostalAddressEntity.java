@@ -1,14 +1,12 @@
 package de.ruu.app.datamodel.postaladdress.jpa;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
-import de.ruu.app.datamodel.postaladdress.jpadto.Mapper;
 import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
+import de.ruu.app.datamodel.postaladdress.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,26 +15,51 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Entity
 @Table(name = "postal_address", schema = "demo_test")
-@Getter
-@Setter
-@Accessors(fluent = true) // generate fluent style getters but also implement java bean style getters
-// to comply to java bean conventions
+@Slf4j
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // required by jpa
-@AllArgsConstructor
-@Builder
+@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
+                          // @Getter(AccessLevel.NONE}))
+@Setter
+@Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
+                          // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no  args constructor for jsonb, jaxb, mapstruct, ...
+//@RequiredArgsConstructor
+//@AllArgsConstructor(access = AccessLevel.PROTECTED)               // generate all args constructor for builder
+//@Builder
 public class PostalAddressEntity extends AbstractMappedEntity<PostalAddressDTO> implements PostalAddress
 {
-	@NonNull @Builder.Default private String street = "";
-	@NonNull @Builder.Default private String streetNumber = "";
-	@NonNull @Builder.Default private String city = "";
-	@NonNull @Builder.Default private String stateOrProvince = "";
-	@NonNull @Builder.Default private String postalCode = "";
-	@NonNull @Builder.Default private String country = "";
-	@NonNull @Builder.Default private String type = "";
+	@NonNull
+//	@Builder.Default
+	private String street = "";
+	@NonNull
+//	@Builder.Default
+	private String streetNumber = "";
+	@NonNull
+//	@Builder.Default
+	private String city = "";
+//	@NonNull
+//	@Builder.Default
+	private String stateOrProvince;
+	@NonNull
+//	@Builder.Default
+	private String postalCode = "";
+	@NonNull
+//	@Builder.Default
+	private String country = "";
+//	@NonNull
+//	@Builder.Default
+	private String type;
+
+	public PostalAddressEntity(@NonNull String street, @NonNull String streetNumber, @NonNull String city, @NonNull String postalCode, @NonNull String country)
+	{
+		this.street = street;
+		this.streetNumber = streetNumber;
+		this.city = city;
+		this.postalCode = postalCode;
+		this.country = country;
+	}
 
 	@Override public @NonNull String getStreet() { return street; }
 	@Override public void setStreet(@NonNull String street) { this.street = street; }
@@ -58,6 +81,11 @@ public class PostalAddressEntity extends AbstractMappedEntity<PostalAddressDTO> 
 
 	@Override public @NonNull String getType() { return type; }
 	@Override public void setType(@NonNull String type) { this.type = type; }
+
+	@Override public void beforeMapping(@NonNull PostalAddressDTO input)
+	{
+		super.beforeMapping(input);
+	}
 
 	@Override public void afterMapping(@NonNull PostalAddressDTO input)
 	{

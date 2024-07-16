@@ -1,7 +1,9 @@
 package de.ruu.app.datamodel.company.jpa.se;
 
 import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.Department;
 import de.ruu.app.datamodel.company.jpa.CompanyEntity;
+import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
 import de.ruu.lib.cdi.common.CDIExtension;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.jpa.se.TransactionalInterceptorCDI;
@@ -44,6 +46,7 @@ class CompanyServiceJPASETest
 						  CompanyServiceJPASETest.class.getClassLoader()
 						, List.of(TransactionalInterceptorCDI.class)
 						, List.of(CDIExtension.class)
+						, List.of(EntityManagerProducer.class, TransactionalInterceptorCDI.class)
 				);
 //		try
 //		{
@@ -199,6 +202,41 @@ class CompanyServiceJPASETest
 		else
 		{
 			fail("unexpected type: " + company.getClass().getName());
+		}
+	}
+
+	@Test void testFindWithDepartments()
+	{
+		DepartmentServiceJPASE departmentService = CDI.current().select(DepartmentServiceJPASE.class).get();
+
+		String name = "name " + System.currentTimeMillis();
+
+		CompanyEntity company = service.create(new CompanyEntity(name));
+
+		log.info("\nreceived company\n{}", company);
+
+		DepartmentEntity department = new DepartmentEntity(company, name);
+
+		department = departmentService.create(department);
+
+		Optional<CompanyEntity> optional = service.findWithDepartments(company.id());
+
+		assertThat(optional            , is(not(nullValue())));
+		assertThat(optional.isPresent(), is(true));
+
+		company = optional.get();
+		Optional<Set<Department>> optionalInner = company.departments();
+
+		assertThat(optionalInner            , is(not(nullValue())));
+		assertThat(optionalInner.isPresent(), is(true));
+
+		Set<Department> departments = optionalInner.get();
+
+		assertThat(departments.size(), is(1));
+
+		for (Department departmentInner : departments)
+		{
+			log.debug("found department {}", departmentInner);
 		}
 	}
 }
