@@ -76,12 +76,20 @@
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-datamodel-postaladdress-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-datamodel-postaladdress-jpadto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-gen-java-fx-bean</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-gen-java-fx-tableview</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

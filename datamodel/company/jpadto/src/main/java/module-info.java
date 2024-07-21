@@ -17,4 +17,5 @@ module de.ruu.app.datamodel.company.jpadto
 	requires de.ruu.lib.jpa.core;
 	requires de.ruu.lib.mapstruct;
 	requires org.mapstruct;
+	requires jakarta.json.bind;
 }

@@ -7,15 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 
 @Slf4j
-class DemoClientDataModelFXPostalAddressGeneratorRunner
+class FXCompPostalAddressManagerGeneratorRunner
 {
 	public static void main(String[] args) throws IOException, GeneratorException
 	{
 		GeneratorFXCompBundle generator;
-		String                packageName = DemoClientDataModelFXPostalAddressGeneratorRunner.class.getPackageName();
+		String                packageName = FXCompPostalAddressManagerGeneratorRunner.class.getPackageName();
 
 		log.debug("creating java fx component {} bundles", packageName);
-		generator = new GeneratorFXCompBundle(packageName, "Main");
+		generator = new GeneratorFXCompBundle(packageName, "PostalAddressManager");
 		generator.run();
 		log.debug("created  java fx component {} bundles", packageName);
 	}

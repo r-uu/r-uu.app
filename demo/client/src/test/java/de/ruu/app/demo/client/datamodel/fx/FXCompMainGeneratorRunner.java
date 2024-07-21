@@ -7,12 +7,12 @@ import de.ruu.lib.gen.java.fx.comp.GeneratorFXCompBundle;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class DemoClientDataModelFXMainGeneratorRunner
+class FXCompMainGeneratorRunner
 {
 	public static void main(String[] args) throws IOException, GeneratorException
 	{
 		GeneratorFXCompBundle generator;
-		String                packageName = DemoClientDataModelFXMainGeneratorRunner.class.getPackageName();
+		String                packageName = FXCompMainGeneratorRunner.class.getPackageName();
 
 		log.debug("creating java fx component {} bundles", packageName);
 		generator = new GeneratorFXCompBundle(packageName, "Main");

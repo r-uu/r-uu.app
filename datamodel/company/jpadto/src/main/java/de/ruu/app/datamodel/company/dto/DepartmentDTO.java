@@ -6,6 +6,7 @@ import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
 import de.ruu.app.datamodel.company.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
+import jakarta.json.bind.annotation.JsonbTransient;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,15 +28,17 @@ import lombok.extern.slf4j.Slf4j;
 public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implements Department
 {
 	/** mutable non-null */
-	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
+	// no lombok-generation of setter because of additional validation in manually created method
 	@Setter(AccessLevel.NONE)
 	private String name;
 
 	/** mutable non-null */
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@NonNull @Setter
+	@NonNull
+	@Setter
+	@JsonbTransient
 	private CompanyDTO company;
 
 	/* do not use lombok to make sure that fluent setter with its validation is called */
