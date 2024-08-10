@@ -31,11 +31,12 @@ import static java.util.Objects.isNull;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Slf4j
-@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
-                          // @Getter(AccessLevel.NONE}))
-@Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
-                          // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
+//@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
+//                          // @Getter(AccessLevel.NONE}))
+//@Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
+//                          // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
+// can not combine @NoArgsConstructor with @NonNull fields
+//@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
 @Entity
 @Table(schema = "demo_test", name = "company")
 public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements Company
@@ -43,7 +44,6 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
-	@Setter(AccessLevel.NONE)
 	@Column(unique=true, nullable=false)
 	private String name;
 
@@ -54,7 +54,6 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	 */
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@Getter(AccessLevel.NONE)
 	@OneToMany
 	(
 			mappedBy = DepartmentEntity_.COMPANY,
@@ -64,6 +63,13 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	)
 	private Set<DepartmentEntity> departments;
 
+	// no args constructor for jsonb, jaxb, jpa, mapstruct, ...
+	protected CompanyEntity()
+	{
+		// assign default values to @NonNull fields
+		name = "";
+	}
+
 	/* do not use lombok to make sure that fluent setter with its validation is called */
 	public CompanyEntity(@NonNull String name)
 	{
@@ -71,21 +77,24 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 		name(name); // use fluent setter with its validation
 	}
 
-	@Override
-	@NonNull
-	public Company name(@NonNull String name)
+	/////////////////////////
+	// fluent style accessors
+	/////////////////////////
+	@Override @NonNull public String  name() { return name; }
+	@Override @NonNull public Company name(@NonNull String name)
 	{
 		if (Strings.isEmptyOrBlank(name)) throw new IllegalArgumentException("name must not be empty nor blank");
 		this.name = name;
 		return this;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
-	@NonNull
-	public String getName() { return name(); }
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	@Override @NonNull public String  getName()                     { return name(); }
+	@Override @NonNull public Company setName(@NonNull String name) { return name(name); }
 
-	@Override
-	public void beforeMapping(@NonNull CompanyDTO input)
+	@Override public void beforeMapping(@NonNull CompanyDTO input)
 	{
 		log.debug("before mapping starting");
 		super.beforeMapping(input);
@@ -95,8 +104,7 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 		log.debug("before mapping finished");
 	}
 
-	@Override
-	public void afterMapping(@NonNull CompanyDTO input)
+	@Override public void afterMapping(@NonNull CompanyDTO input)
 	{
 		log.debug("after mapping starting");
 		log.debug("after mapping finished");
@@ -132,8 +140,6 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 			if (departmentsContains(department))
 				log.error("department with {} is already contained in {}", department.company(), this);
 
-			// assign this department as department of department and update employees
-			department.company(this);
 			return nonNullDepartments().add(department);
 		}
 	}
@@ -154,5 +160,17 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	{
 		if (isNull(departments)) return false;
 		return departments.contains(department);
+	}
+
+	@Override
+	public @NonNull Optional<Long> optionalId()
+	{
+		return super.optionalId();
+	}
+
+	@Override
+	public @NonNull Optional<Short> optionalVersion()
+	{
+		return super.optionalVersion();
 	}
 }

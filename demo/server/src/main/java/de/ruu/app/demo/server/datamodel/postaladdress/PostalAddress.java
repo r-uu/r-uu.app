@@ -41,7 +41,6 @@ import static jakarta.ws.rs.core.Response.status;
  *
  * @author r-uu
  */
-
 @RequestScoped
 @Path(POSTAL_ADDRESS)
 @OpenAPIDefinition(info = @Info(version = "a version", title = "a title"))
@@ -89,14 +88,9 @@ public class PostalAddress
 	@Produces(APPLICATION_JSON)
 	public Response create(PostalAddressDTO dto)
 	{
-		return
-				status(CREATED)
-						.entity
-								(
-										service
-												.create(dto.toSource())
-												.toTarget()
-								).build();
+		PostalAddressEntity entity = service.create(dto.toSource());
+		PostalAddressDTO    result = entity.toTarget();
+		return status(CREATED).entity(result).build();
 	}
 
 	@PUT

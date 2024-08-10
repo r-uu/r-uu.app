@@ -32,6 +32,10 @@
         </dependency>
         <dependency>
             <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-jsonb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
             <artifactId>r-uu.app-datamodel-company-common</artifactId>
         </dependency>
         <dependency>

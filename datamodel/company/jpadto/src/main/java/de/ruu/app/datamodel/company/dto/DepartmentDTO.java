@@ -6,60 +6,78 @@ import de.ruu.app.datamodel.company.jpa.DepartmentEntity;
 import de.ruu.app.datamodel.company.jpadto.Mapper;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.json.bind.annotation.JsonbTransient;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Slf4j
-@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
-                          // @Getter(AccessLevel.NONE}))
-@Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
-                          // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
 public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implements Department
 {
 	/** mutable non-null */
-	@NonNull
-	// no lombok-generation of setter because of additional validation in manually created method
-	@Setter(AccessLevel.NONE)
-	private String name;
+	@NonNull private String name;
 
 	/** mutable non-null */
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@NonNull
-	@Setter
 	@JsonbTransient
 	private CompanyDTO company;
 
-	/* do not use lombok to make sure that fluent setter with its validation is called */
-	public DepartmentDTO(@NonNull CompanyDTO company, @NonNull String name)
-
+	@JsonbCreator
+	public DepartmentDTO(
+			@JsonbProperty("id")      Long   id,
+			@JsonbProperty("version") Short  version,
+			@JsonbProperty("name")    String name)
 	{
-		this(); // just in case something important happens in the default constructor
-		name(name); // use fluent setter with its validation
-		company(company);
+		super(id, version);
+		this.name = name;
 	}
 
-	@Override public @NonNull Department name(@NonNull String name)
+	// no args constructor for jpa, mapstruct, ...
+	protected DepartmentDTO()
+	{
+		// assign default values to @NonNull fields
+		name = "";
+	}
+
+	/**
+	 * constructor to be used by consumers, do not use lombok to make sure that fluent setter with its validation is
+	 * called
+	 */
+	public DepartmentDTO(@NonNull CompanyDTO company, @NonNull String name)
+	{
+		this(); // just in case something important happens in the default constructor
+		this.company = company;
+		name(name); // use fluent setter with its validation
+		company.add(this);
+	}
+
+	/////////////////////////
+	// fluent style accessors
+	/////////////////////////
+	@Override @NonNull public String     name() {      return name; }
+	@Override @NonNull public Department name(@NonNull String name)
 	{
 		if (Strings.isEmptyOrBlank(name)) throw new IllegalArgumentException("name must not be empty nor blank");
 		this.name = name;
 		return this;
 	}
 
-	@Override
-	@NonNull
-	public Company company() { return company; }
+	@Override @NonNull public Company company() { return company; }
+
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	@Override @NonNull public String     getName()                     { return name();     }
+	@Override @NonNull public Department setName(@NonNull String name) { return name(name); }
+
+	@Override @NonNull public Company getCompany() { return company(); }
 
 	@Override public void beforeMapping(@NonNull DepartmentEntity input)
 	{
@@ -75,9 +93,12 @@ public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implement
 		log.debug("before mapping finished");
 	}
 
-	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
-	public @NonNull String  getName   () { return name();    }
-//	public @NonNull Company getCompany() { return company(); }
-
 	@Override public @NonNull DepartmentEntity toSource() { return Mapper.INSTANCE.map(this); }
+
+	/** package visible method to be called from JsonbCreator in {@link CompanyDTO} */
+	@NonNull Department company(@NonNull CompanyDTO company)
+	{
+		this.company = company;
+		return this;
+	}
 }

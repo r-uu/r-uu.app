@@ -13,11 +13,14 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 
+import java.net.URI;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,8 +30,8 @@ import static de.ruu.app.demo.common.Paths.COMPANY;
 import static de.ruu.lib.util.BooleanFunctions.not;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.Response.Status.CONFLICT;
-import static jakarta.ws.rs.core.Response.Status.CREATED;
 import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
+import static jakarta.ws.rs.core.Response.created;
 import static jakarta.ws.rs.core.Response.ok;
 import static jakarta.ws.rs.core.Response.status;
 
@@ -62,7 +65,7 @@ public class Company
 								service
 										.findAll()
 										.stream()
-										.map(company -> company.toTarget())
+										.map(entity -> entity.toTarget())
 										.collect(Collectors.toSet())
 						)
 						.build();
@@ -92,45 +95,52 @@ public class Company
 	public Response findWithDepartments(@PathParam("id") Long id)
 	{
 		Optional<CompanyEntity> result = service.findWithDepartments(id);
-		if (not(result.isPresent()))
-			return status(NOT_FOUND).entity("company with id " + id + " not found").build();
-		else
-			return
-					ok
-							(
-									result
-											.get()
-											.toTarget()
-							).build();
-	}
 
-	@POST
-//	@Path(COMPANY)
-	@Consumes(APPLICATION_JSON)
-	@Produces(APPLICATION_JSON)
-	public Response create(CompanyDTO company)
-	{
-		return
-				status(CREATED)
-						.entity
+		if (not(result.isPresent()))
+				return status(NOT_FOUND).entity("company with id " + id + " not found").build();
+		else
+				return
+						ok
 								(
-										service
-												.create(company.toSource())
+										result
+												.get()
 												.toTarget()
 								).build();
 	}
 
-	@PUT
-//	@Path(COMPANY)
+	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response update(CompanyDTO company)
+	public Response create(CompanyDTO dto, @Context UriInfo uriInfo)
+	{
+//		// build result without location header
+//		return
+//				status(CREATED)
+//						.entity
+//								(
+//										service
+//												.create(dto.toSource())
+//												.toTarget()
+//								).build();
+
+		CompanyEntity result = service.create(dto.toSource());
+
+		// build result with location header
+		URI uri = uriInfo.getAbsolutePathBuilder().path(Long.toString(result.id())).build();
+
+		return created(uri).entity(result).build();
+	}
+
+	@PUT
+	@Consumes(APPLICATION_JSON)
+	@Produces(APPLICATION_JSON)
+	public Response update(CompanyDTO dto)
 	{
 		return
 				ok
 						(
 								service
-										.create(company.toSource())
+										.create(dto.toSource())
 										.toTarget()
 						).build();
 	}

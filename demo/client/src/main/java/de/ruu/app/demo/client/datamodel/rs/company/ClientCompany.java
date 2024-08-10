@@ -4,7 +4,7 @@ import de.ruu.app.datamodel.company.Company;
 import de.ruu.app.datamodel.company.CompanyService;
 import de.ruu.app.datamodel.company.dto.CompanyDTO;
 import de.ruu.app.demo.common.Paths;
-import de.ruu.lib.util.jsonb.JsonbConfigurator;
+import de.ruu.lib.jsonb.JsonbConfigurator;
 import de.ruu.lib.util.rs.RestClientCallException;
 import de.ruu.lib.util.rs.filter.logging.ClientRequestLoggingFilter;
 import jakarta.annotation.PostConstruct;

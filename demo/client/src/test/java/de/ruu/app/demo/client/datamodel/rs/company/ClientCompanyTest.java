@@ -1,7 +1,9 @@
 package de.ruu.app.demo.client.datamodel.rs.company;
 
 import de.ruu.app.datamodel.company.Company;
+import de.ruu.app.datamodel.company.Department;
 import de.ruu.app.datamodel.company.dto.CompanyDTO;
+import de.ruu.app.datamodel.company.dto.DepartmentDTO;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.spi.CDI;
@@ -23,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Slf4j
 class ClientCompanyTest
 {
-	private ClientCompany client;
+	private ClientCompany    client;
+	private ClientDepartment clientDepartment;
 
 	@BeforeAll static void beforeAll()
 	{
@@ -32,7 +35,8 @@ class ClientCompanyTest
 
 	@BeforeEach void beforeEach()
 	{
-		client = CDI.current().select(ClientCompany.class).get();
+		client           = CDI.current().select(ClientCompany   .class).get();
+		clientDepartment = CDI.current().select(ClientDepartment.class).get();
 	}
 
 	@Test void testFindAll()
@@ -41,7 +45,7 @@ class ClientCompanyTest
 
 		assertThat(all, is(not(nullValue())));
 
-		log.info("\nreceived {} tag groups", all.size());
+		log.debug("\nreceived {} companies", all.size());
 	}
 
 	@Test void testCreate()
@@ -50,7 +54,7 @@ class ClientCompanyTest
 
 		Company company = client.create(new CompanyDTO(name));
 
-		log.info("\nreceived company\n{}", company);
+		log.debug("\nreceived company\n{}", company);
 
 		if (company instanceof CompanyDTO)
 		{
@@ -84,7 +88,7 @@ class ClientCompanyTest
 
 		Company companyOut = optional.get();
 
-		log.info("\nreceived company\n{}" + companyOut);
+		log.debug("\nreceived company\n{}" + companyOut);
 
 		if (companyOut instanceof CompanyDTO)
 		{
@@ -115,7 +119,7 @@ class ClientCompanyTest
 
 		Company companyOut = client.update(companyIn);
 
-		log.info("\nreceived company\n{}" + companyOut);
+		log.debug("\nreceived company\n{}" + companyOut);
 
 		if (companyOut instanceof CompanyDTO)
 		{
@@ -141,7 +145,7 @@ class ClientCompanyTest
 	{
 		Company company = client.create(new CompanyDTO("name " + System.currentTimeMillis()));
 
-		log.info("\nreceived company\n{}", company);
+		log.debug("\nreceived company\n{}", company);
 
 		client.delete(company.id());
 
@@ -149,5 +153,38 @@ class ClientCompanyTest
 
 		assertThat(optional            , is(not(nullValue())));
 		assertThat(optional.isPresent(), is(false));
+	}
+
+	@Test void testFindWithDepartments()
+	{
+		Company company = client.create(new CompanyDTO("name " + System.currentTimeMillis()));
+
+		log.debug("\nreceived company\n{}", company);
+
+		if (company instanceof CompanyDTO)
+		{
+			CompanyDTO dto = (CompanyDTO) company;
+
+			for (int i = 0; i < 3; i++)
+			{
+				Department department = clientDepartment.create(new DepartmentDTO(dto, "test" + i));
+				log.debug("\nreceived department\n{}", department);
+			}
+
+			Optional<Company> optional = client.findWithDepartments(company.id());
+
+			assertThat(optional.isPresent(), is(true));
+
+			company = optional.get();
+
+			assertThat(company.departments().isPresent() , is(true));
+			assertThat(company.departments().get().size(), is(3));
+
+			for (Department department : company.departments().get())
+			{
+				log.debug("company for department {} is null {}", department, department.getCompany() == null);
+			}
+
+		}
 	}
 }

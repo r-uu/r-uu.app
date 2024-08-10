@@ -17,7 +17,9 @@
 
   <modules>
     <module>demo</module>
-      <module>datamodel</module>
+    <module>datamodel</module>
+    <module>jfx-exe-min</module>
+    <module>jfx-exe-min-1</module>
   </modules>
 
 </project>

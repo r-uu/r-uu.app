@@ -18,4 +18,6 @@ module de.ruu.app.datamodel.company.jpadto
 	requires de.ruu.lib.mapstruct;
 	requires org.mapstruct;
 	requires jakarta.json.bind;
+	requires de.ruu.lib.jsonb;
+	requires jakarta.json;
 }

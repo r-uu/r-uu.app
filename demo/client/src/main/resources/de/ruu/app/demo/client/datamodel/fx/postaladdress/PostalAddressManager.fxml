@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,7 +14,7 @@
       <VBox fx:id="vbx" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <TableView fx:id="tv" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-            <ToolBar fx:id="tbr" prefHeight="40.0" prefWidth="200.0">
+            <ToolBar fx:id="tbr" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
               <items>
                 <Button fx:id="btnAdd" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
                      <graphic>
@@ -23,6 +24,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <tooltip>
+                        <Tooltip text="add" />
+                     </tooltip>
                   </Button>
                   <Button fx:id="btnRemove" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
                      <graphic>
@@ -32,6 +36,21 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <tooltip>
+                        <Tooltip text="remove" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="btnEdit" layoutX="10.0" layoutY="18.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="15.0">
+                     <graphic>
+                        <ImageView fx:id="ivwEdit" fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@edit.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="edit" />
+                     </tooltip>
                   </Button>
               </items>
             </ToolBar>

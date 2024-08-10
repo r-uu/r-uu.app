@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Table(name = "postal_address", schema = "demo_test")
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
                           // @Getter(AccessLevel.NONE}))
 @Setter

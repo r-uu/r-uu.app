@@ -19,11 +19,9 @@ import java.util.Set;
 @Slf4j
 public class CompanyServiceJPAEE implements CompanyServiceJPA
 {
-	@Inject
-	private CompanyRepository repository;
+	@Inject private CompanyRepository repository;
 
-	@PostConstruct
-	private void postConstruct() { log.debug("injected repository: {}", repository); }
+	@PostConstruct private void postConstruct() { log.debug("injected repository: {}", repository); }
 
 	@Override public @NonNull          CompanyEntity  create(@NonNull CompanyEntity entity) { return repository.save  (entity); }
 	@Override public @NonNull Optional<CompanyEntity> read  (@NonNull Long          id    ) { return repository.find  (id    ); }

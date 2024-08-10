@@ -8,14 +8,15 @@ public interface Paths
 	/** constants for demo domain */
 	String DEMO = "/demo";
 
-	/** constants for company domain */
-	String COMPANY                = "/company";
-	String BY_ID_WITH_DEPARTMENTS = BY_ID + "/optionalDepartments";
-
 	/** constants for datamodel domain */
-	String DATAMODEL      = "/datamodel";
-	String POSTAL_ADDRESS = DATAMODEL + "/postaladdress";
+	String DATAMODEL              = "/datamodel";
+	String POSTAL_ADDRESS         = DATAMODEL + "/postaladdress";
+	String COMPANY                = DATAMODEL + "/company";
+	String DEPARTMENT             = DATAMODEL + "/department";
 
 	/** constants for system domain */
 	String SYSTEM  = "/system";
+
+	/** special purpose constants */
+	String BY_ID_WITH_DEPARTMENTS = BY_ID + "/optionalDepartments";
 }

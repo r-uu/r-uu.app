@@ -19,4 +19,5 @@ module de.ruu.app.demo.server
 	requires de.ruu.app.datamodel.postaladdress.jpadto.ee;
 	requires de.ruu.app.datamodel.company.jpadto;
 	requires static lombok;
+	requires de.ruu.app.datamodel.company.common;
 }

@@ -28,50 +28,58 @@ public abstract class Mapper
 
 	@BeforeMapping public void beforeMapping(CompanyDTO source, @MappingTarget CompanyEntity target)
 	{
-		log.debug("before source {}, target  {}", source, target);
+		log.debug("starting before source {}, target  {}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
+		log.debug("finished before source {}, target  {}", source, target);
 	}
 
 	@BeforeMapping public void beforeMapping(CompanyEntity source, @MappingTarget CompanyDTO target)
 	{
-		log.debug("before source {}, target  {}", source, target);
+		log.debug("starting before source {}, target  {}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
+		log.debug("finished before source {}, target  {}", source, target);
 	}
 
 	@AfterMapping public void afterMapping(CompanyDTO source, @MappingTarget CompanyEntity target)
 	{
-		log.debug("after source {}, target  {}", source, target);
-		target.beforeMapping(source); // invoke callback for mapping
+		log.debug("calling after source {}, target  {}", source, target);
+		target.afterMapping(source); // invoke callback for mapping
+		log.debug("finished after source {}, target  {}", source, target);
 	}
 
 	@AfterMapping public void afterMapping(CompanyEntity source, @MappingTarget CompanyDTO target)
 	{
 		log.debug("after source {}, target  {}", source, target);
-		target.beforeMapping(source); // invoke callback for mapping
+		target.afterMapping(source); // invoke callback for mapping
+		log.debug("finished after source {}, target  {}", source, target);
 	}
 
 	@BeforeMapping public void beforeMapping(DepartmentDTO source, @MappingTarget DepartmentEntity target)
 	{
-		log.debug("before source {}, target  {}", source, target);
+		log.debug("starting before source {}, target  {}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
+		log.debug("finished before source {}, target  {}", source, target);
 	}
 
 	@BeforeMapping public void beforeMapping(DepartmentEntity source, @MappingTarget DepartmentDTO target)
 	{
-		log.debug("before source {}, target  {}", source, target);
+		log.debug("starting before source {}, target  {}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
+		log.debug("finished before source {}, target  {}", source, target);
 	}
 
 	@AfterMapping public void afterMapping(DepartmentDTO source, @MappingTarget DepartmentEntity target)
 	{
 		log.debug("after source {}, target  {}", source, target);
-		target.beforeMapping(source); // invoke callback for mapping
+		target.afterMapping(source); // invoke callback for mapping
+		log.debug("finished after source {}, target  {}", source, target);
 	}
 
 	@AfterMapping public void afterMapping(DepartmentEntity source, @MappingTarget DepartmentDTO target)
 	{
 		log.debug("after source {}, target  {}", source, target);
-		target.beforeMapping(source); // invoke callback for mapping
+		target.afterMapping(source); // invoke callback for mapping
+		log.debug("finished after source {}, target  {}", source, target);
 	}
 
 	@ObjectFactory

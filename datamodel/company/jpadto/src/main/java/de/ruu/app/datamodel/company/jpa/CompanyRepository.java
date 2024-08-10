@@ -26,12 +26,14 @@ public class CompanyRepository extends AbstractRepository<CompanyEntity, Long>
 
 	public Optional<CompanyEntity> findWithDepartments(@NonNull Long id)
 	{
-		EntityGraph<CompanyEntity> result = entityManager.createEntityGraph(CompanyEntity.class);
-		result.addSubgraph(CompanyEntity_.departments.getName());
+		EntityGraph<CompanyEntity> entityGraph = entityManager.createEntityGraph(CompanyEntity.class);
+		entityGraph.addSubgraph(CompanyEntity_.departments.getName());
 
 		Map<String, Object> hints = new HashMap<>();
-		hints.put(GraphType.FETCH.getName(), result);
+		hints.put(GraphType.FETCH.getName(), entityGraph);
 
-		return Optional.ofNullable(entityManager.find(CompanyEntity.class, id, hints));
+		CompanyEntity result = entityManager.find(CompanyEntity.class, id, hints);
+
+		return Optional.ofNullable(result);
 	}
 }

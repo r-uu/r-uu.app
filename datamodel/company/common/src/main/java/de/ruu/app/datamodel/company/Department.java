@@ -4,9 +4,15 @@ import lombok.NonNull;
 
 public interface Department
 {
-	@NonNull String     name();
-	@NonNull Department name(@NonNull String name);
+	/** @return nullable id */
+	Long id();
 
-	/** @return non null {@link Department} */
-	@NonNull Company company();
+	@NonNull String        name();
+	@NonNull Department    name(@NonNull String name);
+	@NonNull String     getName();
+	@NonNull Department setName(@NonNull String name);
+
+	/** @return non null {@link Company} */
+	@NonNull Company    company();
+	@NonNull Company getCompany();
 }

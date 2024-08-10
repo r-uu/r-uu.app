@@ -7,6 +7,7 @@ module de.ruu.app.demo.client
 
 	opens de.ruu.app.demo.client.datamodel.fx;
 	opens de.ruu.app.demo.client.datamodel.fx.postaladdress;
+	opens de.ruu.app.demo.client.datamodel.fx.postaladdress.edit;
 	opens de.ruu.app.demo.client.datamodel.rs.company;
 
 	requires static lombok;
@@ -31,4 +32,6 @@ module de.ruu.app.demo.client
 	requires de.ruu.app.datamodel.company.common;
 	requires de.ruu.app.datamodel.company.jpadto;
 	requires de.ruu.lib.fx.core;
+	requires de.ruu.lib.jsonb;
+	requires de.ruu.lib.jpa.core;
 }

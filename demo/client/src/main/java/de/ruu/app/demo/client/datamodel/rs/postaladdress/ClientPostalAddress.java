@@ -4,7 +4,7 @@ import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.app.datamodel.postaladdress.PostalAddressService;
 import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
 import de.ruu.app.demo.common.Paths;
-import de.ruu.lib.util.jsonb.JsonbConfigurator;
+import de.ruu.lib.jsonb.JsonbConfigurator;
 import de.ruu.lib.util.rs.RestClientCallException;
 import de.ruu.lib.util.rs.filter.logging.ClientRequestLoggingFilter;
 import jakarta.annotation.PostConstruct;
@@ -74,7 +74,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 	// interface implementations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override public @NonNull PostalAddress create(@NonNull PostalAddress postalAddress)
+	@Override public @NonNull PostalAddressDTO create(@NonNull PostalAddress postalAddress)
 	{
 		Response response = client.target(uri).request().post(Entity.entity(postalAddress, APPLICATION_JSON));
 
@@ -107,7 +107,7 @@ public class ClientPostalAddress implements PostalAddressService<PostalAddress>
 		}
 	}
 
-	@Override public @NonNull PostalAddress update(@NonNull PostalAddress address)
+	@Override public @NonNull PostalAddressDTO update(@NonNull PostalAddress address)
 	{
 		Response response = client.target(uri).request().put(Entity.entity(address, APPLICATION_JSON));
 

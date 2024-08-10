@@ -1,6 +1,7 @@
 package de.ruu.app.demo.client.datamodel.fx.postaladdress;
 
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Builder;
@@ -15,55 +16,54 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class PostalAddressFXBean
 {
-	private StringProperty city;
-	private StringProperty country;
-	private StringProperty getCity;
-	private StringProperty getCountry;
-	private StringProperty getPostalCode;
-	private StringProperty getStateOrProvince;
-	private StringProperty getStreet;
-	private StringProperty getStreetNumber;
-	private StringProperty getType;
-	private StringProperty postalCode;
-	private StringProperty stateOrProvince;
-	private StringProperty street;
-	private StringProperty streetNumber;
-	private StringProperty type;
+	private StringProperty street          = new SimpleStringProperty();
+	private StringProperty streetNumber    = new SimpleStringProperty();
+	private StringProperty postalCode      = new SimpleStringProperty();
+	private StringProperty city            = new SimpleStringProperty();
+	private StringProperty stateOrProvince = new SimpleStringProperty();
+	private StringProperty country         = new SimpleStringProperty();
+	private StringProperty type            = new SimpleStringProperty();
 
-	public PostalAddressFXBean(StringProperty city, StringProperty country, StringProperty getCity, StringProperty getCountry, StringProperty getPostalCode, StringProperty getStateOrProvince, StringProperty getStreet, StringProperty getStreetNumber, StringProperty getType, StringProperty postalCode, StringProperty stateOrProvince, StringProperty street, StringProperty streetNumber, StringProperty type)
+	public PostalAddressFXBean(
+			StringProperty street,
+			StringProperty streetNumber,
+			StringProperty postalCode,
+			StringProperty city,
+			StringProperty stateOrProvince,
+			StringProperty country,
+			StringProperty type)
 	{
-		this.city = city;
-		this.country = country;
-		this.getCity = getCity;
-		this.getCountry = getCountry;
-		this.getPostalCode = getPostalCode;
-		this.getStateOrProvince = getStateOrProvince;
-		this.getStreet = getStreet;
-		this.getStreetNumber = getStreetNumber;
-		this.getType = getType;
-		this.postalCode = postalCode;
+		this.street          = street;
+		this.streetNumber    = streetNumber;
+		this.postalCode      = postalCode;
+		this.city            = city;
 		this.stateOrProvince = stateOrProvince;
-		this.street = street;
-		this.streetNumber = streetNumber;
-		this.type = type;
+		this.country         = country;
+		this.type            = type;
 	}
 
 	public PostalAddressFXBean(PostalAddress postalAddress)
 	{
-		city = new SimpleStringProperty(postalAddress.city());
-		country = new SimpleStringProperty(postalAddress.country());
-		getCity = new SimpleStringProperty(postalAddress.getCity());
-		getCountry = new SimpleStringProperty(postalAddress.getCountry());
-		getPostalCode = new SimpleStringProperty(postalAddress.getPostalCode());
-		getStateOrProvince = new SimpleStringProperty(postalAddress.getStateOrProvince());
-		getStreet = new SimpleStringProperty(postalAddress.getStreet());
-		getStreetNumber = new SimpleStringProperty(postalAddress.getStreetNumber());
-		getType = new SimpleStringProperty(postalAddress.getType());
-		postalCode = new SimpleStringProperty(postalAddress.postalCode());
+		street          = new SimpleStringProperty(postalAddress.street());
+		streetNumber    = new SimpleStringProperty(postalAddress.streetNumber());
+		postalCode      = new SimpleStringProperty(postalAddress.postalCode());
+		city            = new SimpleStringProperty(postalAddress.city());
 		stateOrProvince = new SimpleStringProperty(postalAddress.stateOrProvince());
-		street = new SimpleStringProperty(postalAddress.street());
-		streetNumber = new SimpleStringProperty(postalAddress.streetNumber());
-		type = new SimpleStringProperty(postalAddress.type());
+		country         = new SimpleStringProperty(postalAddress.country());
+		type            = new SimpleStringProperty(postalAddress.type());
+	}
+
+	public PostalAddress toSource()
+	{
+		return
+				new PostalAddressDTO(
+						street         .getValue(),
+						streetNumber   .getValue(),
+						postalCode     .getValue(),
+						city           .getValue(),
+						stateOrProvince.getValue(),
+						country        .getValue(),
+						type           .getValue());
 	}
 
 	public StringProperty city()
@@ -74,41 +74,6 @@ public class PostalAddressFXBean
 	public StringProperty country()
 	{
 		return country;
-	}
-
-	public StringProperty getCity()
-	{
-		return getCity;
-	}
-
-	public StringProperty getCountry()
-	{
-		return getCountry;
-	}
-
-	public StringProperty getPostalCode()
-	{
-		return getPostalCode;
-	}
-
-	public StringProperty getStateOrProvince()
-	{
-		return getStateOrProvince;
-	}
-
-	public StringProperty getStreet()
-	{
-		return getStreet;
-	}
-
-	public StringProperty getStreetNumber()
-	{
-		return getStreetNumber;
-	}
-
-	public StringProperty getType()
-	{
-		return getType;
 	}
 
 	public StringProperty postalCode()

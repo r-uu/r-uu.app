@@ -1,5 +1,8 @@
 package de.ruu.app.demo.client.datamodel.fx.postaladdress;
 
+import de.ruu.app.datamodel.postaladdress.PostalAddress;
+import de.ruu.app.datamodel.postaladdress.dto.PostalAddressDTO;
+import de.ruu.app.demo.client.datamodel.fx.postaladdress.edit.PostalAddressFXBeanEditor;
 import de.ruu.app.demo.client.datamodel.rs.postaladdress.ClientPostalAddress;
 import de.ruu.lib.cdi.se.EventDispatcher;
 import de.ruu.lib.fx.FXUtil;
@@ -9,7 +12,10 @@ import de.ruu.lib.fx.control.TableViewConfig;
 import de.ruu.lib.fx.css.ButtonUtil;
 import de.ruu.lib.fx.css.Color;
 import de.ruu.lib.fx.css.FontWeight;
+import de.ruu.lib.jpa.core.Entity;
+import de.ruu.lib.jpa.core.Entity.EntityInfo;
 import jakarta.inject.Inject;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
@@ -18,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -30,27 +37,101 @@ import java.util.Optional;
 @Slf4j
 class PostalAddressManagerController extends DefaultFXCViewController
 {
-	@FXML private Button btnAdd;
-	@FXML private Button btnRemove;
-	@FXML private ImageView ivwAdd;
-	@FXML private ImageView ivwRemove;
+	static class PostalAddressFXBeanWithEntityInfo extends PostalAddressFXBean
+	{
+		private EntityInfo<Long> info;
+
+		private PostalAddressFXBeanWithEntityInfo(@NonNull PostalAddress postalAddress)
+		{
+			super(postalAddress);
+			info = new EntityInfo<>((Entity<Long>) postalAddress);
+		}
+	}
+
+	@FXML private Button     btnAdd;
+	@FXML private Button     btnRemove;
+	@FXML private Button     btnEdit;
+	@FXML private ImageView  ivwAdd;
+	@FXML private ImageView  ivwRemove;
+	@FXML private ImageView  ivwEdit;
 	@FXML private AnchorPane root;
-	@FXML private ToolBar tbr;
-	@FXML private TableView<PostalAddressFXBean> tv;
-	@FXML private VBox vbx;
+	@FXML private ToolBar    tbr;
+	@FXML private VBox       vbx;
+
+	@FXML private TableView<PostalAddressFXBeanWithEntityInfo> tv;
 
 	@Inject private ClientPostalAddress client;
+
+	@Inject private PostalAddressFXBeanEditor editor;
 
 	@Inject private EventDispatcher<FXCAppStartedEvent> eventDispatcherFXCAppStarted;
 
 	@Override @FXML
 	protected void initialize()
 	{
+		log.debug("-".repeat(100));
 		PostalAddressFXTableViewConfigurator.configure(tv);
 
-		client.findAll().forEach(address -> tv.getItems().add(new PostalAddressFXBean(address)));
+		client.findAll().forEach(address -> tv.getItems().add(new PostalAddressFXBeanWithEntityInfo(address)));
+
+		btnAdd .setOnAction(e -> onAdd (e));
+		btnEdit.setOnAction(e -> onEdit(e));
 
 		eventDispatcherFXCAppStarted.add(e -> onAppStarted(e));
+	}
+
+	private void onAdd(ActionEvent e)
+	{
+		log.debug("-".repeat(100));
+		PostalAddressFXBean postalAddressFXBean = new PostalAddressFXBean();
+
+		PostalAddressFXBeanEditorNew editorNew = new PostalAddressFXBeanEditorNew(editor);
+
+		// populate editor with new item
+		editor.getService().postalAddress(postalAddressFXBean);
+
+		Optional<PostalAddressFXBean> optional = editorNew.optionalPostalAddressCreateData();
+
+		if (optional.isPresent())
+		{
+			// to create a new item in db the fx bean data has to be passed to
+			PostalAddressDTO newPostalAddressAsDTO = client.create(postalAddressFXBean.toSource());
+
+			PostalAddressFXBeanWithEntityInfo newItem =
+					new PostalAddressFXBeanWithEntityInfo(newPostalAddressAsDTO);
+
+			// add and select item with retrieved item
+			tv.getItems().add(newItem);
+			tv.getSelectionModel().select(newItem);
+		}
+	}
+
+	private void onEdit(ActionEvent e)
+	{
+		log.debug("-".repeat(100));
+		PostalAddressFXBeanWithEntityInfo postalAddressFXBean = tv.getSelectionModel().getSelectedItem();
+
+		if (postalAddressFXBean == null) return;
+
+		PostalAddressFXBeanEditorUpdate editorUpdate = new PostalAddressFXBeanEditorUpdate(editor);
+
+		// populate editor with selected item
+		editor.getService().postalAddress(postalAddressFXBean);
+
+		Optional<PostalAddressFXBeanWithEntityInfo> optional = editorUpdate.optionalPostalAddressUpdateData();
+
+		if (optional.isPresent())
+		{
+			// remember index of selected item
+			int index = tv.getItems().indexOf(postalAddressFXBean);
+
+			PostalAddressDTO updatedDTO = client.update(postalAddressFXBean.toSource());
+			PostalAddressFXBeanWithEntityInfo updatedItem = new PostalAddressFXBeanWithEntityInfo(updatedDTO);
+
+			// replace and select item with retrieved item
+			tv.getItems().set(index, updatedItem);
+			tv.getSelectionModel().select(updatedItem);
+		}
 	}
 
 	private void onAppStarted(FXCAppStartedEvent e)
@@ -62,10 +143,6 @@ class PostalAddressManagerController extends DefaultFXCViewController
 			optional.get().setTitle("postal address manager");
 		}
 
-//		Color.WHITE;
-//		log.debug("before: {}", btnRemove.getStyle());
-//		btnRemove.setStyle("-fx-background-color: white");
-//		log.debug("after : {}", btnRemove.getStyle());
 		ButtonUtil.backgroundColor(btnRemove, Color.WHITE);
 
 		TableViewConfig tableViewConfig = new TableViewConfig(tv);

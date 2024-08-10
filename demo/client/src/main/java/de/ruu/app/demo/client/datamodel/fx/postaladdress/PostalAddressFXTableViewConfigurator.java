@@ -11,68 +11,68 @@ import javafx.scene.control.cell.TextFieldTableCell;
  */
 public abstract class PostalAddressFXTableViewConfigurator
 {
-	public static void configure(TableView<PostalAddressFXBean> tableView)
+	public static <P extends PostalAddressFXBean> void configure(TableView<P> tableView)
 	{
-		tableView.getColumns().add(createColumnCountry());
-		tableView.getColumns().add(createColumnType());
-		tableView.getColumns().add(createColumnPostalCode());
-		tableView.getColumns().add(createColumnStateOrProvince());
 		tableView.getColumns().add(createColumnStreet());
 		tableView.getColumns().add(createColumnStreetNumber());
+		tableView.getColumns().add(createColumnPostalCode());
 		tableView.getColumns().add(createColumnCity());
+		tableView.getColumns().add(createColumnCountry());
+		tableView.getColumns().add(createColumnStateOrProvince());
+		tableView.getColumns().add(createColumnType());
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnCountry()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnCountry()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("country");
+		TableColumn<P, String> result = new TableColumn<>("country");
 		result.setCellValueFactory(data -> data.getValue().country());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnType()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnType()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("type");
+		TableColumn<P, String> result = new TableColumn<>("type");
 		result.setCellValueFactory(data -> data.getValue().type());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnPostalCode()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnPostalCode()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("postalCode");
+		TableColumn<P, String> result = new TableColumn<>("postal code");
 		result.setCellValueFactory(data -> data.getValue().postalCode());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnStateOrProvince()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnStateOrProvince()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("stateOrProvince");
+		TableColumn<P, String> result = new TableColumn<>("state or province");
 		result.setCellValueFactory(data -> data.getValue().stateOrProvince());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnStreet()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnStreet()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("street");
+		TableColumn<P, String> result = new TableColumn<>("street");
 		result.setCellValueFactory(data -> data.getValue().street());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnStreetNumber()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnStreetNumber()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("streetNumber");
+		TableColumn<P, String> result = new TableColumn<>("streetNumber");
 		result.setCellValueFactory(data -> data.getValue().streetNumber());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}
 	
-	private static TableColumn<PostalAddressFXBean, String> createColumnCity()
+	private static <P extends PostalAddressFXBean> TableColumn<P, String> createColumnCity()
 	{
-		TableColumn<PostalAddressFXBean, String> result = new TableColumn<>("city");
+		TableColumn<P, String> result = new TableColumn<>("city");
 		result.setCellValueFactory(data -> data.getValue().city());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
