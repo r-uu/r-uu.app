@@ -11,4 +11,4 @@ This app is inspired by [Konrad Neitzels project on github](https://github.com/k
 
 # [jfx-exe-main-1 introduce jpms](#jfx-exe-main-1)
 
-  same as [jfx-exe-min](jfx-exe-min) but with ```module-info.java```
+  same as [jfx-exe-min](#jfx-exe-min) but with ```module-info.java```

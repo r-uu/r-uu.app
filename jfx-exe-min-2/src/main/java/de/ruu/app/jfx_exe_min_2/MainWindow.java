@@ -1,4 +1,4 @@
-package de.ruu.app.jfx_exe_min_1;
+package de.ruu.app.jfx_exe_min_2;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

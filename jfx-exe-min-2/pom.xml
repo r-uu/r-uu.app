@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>r-uu</groupId>
-    <artifactId>r-uu.app-jfx-exe-min-1</artifactId>
+    <artifactId>r-uu.app-jfx-exe-min-2</artifactId>
 
     <organization>
         <name>r-uu</name>
@@ -96,6 +96,12 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- r-uu dependencies -->
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-demo-client</artifactId>
         </dependency>
 
         <!-- JUnit 5 -->
@@ -443,6 +449,7 @@
                             <mainclass>${main.class}</mainclass>
                             <input>${project.build.directory}/modules</input>
                             <mainjar>${jar.filename}.jar</mainjar>
+                            <winconsole>true</winconsole>
                         </configuration>
                         <executions>
                             <execution>

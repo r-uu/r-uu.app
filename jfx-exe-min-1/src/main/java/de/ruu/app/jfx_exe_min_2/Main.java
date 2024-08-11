@@ -1,10 +1,11 @@
-package de.ruu.app.jfx_exe_min_1;
+package de.ruu.app.jfx_exe_min_2;
 
 /**
  * Another Main class as workaround when the JavaFX Application ist started without
- * taking care os Classloader Requirements of JavaFX. (Important when starting from inside NetBeans!)
+ * taking care of Classloader Requirements of JavaFX. (Important when starting from inside NetBeans!)
  */
-public class Main {
+public class Main
+{
     /**
      * Additional main methode to start Application.
      * @param args Commandline Arguments.

@@ -22,7 +22,7 @@
         <link.name>${project.artifactId}</link.name>
         <launcher>${project.artifactId}</launcher>
         <appName>${project.artifactId}</appName>
-        <main.class>de.ruu.app.jfx_exe_min_1.Main</main.class>
+        <main.class>de.ruu.app.jfx_exe_min_2.Main</main.class>
         <java.version>21</java.version>
         <required.maven.version>3.8.6</required.maven.version>
         <jar.filename>${project.artifactId}-${project.version}</jar.filename>

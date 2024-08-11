@@ -1,4 +1,4 @@
-package de.ruu.app.jfx_exe_min_1;
+package de.ruu.app.jfx_exe_min_2;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,9 +8,8 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainWindow implements Initializable {
-
-
+public class MainWindow implements Initializable
+{
     private int counter = 0;
 
     @FXML
@@ -26,7 +25,8 @@ public class MainWindow implements Initializable {
     }
 
     @FXML
-    private void onButtonClick(ActionEvent actionEvent) {
+    private void onButtonClick(ActionEvent actionEvent)
+    {
         counter++;
         displayCounter();
     }
