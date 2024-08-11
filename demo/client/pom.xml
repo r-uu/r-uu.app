@@ -158,16 +158,16 @@
 <!--        </plugins>-->
 <!--    </build>-->
 
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.openjfx</groupId>-->
-<!--                <artifactId>javafx-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <mainClass>de.ruu.app.demo.client.datamodel.fx.postaladdress.PostalAddressManagerAppRunner</mainClass>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>de.ruu.app.demo.client.datamodel.fx.postaladdress.PostalAddressManagerAppRunner</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
