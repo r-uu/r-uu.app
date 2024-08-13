@@ -2,4 +2,4 @@
 
 r-uu's app repository
 
-[back](../r-uu/readme.md)
+[back](https://github.com/r-uu/r-uu)
