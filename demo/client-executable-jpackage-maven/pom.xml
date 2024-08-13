@@ -308,6 +308,9 @@
                 <version>${javafx.maven.plugin}</version>
                 <configuration>
                     <mainClass>${main.class}</mainClass>
+                    <options>
+                        <option>--add-reads de.ruu.lib.fx.comp=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>
