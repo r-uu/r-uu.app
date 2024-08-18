@@ -6,11 +6,92 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>r-uu.app-jeee-raaa-server</artifactId>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>r-uu</groupId>
         <artifactId>r-uu.app-jeee-raaa</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <!-- overwrite possible definition of properties in parent modules -->
+        <!--		<maven.compiler.source></maven.compiler.source>-->
+        <!--		<maven.compiler.target></maven.compiler.target>-->
+        <!--		<maven.compiler.release>${java.version}</maven.compiler.release>-->
+        <!-- Liberty configuration -->
+        <liberty.var.http.port>9080</liberty.var.http.port>
+        <liberty.var.https.port>9443</liberty.var.https.port>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.metrics</groupId>
+            <artifactId>microprofile-metrics-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.openapi</groupId>
+            <artifactId>microprofile-openapi-api</artifactId>
+        </dependency>
+
+        <!-- own dependencies -->
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeee-raaa-common</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.10.3</version>
+                <configuration>
+                    <jvmOptions>--enable-preview</jvmOptions>
+                    <copyDependencies>
+                        <location>${project.build.directory}/liberty/wlp/usr/shared/resources</location>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                        </dependency>
+                    </copyDependencies>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <!-- Plugin to run functional tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <http.port>${liberty.var.http.port}</http.port>
+                        <context.root>/</context.root>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

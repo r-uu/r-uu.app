@@ -13,7 +13,7 @@
 		<groupId>r-uu</groupId>
 		<artifactId>r-uu.maven-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../../r-uu.maven-parent</relativePath>
+<!--		<relativePath>../../../r-uu.maven-parent</relativePath>-->
 	</parent>
 
 	<properties>

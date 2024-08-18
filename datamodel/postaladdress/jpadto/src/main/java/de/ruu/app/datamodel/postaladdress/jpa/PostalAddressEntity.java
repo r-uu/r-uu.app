@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Entity
-@Table(name = "postal_address", schema = "demo_test")
+@Table(schema = "app_test", name = "postal_address")
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

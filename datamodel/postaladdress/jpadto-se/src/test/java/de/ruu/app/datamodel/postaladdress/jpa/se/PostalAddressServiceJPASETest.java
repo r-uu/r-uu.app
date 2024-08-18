@@ -23,11 +23,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@DisabledOnServerNotListening
-(
-		propertyNameHost = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbhost",
-		propertyNamePort = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbport"
-)
+@DisabledOnServerNotListening(propertyNameHost = "database.host", propertyNamePort = "database.port")
 @Slf4j
 class PostalAddressServiceJPASETest
 {
@@ -44,9 +40,9 @@ class PostalAddressServiceJPASETest
 			seContainer =
 					SeContainerInitializer
 							.newInstance()
-							.addExtensions     (CDIExtension.class               )
+							.addExtensions     (CDIExtension               .class)
 							.addBeanClasses    (TransactionalInterceptorCDI.class)
-							.addBeanClasses    (EntityManagerProducer.class      )
+							.addBeanClasses    (EntityManagerProducer      .class)
 							.enableInterceptors(TransactionalInterceptorCDI.class)
 							.initialize();
 			CDIContainer.bootstrap(PostalAddressServiceJPASETest.class.getClassLoader());

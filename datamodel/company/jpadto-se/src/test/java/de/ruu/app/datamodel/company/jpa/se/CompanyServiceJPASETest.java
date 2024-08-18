@@ -25,11 +25,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@DisabledOnServerNotListening
-(
-		propertyNameHost = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbhost",
-		propertyNamePort = "de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer.dbport"
-)
+@DisabledOnServerNotListening(propertyNameHost = "database.host", propertyNamePort = "database.port")
 @Slf4j
 class CompanyServiceJPASETest
 {

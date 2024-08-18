@@ -38,7 +38,7 @@ import static java.util.Objects.isNull;
 // can not combine @NoArgsConstructor with @NonNull fields
 //@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, jpa, mapstruct, ...
 @Entity
-@Table(schema = "demo_test", name = "company")
+@Table(schema = "app_test", name = "company")
 public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements Company
 {
 	/** mutable non-null */
