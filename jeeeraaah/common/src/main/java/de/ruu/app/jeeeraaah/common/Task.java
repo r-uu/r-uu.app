@@ -5,27 +5,38 @@ import lombok.NonNull;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface Task
 {
-	Long      id();
+	Long                       id();
 	@NonNull
-	String    name();
-	String    description();
-	LocalDate startEstimated();
-	LocalDate finishEstimated();
-	Duration  effortEstimated();
-	LocalDate startActual();
-	LocalDate finishActual();
-	Duration  effortActual();
+	String                     name();
+	@NonNull
+	String                     description();
+	@NonNull
+	Optional<LocalDate>        startEstimated();
+	@NonNull
+	Optional<LocalDate>        finishEstimated();
+	@NonNull
+	Optional<Duration>         effortEstimated();
+	@NonNull
+	Optional<LocalDate>        startActual();
+	@NonNull
+	Optional<LocalDate>        finishActual();
+	@NonNull
+	Optional<Duration>         effortActual();
 
 	/** @return tasks that have to be finished before this task can start */
-	Collection<Task> predecessors();
+	@NonNull
+	Collection<? extends Task> predecessors();
 	/** @return tasks that can only start after this task is finished */
-	Collection<Task> successors();
+	@NonNull
+	Collection<? extends Task> successors();
 
 	/** @return superordinate task */
-	Task             parent();
+	Optional<? extends Task>   parent();
 	/** @return subordinate   tasks */
-	Collection<Task> children();
+	@NonNull
+	Collection<? extends Task> children();
 }

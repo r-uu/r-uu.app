@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @Slf4j
-public class TestMapStruct
+class TestMapStruct
 {
 	@Test void test()
 	{
