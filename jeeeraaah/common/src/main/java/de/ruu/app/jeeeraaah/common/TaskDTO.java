@@ -2,6 +2,9 @@ package de.ruu.app.jeeeraaah.common;
 
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,9 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
+import static java.util.Objects.isNull;
 import static lombok.AccessLevel.PROTECTED;
 
 @EqualsAndHashCode(callSuper = true)
@@ -33,109 +40,80 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
 public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 {
+	/** mutable non-null */
+	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
 	@Setter(AccessLevel.NONE)
-	private String              name;
-	@NonNull
-	private String              description;
-	@NonNull
-	private Optional<LocalDate> startEstimated;
-	@NonNull
-	private Optional<LocalDate> finishEstimated;
-	@NonNull
-	private Optional<Duration>  effortEstimated;
-	@NonNull
-	private Optional<LocalDate> startActual;
-	@NonNull
-	private Optional<LocalDate> finishActual;
-	@NonNull
-	private Optional<Duration>  effortActual;
+	private String          name;
+	private String          description;
+	private LocalDate       startEstimated;
+	private LocalDate       finishEstimated;
+	private Duration        effortEstimated;
+	private LocalDate       startActual;
+	private LocalDate       finishActual;
+	private Duration        effortActual;
 
+	/**
+	 * prevent direct access to this modifiable set from outside this class, use {@link #addPredecessor(TaskDTO)} and
+	 * {@link #removePredecessor(TaskDTO)} to modify the set
+	 * <p>
+	 * may explicitly be {@code null}, {@code null} indicates that there was no attempt to load related objects from db
+	 * (lazy)
+	 */
+	@Nullable
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Getter(AccessLevel.NONE) // provide handmade getter that returns unmodifiable
+	@Setter(AccessLevel.NONE) // no setter at all
+	private Set<TaskDTO>    predecessors;
+
+	/**
+	 * prevent direct access to this modifiable set from outside this class, use {@link #addSuccessor(TaskDTO)} and
+	 * {@link #removeSuccessor(TaskDTO)} to modify the set
+	 * <p>
+	 * may explicitly be {@code null}, {@code null} indicates that there was no attempt to load related objects from db
+	 * (lazy)
+	 */
+	@Nullable
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@Getter(AccessLevel.NONE) // provide handmade getter that returns unmodifiable
+	@Setter(AccessLevel.NONE) // no setter at all
+	private Set<TaskDTO>    successors;
+
+	/**
+	 * prevent direct access to this modifiable set from outside this class, use {@link #addChild(TaskDTO)} and
+	 * {@link #removeChild(TaskDTO)} to modify the set
+	 * <p>
+	 * may explicitly be {@code null}, {@code null} indicates that there was no attempt to load related objects from db
+	 * (lazy)
+	 */
+	@Nullable
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@NonNull
-	private Collection<TaskDTO> predecessors;
+	@Getter(AccessLevel.NONE) // provide handmade getter that returns unmodifiable
+	@Setter(AccessLevel.NONE) // no setter at all
+	private Set<TaskDTO>    children;
+
+	/** mutable nullable */
+	@Nullable
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@NonNull
-	private Collection<TaskDTO> successors;
+	@ManyToOne
+	@JoinColumn(name = "idParent")
+	private TaskDTO         parent;
 
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	@NonNull
-	private Optional<TaskDTO>   parent;
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	@NonNull
-	private Collection<TaskDTO> children;
-
-	@NonNull
-	public String getName()                     { return name(); }
-	public void   setName(@NonNull String name) { name  (name) ; }
-
-	@NonNull
-	public String getDescription()                            {      return description(); }
-	public void   setDescription(@NonNull String description) { description(description) ; }
-
-	@NonNull
-	public Optional<LocalDate> getStartEstimated()
-			{                                                     return startEstimated(); }
-	public void                setStartEstimated(          LocalDate startEstimated)
-			{                         startEstimated(Optional.ofNullable(startEstimated)); }
-
-	@NonNull
-	public Optional<LocalDate> getFinishEstimated()
-			{                                                      return finishEstimated(); }
-	public void                setFinishEstimated(          LocalDate finishEstimated)
-			{                         finishEstimated(Optional.ofNullable(finishEstimated)); }
-
-	@NonNull
-	public Optional<Duration> getEffortEstimated()
-			{                                                     return effortEstimated(); }
-	public void               setEffortEstimated(           Duration effortEstimated)
-			{                        effortEstimated(Optional.ofNullable(effortEstimated)); }
-
-	@NonNull
-	public Optional<LocalDate> getStartActual()
-			{                                                  return startActual(); }
-	public void                setStartActual(          LocalDate startActual)
-			{                         startActual(Optional.ofNullable(startActual)); }
-
-	@NonNull
-	public Optional<LocalDate> getFinishActual()
-			{                                                   return finishActual(); }
-	public void                setFinishActual(          LocalDate finishActual)
-			{                         finishActual(Optional.ofNullable(finishActual)); }
-
-	@NonNull
-	public Optional<Duration>  getEffortActual()
-			{                                                   return effortActual(); }
-	public void                setEffortActual(           Duration effortActual)
-			{                         effortActual(Optional.ofNullable(effortActual)); }
-
-	@NonNull
-	public Collection<TaskDTO> getPredecessors()
-			{                  return predecessors(); }
-	public void                setPredecessors(@NonNull Collection<TaskDTO> predecessors)
-			{                         predecessors(                             predecessors); }
-
-	@NonNull
-	public Collection<TaskDTO> getSuccessors()
-			{                  return successors(); }
-	public void                setSuccessors(@NonNull Collection<TaskDTO> successors)
-			{                         successors(                             successors); }
-
-	public Optional<TaskDTO> getParent()
-			{                return parent(); }
-	public void              setParent(            TaskDTO parent)
-			{                       parent(Optional.ofNullable(parent)); }
-
-	@NonNull
-	public Collection<TaskDTO> getChildren()
-			{                  return children()       ; }
-	public void                setChildren(@NonNull Collection<TaskDTO> children)
-			{                         children(                             children); }
-
+	////////////////////////////////////////////////////////////////////////
+	// fluent style accessors generated by lombok if not specified otherwise
+	////////////////////////////////////////////////////////////////////////
+	/**
+	 * manually created fluent setter with extra parameter check (see throws documentation)
+	 * @param name non-null, non-empty, non-blank
+	 * @return {@code this}
+	 * @throws IllegalArgumentException if {@code name} parameter is empty or blank
+	 * @throws NullPointerException     if {@code name} parameter is {@code null}
+	 */
 	public @NonNull TaskDTO name(@NonNull String name)
 	{
 		if (Strings.isEmptyOrBlank(name)) throw new IllegalArgumentException("name must not be empty nor blank");
@@ -143,10 +121,229 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 		return this;
 	}
 
+	/** @return {@link #predecessors} wrapped in unmodifiable */
+	@Override
+	@NonNull
+	public Optional<Set<? extends Task>> predecessors()
+	{
+		Optional<Set<TaskDTO>> predecessors = optionalPredecessors();
+		if (predecessors.isPresent())
+			return Optional.of(Collections.unmodifiableSet(predecessors.get()));
+		return Optional.empty();
+	}
+
+	/** @return {@link #predecessors} wrapped in unmodifiable */
+	@Override
+	@NonNull
+	public Optional<Set<? extends Task>> successors()
+	{
+		Optional<Set<TaskDTO>> successors = optionalSuccessors();
+		if (successors.isPresent())
+			return Optional.of(Collections.unmodifiableSet(successors.get()));
+		return Optional.empty();
+	}
+
+	/** @return {@link #predecessors} wrapped in unmodifiable */
+	@Override
+	@NonNull
+	public Optional<Set<? extends Task>> children()
+	{
+		Optional<Set<TaskDTO>> children = optionalChildren();
+		if (children.isPresent())
+			return Optional.of(Collections.unmodifiableSet(children.get()));
+		return Optional.empty();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	@NonNull
+	public String getName()                     { return name(); }
+	public void   setName(@NonNull String name) { name  (name);  }
+
+	@NonNull
+	public String getDescription()                            { return      description(); }
+	public void   setDescription(@NonNull String description) { description(description); }
+
+	@NonNull
+	public Optional<LocalDate> getStartEstimated()                         { return Optional.ofNullable(startEstimated()); }
+	public void                setStartEstimated(LocalDate startEstimated) { startEstimated(startEstimated); }
+
+	@NonNull
+	public Optional<LocalDate> getFinishEstimated()                          { return Optional.ofNullable(finishEstimated());}
+	public void                setFinishEstimated(LocalDate finishEstimated) { finishEstimated(finishEstimated); }
+
+	@NonNull
+	public Optional<Duration> getEffortEstimated()                         { return Optional.ofNullable(effortEstimated()); }
+	public void               setEffortEstimated(Duration effortEstimated) { effortEstimated(effortEstimated); }
+
+	@NonNull
+	public Optional<LocalDate> getStartActual()                      { return Optional.ofNullable(startActual()); }
+	public void                setStartActual(LocalDate startActual) { startActual(startActual); }
+
+	@NonNull
+	public Optional<LocalDate> getFinishActual()                       { return Optional.ofNullable(finishActual()); }
+	public void                setFinishActual(LocalDate finishActual) { finishActual(finishActual); }
+
+	@NonNull
+	public Optional<Duration> getEffortActual()                      { return Optional.ofNullable(effortActual()); }
+	public void               setEffortActual(Duration effortActual) { effortActual(effortActual); }
+
+	public TaskDTO getParent()               { return parent(); }
+	public void    setParent(TaskDTO parent) { parent(parent);  }
+
+	///////////////////////
+	// additional accessors
+	///////////////////////
+	/** @return optional unmodifiable */
+	public Optional<Set<TaskDTO>> optionalPredecessors()
+	{
+		if (Objects.isNull(predecessors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(predecessors));
+	}
+
+	/** @return optional unmodifiable */
+	public Optional<Set<TaskDTO>> optionalSuccessors()
+	{
+		if (Objects.isNull(successors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(successors));
+	}
+
+	/** @return optional unmodifiable */
+	public Optional<Set<TaskDTO>> optionalChildren()
+	{
+		if (Objects.isNull(children)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(children));
+	}
+
+	////////////////////////
+	// relationship handling
+	////////////////////////
+	/**
+	 * @param dto the {@link Task} to be added as predecessor
+	 * @return {@code true} if operation succeeded, {@code false} otherwise
+	 * @throws IllegalArgumentException if {@code dto} is identical to {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is already predecessor of {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is a child of {@code this} task
+	 * @throws IllegalStateException    if {@code this} could not be added to {@link #successors} of {@code dto}
+	 */
+	public boolean addPredecessor(@NonNull TaskDTO dto)
+	{
+		if (dto == this)
+				throw new IllegalArgumentException("dto can not be predecessor of itself");
+		if (successorsContains(dto))
+				throw new IllegalArgumentException(
+						"dto can not be predecessor and successor for the same task at the same time");
+		if (childrenContains(dto))
+				throw new IllegalArgumentException("a task's child can not be predecessor for it's parent");
+
+		if (predecessorsContains(dto)) return true;
+
+		if (dto.successors.add(this))
+				return nonNullPredecessors().add(dto);
+
+		throw new IllegalStateException("could not add this to successors of dto");
+	}
+
+	/**
+	 * @param dto the {@link Task} to be added as predecessor
+	 * @return {@code true} if operation succeeded, {@code false} otherwise
+	 * @throws IllegalArgumentException if {@code dto} is identical to {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is already predecessor of {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is a child of {@code this} task
+	 * @throws IllegalStateException    if {@code this} could not be added to {@link #predecessors()} of {@code dto}
+	 */
+	public boolean addSuccessor(@NonNull TaskDTO dto)
+	{
+		if (dto == this)
+				throw new IllegalArgumentException("dto can not be successor of itself");
+		if (predecessorsContains(dto))
+				throw new IllegalArgumentException(
+						"dto can not be predecessor and successor for the same task at the same time");
+		if (childrenContains(dto))
+				throw new IllegalArgumentException("a task's child can not be successor for it's parent");
+
+		if (successorsContains(dto)) return true;
+
+		if (dto.predecessors.add(this))
+				return nonNullSuccessors().add(dto);
+
+		throw new IllegalStateException("could not add this to predecessors of dto");
+	}
+
+	/**
+	 * @param dto the {@link Task} to be added as child
+	 * @return {@code true} if operation succeeded, {@code false} otherwise
+	 * @throws IllegalArgumentException if {@code dto} is identical to {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is a predecessor of {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is a successor of {@code this} task
+	 * @throws IllegalArgumentException if {@code dto} is already child of {@code this} task
+	 */
+	public boolean addChild(@NonNull TaskDTO dto)
+	{
+		if (dto == this)
+				throw new IllegalArgumentException("dto can not be child of itself");
+		if (predecessorsContains(dto))
+				throw new IllegalArgumentException(
+						"dto can not be predecessor for the same task at the same time");
+		if (successorsContains(dto))
+				throw new IllegalArgumentException(
+						"dto can not be successor for the same task at the same time");
+		if (childrenContains(dto))
+				throw new IllegalArgumentException("a task's child can not be successor for it's parent");
+
+		if (childrenContains(dto)) return true;
+
+		dto.parent = this;
+
+		return nonNullChildren().add(dto);
+	}
+
+	public boolean removePredecessor(@NonNull TaskDTO dto)
+	{
+		if (dto.successors.remove(this))
+				return predecessors.remove(dto);
+
+		throw new IllegalStateException("could not remove this from successors of dto");
+	}
+
+	public boolean removeSuccessor(@NonNull TaskDTO dto)
+	{
+		if (dto.predecessors.remove(this))
+				return successors.remove(dto);
+
+		throw new IllegalStateException("could not remove this from predecessors of dto");
+	}
+
+	public boolean removeChild(@NonNull TaskDTO dto)
+	{
+		TaskDTO entityParent = dto.parent;
+
+		dto.parent = null;
+		boolean result = children.remove(dto);
+
+		if (result == false)
+		{
+			// rollback changes
+			dto.parent = entityParent;
+		}
+		return result;
+	}
+
 	@Override public void beforeMapping(@NonNull TaskEntity input)
 	{
-		if (input.optionalPredecessors().isPresent())
-				input.optionalPredecessors().get().forEach(p -> predecessors.add(p.toTarget()));
+		log.debug("starting\ninput\n{}\noutput\n{}", input, this);
+		super.beforeMapping(input);
+		Optional<Set<TaskEntity>> inputOptionalPredecessors = input.optionalPredecessors();
+		Optional<Set<TaskEntity>> inputOptionalSuccessors   = input.optionalSuccessors  ();
+		Optional<Set<TaskEntity>> inputOptionalChildren     = input.optionalChildren    ();
+		if (inputOptionalPredecessors.isPresent())
+			inputOptionalPredecessors.get().forEach(e -> addPredecessor(e.toTarget()));
+		if (inputOptionalSuccessors  .isPresent())
+			inputOptionalSuccessors  .get().forEach(e -> addSuccessor  (e.toTarget()));
+		if (inputOptionalChildren    .isPresent())
+			inputOptionalChildren    .get().forEach(e -> addChild      (e.toTarget()));
+		log.debug("finished\ninput\n{}\noutput\n{}", input, this);
 	}
 
 	@Override public void afterMapping(@NonNull TaskEntity input)
@@ -156,4 +353,43 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 	}
 
 	@Override public @NonNull TaskEntity toSource() { return Mapper.INSTANCE.map(this); }
+
+	private Set<TaskDTO> nonNullPredecessors()
+	{
+		if (isNull(predecessors)) predecessors = new HashSet<>();
+		return predecessors;
+	}
+
+	private Set<TaskDTO> nonNullSuccessors()
+	{
+		if (isNull(children)) successors = new HashSet<>();
+		return successors;
+	}
+
+	private Set<TaskDTO> nonNullChildren()
+	{
+		if (isNull(children)) children = new HashSet<>();
+		return children;
+	}
+
+	/** {@code null} safe check for containment */
+	private boolean predecessorsContains(TaskDTO entity)
+	{
+		if (isNull(predecessors)) return false;
+		return predecessors.contains(entity);
+	}
+
+	/** {@code null} safe check for containment */
+	private boolean successorsContains(TaskDTO entity)
+	{
+		if (isNull(successors)) return false;
+		return successors.contains(entity);
+	}
+
+	/** {@code null} safe check for containment */
+	private boolean childrenContains(TaskDTO entity)
+	{
+		if (isNull(children)) return false;
+		return children.contains(entity);
+	}
 }

@@ -8,4 +8,7 @@ module de.ruu.app.jeee_raaa.common
 	requires org.mapstruct;
 	requires de.ruu.lib.mapstruct;
 	requires de.ruu.lib.util;
+	requires jakarta.persistence;
+	requires jakarta.annotation;
+	requires de.ruu.lib.jpa.core;
 }

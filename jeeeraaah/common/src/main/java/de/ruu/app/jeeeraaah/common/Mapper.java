@@ -22,17 +22,17 @@ abstract class Mapper
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskEntity source, @MappingTarget TaskDTO target)
 	{
-		log.debug("starting source {}, target  {}", source, target);
+		log.debug("starting\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
-		log.debug("finished source {}, target  {}", source, target);
+		log.debug("finished\nsource\n{}\ntarget\n{}", source, target);
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskDTO source, @MappingTarget TaskEntity target)
 	{
-		log.debug("starting source {}, target  {}", source, target);
+		log.debug("starting\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
-		log.debug("finished source {}, target  {}", source, target);
+		log.debug("finished\nsource\n{}\ntarget\n{}", source, target);
 	}
 
 	@ObjectFactory @NonNull TaskEntity lookupOrCreate(@NonNull TaskDTO input)
