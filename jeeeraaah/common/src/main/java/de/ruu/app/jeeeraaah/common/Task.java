@@ -1,5 +1,6 @@
 package de.ruu.app.jeeeraaah.common;
 
+import jakarta.annotation.Nullable;
 import lombok.NonNull;
 
 import java.time.Duration;
@@ -13,12 +14,30 @@ public interface Task
 	Long                          id();
 	@NonNull
 	String                        name();
-	Optional<String>              description();
-	Optional<LocalDate>           startEstimated();
-	Optional<LocalDate>           finishEstimated();
-	Optional<LocalDate>           startActual();
-	Optional<LocalDate>           finishActual();
-	Optional<Duration>            effortActual();
+	@Nullable
+	String                        description();
+	@NonNull
+	default Optional<String>      descriptionOptional    () { return Optional.ofNullable(description()); };
+	@Nullable
+	LocalDate                     startEstimated();
+	@NonNull
+	default Optional<LocalDate>   startEstimatedOptional () { return Optional.ofNullable(startEstimated()); };
+	@Nullable
+	LocalDate                     finishEstimated();
+	@NonNull
+	default Optional<LocalDate>   finishEstimatedOptional() { return Optional.ofNullable(finishEstimated()); };
+	@Nullable
+	LocalDate                     startActual();
+	@NonNull
+	default Optional<LocalDate>   startActualOptional    () { return Optional.ofNullable(startActual()); };
+	@Nullable
+	LocalDate                     finishActual();
+	@NonNull
+	default Optional<LocalDate>   finishActualOptional   () { return Optional.ofNullable(finishActual()); };
+	@Nullable
+	Duration                      effortActual();
+	@NonNull
+	default Optional<Duration>    effortActualOptional   () { return Optional.ofNullable(effortActual()); };
 
 	/**
 	 * @return tasks that have to be finished before this task can start

@@ -22,17 +22,13 @@ abstract class Mapper
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskEntity source, @MappingTarget TaskDTO target)
 	{
-		log.debug("starting\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
-		log.debug("finished\nsource\n{}\ntarget\n{}", source, target);
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskDTO source, @MappingTarget TaskEntity target)
 	{
-		log.debug("starting\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
-		log.debug("finished\nsource\n{}\ntarget\n{}", source, target);
 	}
 
 	@ObjectFactory @NonNull TaskEntity lookupOrCreate(@NonNull TaskDTO input)
@@ -43,6 +39,19 @@ abstract class Mapper
 			result = new TaskEntity(input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
+			// handle recursive data structure
+			if (input.parent().isPresent())
+			{
+				TaskDTO parent = input.parent().get();
+				if (parent == input)
+				{
+					result.parent(CONTEXT.get(parent, TaskEntity.class));
+				}
+				else
+				{
+					result.parent(new TaskEntity(input.name()));
+				}
+			}
 		}
 		return result;
 	}
@@ -55,6 +64,19 @@ abstract class Mapper
 			result = new TaskDTO(input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
+			// handle recursive data structure
+			if (input.parent().isPresent())
+			{
+				TaskEntity parent = input.parent().get();
+				if (parent == input)
+				{
+					result.parent(CONTEXT.get(parent, TaskDTO.class));
+				}
+				else
+				{
+					result.parent(new TaskDTO(input.name()));
+				}
+			}
 		}
 		return result;
 	}

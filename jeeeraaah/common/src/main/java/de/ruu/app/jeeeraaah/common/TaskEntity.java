@@ -51,12 +51,19 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	@NonNull
 	@Setter(AccessLevel.NONE)
 	private String          name;
+	@Nullable
 	private String          description;
+	@Nullable
 	private LocalDate       startEstimated;
+	@Nullable
 	private LocalDate       finishEstimated;
+	@Nullable
 	private Duration        effortEstimated;
+	@Nullable
 	private LocalDate       startActual;
+	@Nullable
 	private LocalDate       finishActual;
+	@Nullable
 	private Duration        effortActual;
 
 	/**
@@ -91,7 +98,7 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Getter(AccessLevel.NONE) // provide handmade getter that returns unmodifiable
-	@Setter(AccessLevel.NONE) // no setter at all
+	@Setter(AccessLevel.NONE) // no setter at all, use add method instead
 	@OneToMany
 	(
 			mappedBy = TaskEntity_.SUCCESSORS,
@@ -112,7 +119,7 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@Getter(AccessLevel.NONE) // provide handmade getter that returns unmodifiable
-	@Setter(AccessLevel.NONE) // no setter at all
+	@Setter(AccessLevel.NONE) // no setter at all, use add method instead
 	@OneToMany
 	(
 			mappedBy = TaskEntity_.CHILDREN,
@@ -126,6 +133,8 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	@Nullable
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	@Getter(AccessLevel.NONE) // provide handmade getter that returns optional
+	@Setter(AccessLevel.NONE) // provide handmade setter that handles bidirectional relation properly
 	@ManyToOne
 	@JoinColumn(name = "idParent")
 	private TaskEntity      parent;
@@ -140,10 +149,22 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	 * @throws IllegalArgumentException if {@code name} parameter is empty or blank
 	 * @throws NullPointerException     if {@code name} parameter is {@code null}
 	 */
-	public @NonNull TaskEntity name(@NonNull String name)
+	@NonNull
+	public TaskEntity name(@NonNull String name)
 	{
 		if (Strings.isEmptyOrBlank(name)) throw new IllegalArgumentException("name must not be empty nor blank");
 		this.name = name;
+		return this;
+	}
+
+	@NonNull
+	public TaskEntity parent(@Nullable TaskEntity parent)
+	{
+		this.parent = parent;
+
+		if (parent != null)
+				parent.nonNullChildren().add(this);
+
 		return this;
 	}
 
@@ -169,6 +190,10 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 		return Optional.empty();
 	}
 
+	@Override
+	@NonNull
+	public Optional<TaskEntity> parent() { return Optional.ofNullable(parent); }
+
 	/** @return {@link #predecessors} wrapped in unmodifiable */
 	@Override
 	@NonNull
@@ -184,39 +209,32 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	@NonNull
-	public String getName()                     { return name(); }
-	public void   setName(@NonNull String name) { name  (name);  }
-
-	@NonNull
-	public String getDescription()                            { return      description(); }
-	public void   setDescription(@NonNull String description) { description(description); }
-
-	@NonNull
-	public Optional<LocalDate> getStartEstimated()                         { return Optional.ofNullable(startEstimated()); }
-	public void                setStartEstimated(LocalDate startEstimated) { startEstimated(startEstimated); }
-
-	@NonNull
-	public Optional<LocalDate> getFinishEstimated()                          { return Optional.ofNullable(finishEstimated());}
-	public void                setFinishEstimated(LocalDate finishEstimated) { finishEstimated(finishEstimated); }
-
-	@NonNull
-	public Optional<Duration> getEffortEstimated()                         { return Optional.ofNullable(effortEstimated()); }
-	public void               setEffortEstimated(Duration effortEstimated) { effortEstimated(effortEstimated); }
-
-	@NonNull
-	public Optional<LocalDate> getStartActual()                      { return Optional.ofNullable(startActual()); }
-	public void                setStartActual(LocalDate startActual) { startActual(startActual); }
-
-	@NonNull
-	public Optional<LocalDate> getFinishActual()                       { return Optional.ofNullable(finishActual()); }
-	public void                setFinishActual(LocalDate finishActual) { finishActual(finishActual); }
-
-	@NonNull
-	public Optional<Duration> getEffortActual()                      { return Optional.ofNullable(effortActual()); }
-	public void               setEffortActual(Duration effortActual) { effortActual(effortActual); }
-
-	public TaskEntity getParent()                  { return parent(); }
-	public void       setParent(TaskEntity parent) { parent(parent);  }
+	public String     getName()                                      { return          name();            }
+	public void       setName(  @NonNull String      name)           { name           (name);             }
+	@Nullable
+	public String     getDescription()                               { return          description();     }
+	public void       setDescription(    String      description)    { description    (description);      }
+	@Nullable
+	public LocalDate  getStartEstimated()                            { return          startEstimated();  }
+	public void       setStartEstimated( LocalDate   startEstimated) { startEstimated (startEstimated);   }
+	@Nullable
+	public LocalDate  getFinishEstimated()                           { return          finishEstimated(); }
+	public void       setFinishEstimated(LocalDate  finishEstimated) { finishEstimated(finishEstimated);  }
+	@Nullable
+	public Duration   getEffortEstimated()                           { return          effortEstimated(); }
+	public void       setEffortEstimated(Duration   effortEstimated) { effortEstimated(effortEstimated);  }
+	@Nullable
+	public LocalDate  getStartActual()                               { return          startActual();     }
+	public void       setStartActual(    LocalDate  startActual)     { startActual    (startActual);      }
+	@Nullable
+	public LocalDate  getFinishActual()                              { return          finishActual();    }
+	public void       setFinishActual(   LocalDate  finishActual)    { finishActual   (finishActual);     }
+	@Nullable
+	public Duration   getEffortActual()                              { return          effortActual();    }
+	public void       setEffortActual(   Duration   effortActual)    { effortActual   (effortActual);     }
+//	@Nullable
+//	public TaskEntity getParent()                                    { return          parent;            }
+//	public void       setParent(         TaskEntity parent)          { parent         (parent);           }
 
 	///////////////////////
 	// additional accessors
@@ -253,7 +271,8 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	 * @throws IllegalArgumentException if {@code entity} is a child of {@code this} task
 	 * @throws IllegalStateException    if {@code this} could not be added to {@link #successors} of {@code entity}
 	 */
-	public boolean addPredecessor(@NonNull TaskEntity entity)
+	@NonNull
+	public TaskEntity addPredecessor(@NonNull TaskEntity entity)
 	{
 		if (entity == this)
 				throw new IllegalArgumentException("entity can not be predecessor of itself");
@@ -263,10 +282,14 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 		if (childrenContains(entity))
 				throw new IllegalArgumentException("a task's child can not be predecessor for it's parent");
 
-		if (predecessorsContains(entity)) return true;
+		if (predecessorsContains(entity)) return this; // no-op
 
-		if (entity.successors.add(this))
-				return nonNullPredecessors().add(entity);
+		// update bidirectional relation
+		if (entity.nonNullSuccessors().add(this))
+		{
+			nonNullPredecessors().add(entity);
+			return this;
+		}
 
 		throw new IllegalStateException("could not add this to successors of entity");
 	}
@@ -279,7 +302,8 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	 * @throws IllegalArgumentException if {@code entity} is a child of {@code this} task
 	 * @throws IllegalStateException    if {@code this} could not be added to {@link #predecessors()} of {@code entity}
 	 */
-	public boolean addSuccessor(@NonNull TaskEntity entity)
+	@NonNull
+	public TaskEntity addSuccessor(@NonNull TaskEntity entity)
 	{
 		if (entity == this)
 				throw new IllegalArgumentException("entity can not be successor of itself");
@@ -289,10 +313,14 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 		if (childrenContains(entity))
 				throw new IllegalArgumentException("a task's child can not be successor for it's parent");
 
-		if (successorsContains(entity)) return true;
+		if (successorsContains(entity)) return this; // no-op
 
-		if (entity.predecessors.add(this))
-				return nonNullSuccessors().add(entity);
+		// update bidirectional relation
+		if (entity.nonNullPredecessors().add(this))
+		{
+			nonNullSuccessors().add(entity);
+			return this;
+		}
 
 		throw new IllegalStateException("could not add this to predecessors of entity");
 	}
@@ -305,7 +333,8 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	 * @throws IllegalArgumentException if {@code entity} is a successor of {@code this} task
 	 * @throws IllegalArgumentException if {@code entity} is already child of {@code this} task
 	 */
-	public boolean addChild(@NonNull TaskEntity entity)
+	@NonNull
+	public TaskEntity addChild(@NonNull TaskEntity entity)
 	{
 		if (entity == this)
 				throw new IllegalArgumentException("entity can not be child of itself");
@@ -318,11 +347,13 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 		if (childrenContains(entity))
 				throw new IllegalArgumentException("a task's child can not be successor for it's parent");
 
-		if (childrenContains(entity)) return true;
+		if (childrenContains(entity)) return this; // no-op
 
+		// update bidirectional relation
 		entity.parent = this;
+		nonNullChildren().add(entity);
 
-		return nonNullChildren().add(entity);
+		return this;
 	}
 
 	public boolean removePredecessor(@NonNull TaskEntity entity)
@@ -358,7 +389,6 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 
 	@Override public void beforeMapping(@NonNull TaskDTO input)
 	{
-		log.debug("starting\ninput\n{}\noutput\n{}", input, this);
 		super.beforeMapping(input);
 		Optional<Set<TaskDTO>> inputOptionalPredecessors = input.optionalPredecessors();
 		Optional<Set<TaskDTO>> inputOptionalSuccessors   = input.optionalSuccessors  ();
@@ -369,14 +399,9 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 				inputOptionalSuccessors  .get().forEach(e -> addSuccessor  (e.toSource()));
 		if (inputOptionalChildren    .isPresent())
 				inputOptionalChildren    .get().forEach(e -> addChild      (e.toSource()));
-		log.debug("finished\ninput\n{}\noutput\n{}", input, this);
 	}
 
-	@Override public void afterMapping(@NonNull TaskDTO input)
-	{
-		log.debug("starting\ninput\n{}\noutput\n{}", input, this);
-		log.debug("finished\ninput\n{}\noutput\n{}", input, this);
-	}
+	@Override public void afterMapping(@NonNull TaskDTO input) { }
 
 	@Override public @NonNull TaskDTO toTarget() { return Mapper.INSTANCE.map(this); }
 

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -13,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 @Slf4j
 class TestMapStruct
 {
-	@Test void test()
+	@Test void testStandaloneDTO()
 	{
 		TaskDTO dto = new TaskDTO("name");
 
@@ -25,10 +24,6 @@ class TestMapStruct
 				.startActual(LocalDate.now())
 				.finishActual(LocalDate.now())
 				.effortActual(Duration.ZERO)
-				.predecessors(List.of(dto))
-				.successors(List.of(dto))
-				.parent(dto)
-				.children(List.of(dto))
 		;
 
 		log.debug("dto\n{}", dto);
@@ -45,5 +40,33 @@ class TestMapStruct
 		assertThat(dto.startActual    (), is(entity.startActual    ()));
 		assertThat(dto.finishActual   (), is(entity.finishActual   ()));
 		assertThat(dto.effortActual   (), is(entity.effortActual   ()));
+	}
+
+	@Test void testDTOWithNonSelfParent()
+	{
+		TaskDTO dto = new TaskDTO("child");
+
+		String parentName = "non self parent";
+
+		dto.parent(new TaskDTO(parentName));
+
+		TaskEntity entity = dto.toSource();
+
+		assertThat(entity.parent().isPresent(), is(true));
+		assertThat(entity.parent().get().name(), is(parentName));
+		assertThat(entity.parent().get().children().isPresent(), is(true));
+		assertThat(entity.parent().get().children().get().contains(entity), is(true));
+	}
+
+	@Test void testDTOWithSelfParent()
+	{
+		TaskDTO dto = new TaskDTO("parent and child");
+
+		dto.parent(dto);
+
+		TaskEntity entity = dto.toSource();
+
+		assertThat(entity.parent().isPresent(), is(true));
+		assertThat(entity.parent(), is(entity));
 	}
 }
