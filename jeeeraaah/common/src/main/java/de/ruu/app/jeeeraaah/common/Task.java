@@ -10,6 +10,10 @@ import java.util.Set;
 
 public interface Task
 {
+//	@NonNull
+//	UUID                          uuid();
+	@NonNull
+	TaskGroup                     taskGroup();
 	@NonNull
 	Long                          id();
 	@NonNull

@@ -46,6 +46,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(schema = "app_test", name = "task")
 public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 {
+//	private UUID            uuid = new UUID();
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
@@ -65,6 +66,14 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	private LocalDate       finishActual;
 	@Nullable
 	private Duration        effortActual;
+
+	/** mutable, but not nullable */
+	@Nullable
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@ManyToOne
+	@JoinColumn(name = "idTaskGroup")
+	private TaskGroupEntity taskGroup;
 
 	/**
 	 * prevent direct access to this modifiable set from outside this class, use {@link #addPredecessor(TaskEntity)} and
