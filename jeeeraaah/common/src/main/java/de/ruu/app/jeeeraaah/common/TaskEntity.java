@@ -51,26 +51,29 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	// no lombok-generation of setter because of additional validation in manually created method
 	@NonNull
 	@Setter(AccessLevel.NONE)
-	private String          name;
+	private String    name;
 	@Nullable
-	private String          description;
+	private String    description;
 	@Nullable
-	private LocalDate       startEstimated;
+	private LocalDate startEstimated;
 	@Nullable
-	private LocalDate       finishEstimated;
+	private LocalDate finishEstimated;
 	@Nullable
-	private Duration        effortEstimated;
+	private Duration  effortEstimated;
 	@Nullable
-	private LocalDate       startActual;
+	private LocalDate startActual;
 	@Nullable
-	private LocalDate       finishActual;
+	private LocalDate finishActual;
 	@Nullable
-	private Duration        effortActual;
+	private Duration  effortActual;
 
 	/** mutable, but not nullable */
-	@Nullable
+	// no java-bean-style getter here, mapstruct will ignore fields without bean-style-accessor so mapping can be
+	// controlled in beforeMapping
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
+	@NonNull
+	@Setter
 	@ManyToOne
 	@JoinColumn(name = "idTaskGroup")
 	private TaskGroupEntity taskGroup;
