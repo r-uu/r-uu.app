@@ -60,6 +60,12 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 	@Nullable
 	private Duration        effortActual;
 
+	/** mutable, but not nullable */
+	@Nullable
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private TaskGroupDTO taskGroup;
+
 	/**
 	 * prevent direct access to this modifiable set from outside this class, use {@link #addPredecessor(TaskDTO)} and
 	 * {@link #removePredecessor(TaskDTO)} to modify the set
@@ -237,7 +243,7 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 	////////////////////////
 	/**
 	 * @param dto the {@link Task} to be added as predecessor
-	 * @return {@code true} if operation succeeded, {@code false} otherwise
+	 * @return {@code this}
 	 * @throws IllegalArgumentException if {@code dto} is identical to {@code this} task
 	 * @throws IllegalArgumentException if {@code dto} is already predecessor of {@code this} task
 	 * @throws IllegalArgumentException if {@code dto} is a child of {@code this} task
@@ -385,7 +391,7 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 
 	private Set<TaskDTO> nonNullSuccessors()
 	{
-		if (isNull(children)) successors = new HashSet<>();
+		if (isNull(successors)) successors = new HashSet<>();
 		return successors;
 	}
 

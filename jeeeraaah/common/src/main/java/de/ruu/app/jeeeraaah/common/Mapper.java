@@ -16,18 +16,37 @@ abstract class Mapper
 
 	private static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
 
-	abstract TaskEntity map(TaskDTO    input);
-	abstract TaskDTO    map(TaskEntity input);
+	abstract TaskEntity      map(TaskDTO         input);
+	abstract TaskDTO         map(TaskEntity      input);
+
+	abstract TaskGroupEntity map(TaskGroupDTO    input);
+	abstract TaskGroupDTO    map(TaskGroupEntity input);
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskEntity source, @MappingTarget TaskDTO target)
 	{
+		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskDTO source, @MappingTarget TaskEntity target)
 	{
+		log.debug("\nsource\n{}\ntarget\n{}", source, target);
+		target.beforeMapping(source); // invoke callback for mapping
+	}
+
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@BeforeMapping void beforeMapping(TaskGroupEntity source, @MappingTarget TaskGroupDTO target)
+	{
+		log.debug("\nsource\n{}\ntarget\n{}", source, target);
+		target.beforeMapping(source); // invoke callback for mapping
+	}
+
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@BeforeMapping void beforeMapping(TaskGroupDTO source, @MappingTarget TaskGroupEntity target)
+	{
+		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
@@ -40,18 +59,18 @@ abstract class Mapper
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 			// handle recursive data structure
-			if (input.parent().isPresent())
-			{
-				TaskDTO parent = input.parent().get();
-				if (parent == input)
-				{
-					result.parent(CONTEXT.get(parent, TaskEntity.class));
-				}
-				else
-				{
-					result.parent(new TaskEntity(input.name()));
-				}
-			}
+//			if (input.parent().isPresent())
+//			{
+//				TaskDTO parent = input.parent().get();
+//				if (parent == input)
+//				{
+//					result.parent(CONTEXT.get(parent, TaskEntity.class));
+//				}
+//				else
+//				{
+//					result.parent(new TaskEntity(input.name()));
+//				}
+//			}
 		}
 		return result;
 	}
@@ -65,18 +84,68 @@ abstract class Mapper
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 			// handle recursive data structure
-			if (input.parent().isPresent())
-			{
-				TaskEntity parent = input.parent().get();
-				if (parent == input)
-				{
-					result.parent(CONTEXT.get(parent, TaskDTO.class));
-				}
-				else
-				{
-					result.parent(new TaskDTO(input.name()));
-				}
-			}
+//			if (input.parent().isPresent())
+//			{
+//				TaskEntity parent = input.parent().get();
+//				if (parent == input)
+//				{
+//					result.parent(CONTEXT.get(parent, TaskDTO.class));
+//				}
+//				else
+//				{
+//					result.parent(new TaskDTO(input.name()));
+//				}
+//			}
+		}
+		return result;
+	}
+
+	@ObjectFactory @NonNull TaskGroupEntity lookupOrCreate(@NonNull TaskGroupDTO input)
+	{
+		TaskGroupEntity result = CONTEXT.get(input, TaskGroupEntity.class);
+		if (result == null)
+		{
+			result = new TaskGroupEntity(input.name());
+			CONTEXT.put(input, result);
+			CONTEXT.put(result, input);
+			// handle recursive data structure
+			//			if (input.parent().isPresent())
+			//			{
+			//				TaskDTO parent = input.parent().get();
+			//				if (parent == input)
+			//				{
+			//					result.parent(CONTEXT.get(parent, TaskEntity.class));
+			//				}
+			//				else
+			//				{
+			//					result.parent(new TaskEntity(input.name()));
+			//				}
+			//			}
+		}
+		return result;
+	}
+
+	@ObjectFactory @NonNull TaskGroupDTO lookupOrCreate(@NonNull TaskGroupEntity input)
+	{
+		TaskGroupDTO result = CONTEXT.get(input, TaskGroupDTO.class);
+		if (result == null)
+		{
+			result = new TaskGroupDTO(input.name());
+			CONTEXT.put(input, result);
+			CONTEXT.put(result, input);
+			// handle recursive data structure
+			//			if (input.parent().isPresent())
+			//			{
+			//				TaskDTO parent = input.parent().get();
+			//				if (parent == input)
+			//				{
+			//					result.parent(CONTEXT.get(parent, TaskEntity.class));
+			//				}
+			//				else
+			//				{
+			//					result.parent(new TaskEntity(input.name()));
+			//				}
+			//			}
 		}
 		return result;
 	}
