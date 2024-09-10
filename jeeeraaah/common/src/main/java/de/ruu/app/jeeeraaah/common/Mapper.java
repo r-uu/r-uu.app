@@ -94,7 +94,10 @@ abstract class Mapper
 		TaskDTO result = CONTEXT.get(input, TaskDTO.class);
 		if (result == null)
 		{
-			result = new TaskDTO(input.name());
+			TaskGroupDTO taskGroup = CONTEXT.get(input.taskGroup(), TaskGroupDTO.class);
+			if (taskGroup == null)
+					taskGroup = new TaskGroupDTO(input.taskGroup().name());
+			result = new TaskDTO(taskGroup, input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}

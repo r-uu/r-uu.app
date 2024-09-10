@@ -69,6 +69,7 @@ public class TaskGroupDTO extends AbstractMappedDTO<TaskGroupEntity> implements 
 	@NonNull
 	public String getName()                     { return name(); }
 	public void   setName(@NonNull String name) { name(name);    }
+	// do _NOT_ define getter for tasks to avoid handling of tasks by mapstruct automatism
 
 	///////////////////////
 	// additional accessors

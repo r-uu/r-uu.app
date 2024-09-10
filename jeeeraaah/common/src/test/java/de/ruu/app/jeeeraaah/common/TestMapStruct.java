@@ -8,15 +8,17 @@ import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 class TestMapStruct
 {
 	@Test void testStandaloneDTO()
 	{
-		TaskDTO dto = new TaskDTO("name");
+		TaskGroupDTO taskGroupDTO = new TaskGroupDTO("task group name");
+		TaskDTO      taskDTO      = new TaskDTO     (taskGroupDTO, "task name");
 
-		dto
+		taskDTO
 				.description("description")
 				.startEstimated(LocalDate.now())
 				.finishEstimated(LocalDate.now())
@@ -26,47 +28,42 @@ class TestMapStruct
 				.effortActual(Duration.ZERO)
 		;
 
-		log.debug("dto\n{}", dto);
+		log.debug("taskDTO\n{}", taskDTO);
 
-		TaskEntity entity = dto.toSource();
+		TaskEntity entity = taskDTO.toSource();
 
 		log.debug("entity\n{}", entity);
 
-		assertThat(dto.name           (), is(entity.name           ()));
-		assertThat(dto.description    (), is(entity.description    ()));
-		assertThat(dto.startEstimated (), is(entity.startEstimated ()));
-		assertThat(dto.finishEstimated(), is(entity.finishEstimated()));
-		assertThat(dto.effortEstimated(), is(entity.effortEstimated()));
-		assertThat(dto.startActual    (), is(entity.startActual    ()));
-		assertThat(dto.finishActual   (), is(entity.finishActual   ()));
-		assertThat(dto.effortActual   (), is(entity.effortActual   ()));
+		assertThat(taskDTO.name           (), is(entity.name           ()));
+		assertThat(taskDTO.description    (), is(entity.description    ()));
+		assertThat(taskDTO.startEstimated (), is(entity.startEstimated ()));
+		assertThat(taskDTO.finishEstimated(), is(entity.finishEstimated()));
+		assertThat(taskDTO.effortEstimated(), is(entity.effortEstimated()));
+		assertThat(taskDTO.startActual    (), is(entity.startActual    ()));
+		assertThat(taskDTO.finishActual   (), is(entity.finishActual   ()));
+		assertThat(taskDTO.effortActual   (), is(entity.effortActual   ()));
 	}
 
 	@Test void testDTOWithNonSelfParent()
 	{
-		TaskDTO dto = new TaskDTO("child");
+		TaskGroupDTO taskGroupDTO  = new TaskGroupDTO("task group name");
+		TaskDTO      taskDTOParent = new TaskDTO     (taskGroupDTO, "task name optionalParent");
+		TaskDTO      taskDTOChild  = new TaskDTO     (taskGroupDTO, "task name child");
 
-		String parentName = "non self parent";
+		taskDTOChild.parent(taskDTOParent);
 
-		dto.parent(new TaskDTO(parentName));
+		TaskEntity taskEntityChild = taskDTOChild.toSource();
 
-		TaskEntity entity = dto.toSource();
-
-		assertThat(entity.parent().isPresent(), is(true));
-		assertThat(entity.parent().get().name(), is(parentName));
-		assertThat(entity.parent().get().children().isPresent(), is(true));
-		assertThat(entity.parent().get().children().get().contains(entity), is(true));
+		assertThat(taskEntityChild.optionalParent().isPresent(), is(true));
+		assertThat(taskEntityChild.optionalParent().get().children().isPresent(), is(true));
+		assertThat(taskEntityChild.optionalParent().get().children().get().contains(taskEntityChild), is(true));
 	}
 
 	@Test void testDTOWithSelfParent()
 	{
-		TaskDTO dto = new TaskDTO("parent and child");
+		TaskGroupDTO taskGroupDTO = new TaskGroupDTO("task group name");
+		TaskDTO      taskDTO      = new TaskDTO(taskGroupDTO, "optionalParent and child");
 
-		dto.parent(dto);
-
-		TaskEntity entity = dto.toSource();
-
-		assertThat(entity.parent().isPresent(), is(true));
-		assertThat(entity.parent(), is(entity));
+		assertThrows(IllegalArgumentException.class, () -> taskDTO.parent(taskDTO));
 	}
 }

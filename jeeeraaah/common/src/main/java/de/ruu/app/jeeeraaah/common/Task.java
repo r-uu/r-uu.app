@@ -64,7 +64,7 @@ public interface Task
 
 	/** @return superordinate task */
 	@NonNull
-	Optional<? extends Task>      parent();
+	Optional<? extends Task> optionalParent();
 
 	/**
 	 * @return subordinate tasks

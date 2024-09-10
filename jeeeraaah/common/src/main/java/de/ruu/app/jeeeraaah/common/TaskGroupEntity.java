@@ -110,6 +110,7 @@ public class TaskGroupEntity extends AbstractMappedEntity<TaskGroupDTO> implemen
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	public @NonNull String getName() { return name(); }
+	// do _NOT_ define getter for tasks to avoid handling of tasks by mapstruct automatism
 
 	@Override
 	public void afterMapping(@NonNull TaskGroupDTO input) { }
