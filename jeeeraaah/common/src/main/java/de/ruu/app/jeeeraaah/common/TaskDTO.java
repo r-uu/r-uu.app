@@ -147,7 +147,7 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 	@NonNull
 	public TaskDTO parent(@Nullable TaskDTO parent)
 	{
-		if (parent == this) throw new IllegalArgumentException("optionalParent must not be this");
+		if (parent == this) throw new IllegalArgumentException("parent must not be this");
 
 		this.parent = parent;
 
@@ -332,8 +332,6 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 		if (successorsContains(dto))
 				throw new IllegalArgumentException(
 						"dto can not be successor for the same task at the same time");
-		if (childrenContains(dto))
-				throw new IllegalArgumentException("a task's child can not be successor for it's optionalParent");
 
 		if (childrenContains(dto)) return this; // no-op
 
@@ -384,14 +382,10 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 		Optional<Set<TaskEntity>> inputOptionalChildren     = input.optionalChildren    ();
 		Optional<    TaskEntity>  inputOptionalParent       = input.optionalParent      ();
 
-		if (inputOptionalPredecessors .isPresent())
-				inputOptionalPredecessors .get().forEach(e -> addPredecessor(e.toTarget()));
-		if (inputOptionalSuccessors   .isPresent())
-				inputOptionalSuccessors   .get().forEach(e -> addSuccessor  (e.toTarget()));
-		if (inputOptionalChildren     .isPresent())
-				inputOptionalChildren     .get().forEach(e -> addChild      (e.toTarget()));
-		if (inputOptionalParent       .isPresent())
-				parent(inputOptionalParent.get().toTarget());
+		input.optionalPredecessors().ifPresent(ts -> ts.forEach(p -> lookupOrMapPredecessor(p)));
+		input.optionalSuccessors  ().ifPresent(ts -> ts.forEach(s -> lookupOrMapSuccessor(s)));
+		input.optionalChildren    ().ifPresent(ts -> ts.forEach(c -> lookupOrMapChild(c)));
+		input.optionalParent      ().ifPresent(                 t -> lookupOrMapParent(t));
 	}
 
 	@Override public void afterMapping(@NonNull TaskEntity input) { }
@@ -435,5 +429,61 @@ public class TaskDTO extends AbstractMappedDTO<TaskEntity> implements Task
 	{
 		if (isNull(children)) return false;
 		return children.contains(entity);
+	}
+
+	private void lookupOrMapPredecessor(TaskEntity predecessor)
+	{
+		Optional<TaskDTO> optionalPredecessorDTO = Mapper.INSTANCE.getFromContext(predecessor);
+
+		if (optionalPredecessorDTO.isPresent())
+		{
+			addPredecessor(optionalPredecessorDTO.get());
+		}
+		else
+		{
+			addPredecessor(predecessor.toTarget());
+		}
+	}
+
+	private void lookupOrMapSuccessor(TaskEntity successor)
+	{
+		Optional<TaskDTO> optionalSuccessorDTO = Mapper.INSTANCE.getFromContext(successor);
+
+		if (optionalSuccessorDTO.isPresent())
+		{
+			addSuccessor(optionalSuccessorDTO.get());
+		}
+		else
+		{
+			addSuccessor(successor.toTarget());
+		}
+	}
+
+	private void lookupOrMapChild(TaskEntity child)
+	{
+		Optional<TaskDTO> optionalChildDTO = Mapper.INSTANCE.getFromContext(child);
+
+		if (optionalChildDTO.isPresent())
+		{
+			addChild(optionalChildDTO.get());
+		}
+		else
+		{
+			addChild(child.toTarget());
+		}
+	}
+
+	private void lookupOrMapParent(TaskEntity parent)
+	{
+		Optional<TaskDTO> optionalParentDTO = Mapper.INSTANCE.getFromContext(parent);
+
+		if (optionalParentDTO.isPresent())
+		{
+			parent(optionalParentDTO.get());
+		}
+		else
+		{
+			parent(parent.toTarget());
+		}
 	}
 }

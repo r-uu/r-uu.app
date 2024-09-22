@@ -179,6 +179,8 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	@NonNull
 	public TaskEntity parent(@Nullable TaskEntity parent)
 	{
+		if (parent == this) throw new IllegalArgumentException("parent must not be this");
+
 		this.parent = parent;
 
 		if (parent != null)
@@ -363,8 +365,6 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 		if (successorsContains(entity))
 				throw new IllegalArgumentException(
 						"entity can not be successor for the same task at the same time");
-		if (childrenContains(entity))
-				throw new IllegalArgumentException("a task's child can not be successor for it's optionalParent");
 
 		if (childrenContains(entity)) return this; // no-op
 
@@ -410,19 +410,10 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	{
 		super.beforeMapping(input);
 
-		Optional<Set<TaskDTO>> inputOptionalPredecessors = input.optionalPredecessors();
-		Optional<Set<TaskDTO>> inputOptionalSuccessors   = input.optionalSuccessors  ();
-		Optional<Set<TaskDTO>> inputOptionalChildren     = input.optionalChildren    ();
-		Optional<    TaskDTO>  inputOptionalParent       = input.optionalParent      ();
-
-		if (inputOptionalPredecessors.isPresent())
-				inputOptionalPredecessors.get().forEach(e -> addPredecessor(e.toSource()));
-		if (inputOptionalSuccessors  .isPresent())
-				inputOptionalSuccessors  .get().forEach(e -> addSuccessor  (e.toSource()));
-		if (inputOptionalChildren    .isPresent())
-				inputOptionalChildren    .get().forEach(e -> addChild      (e.toSource()));
-		if (inputOptionalParent      .isPresent())
-				parent(inputOptionalParent.get().toSource());
+		input.optionalPredecessors().ifPresent(ts -> ts.forEach(p -> lookupOrMapPredecessor(p)));
+		input.optionalSuccessors  ().ifPresent(ts -> ts.forEach(s -> lookupOrMapSuccessor(s)));
+		input.optionalChildren    ().ifPresent(ts -> ts.forEach(c -> lookupOrMapChild(c)));
+		input.optionalParent      ().ifPresent(                 t -> lookupOrMapParent(t));
 	}
 
 	@Override public void afterMapping(@NonNull TaskDTO input) { }
@@ -466,5 +457,61 @@ public class TaskEntity extends AbstractMappedEntity<TaskDTO> implements Task
 	{
 		if (isNull(children)) return false;
 		return children.contains(entity);
+	}
+
+	private void lookupOrMapPredecessor(TaskDTO predecessor)
+	{
+		Optional<TaskEntity> optionalPredecessorEntity = Mapper.INSTANCE.getFromContext(predecessor);
+
+		if (optionalPredecessorEntity.isPresent())
+		{
+			addPredecessor(optionalPredecessorEntity.get());
+		}
+		else
+		{
+			addPredecessor(predecessor.toSource());
+		}
+	}
+
+	private void lookupOrMapSuccessor(TaskDTO successor)
+	{
+		Optional<TaskEntity> optionalSuccessorEntity = Mapper.INSTANCE.getFromContext(successor);
+
+		if (optionalSuccessorEntity.isPresent())
+		{
+			addSuccessor(optionalSuccessorEntity.get());
+		}
+		else
+		{
+			addSuccessor(successor.toSource());
+		}
+	}
+
+	private void lookupOrMapChild(TaskDTO child)
+	{
+		Optional<TaskEntity> optionalChildEntity = Mapper.INSTANCE.getFromContext(child);
+
+		if (optionalChildEntity.isPresent())
+		{
+			addChild(optionalChildEntity.get());
+		}
+		else
+		{
+			addChild(child.toSource());
+		}
+	}
+
+	private void lookupOrMapParent(TaskDTO parent)
+	{
+		Optional<TaskEntity> optionalParentEntity = Mapper.INSTANCE.getFromContext(parent);
+
+		if (optionalParentEntity.isPresent())
+		{
+			parent(optionalParentEntity.get());
+		}
+		else
+		{
+			parent(parent.toSource());
+		}
 	}
 }

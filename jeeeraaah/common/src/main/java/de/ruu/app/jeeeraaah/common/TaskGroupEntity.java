@@ -136,10 +136,8 @@ public class TaskGroupEntity extends AbstractMappedEntity<TaskGroupDTO> implemen
 		if (nonNullTasks().add(entity))
 		{
 			entity.taskGroup(this);
-			return this;
 		}
-
-		throw new IllegalStateException("could not add task entity");
+		return this;
 	}
 
 	public boolean removeTask(@NonNull TaskEntity entity)
