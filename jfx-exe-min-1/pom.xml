@@ -53,7 +53,7 @@
 		<maven.site.plugin>4.0.0-M15</maven.site.plugin>
         <maven.surfire.plugin>3.3.1</maven.surfire.plugin>
         <moditect.maven.plugin>1.0.0.RC2</moditect.maven.plugin>
-        <maven.pmd.plugin>3.24.0</maven.pmd.plugin>
+        <maven.pmd.plugin>3.25.0</maven.pmd.plugin>
         <spotbugs.maven.plugin>4.8.6.2</spotbugs.maven.plugin>
         <spotbugs.version>4.8.6</spotbugs.version>
 

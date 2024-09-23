@@ -4,7 +4,6 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.lib.gen.GeneratorException;
 import de.ruu.lib.gen.java.bean.BeanGenerator;
-import de.ruu.lib.gen.java.fx.bean.FXBeanGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -25,37 +24,37 @@ public class TypeGenerator
 
 		beanGenerator.run();
 
-		log.debug("create java fx bean class based on interface Task");
-		FXBeanGenerator fxBeanGenerator =
-				new FXBeanGenerator
-						(
-								Task.class.getPackageName(),
-								"FXTask",
-								new ClassFileImporter().importClass(JavaModelDemo.class),
-								new ClassFileImporter().importClass(JavaModelDemoDTO.class)
-						);
-
-		fxBeanGenerator.run();
-
-		log.debug("create java fxml for bean editor based on interface JavaModelDemo");
-		FXBeanEditorFXMLGenerator fxBeanEditorFXMLGenerator =
-				new FXBeanEditorFXMLGenerator
-						(
-								GeneratorRunner.class.getPackageName(),
-								"FXBeanEditorDemo.grid.",
-								new ClassFileImporter().importClass(JavaModelDemo.class)
-						);
-
-		fxBeanEditorFXMLGenerator.run();
-
-		log.debug("create java fx component bundle");
-		GeneratorFXCompBundle fxBeanEditorComponentBundleGenerator =
-				new GeneratorFXCompBundle
-						(
-								GeneratorRunner.class.getPackageName(),
-								"FXBeanEditorDemo"
-						);
-
-		fxBeanEditorComponentBundleGenerator.run();
+//		log.debug("create java fx bean class based on interface Task");
+//		FXBeanGenerator fxBeanGenerator =
+//				new FXBeanGenerator
+//						(
+//								Task.class.getPackageName(),
+//								"FXTask",
+//								new ClassFileImporter().importClass(Task.class),
+//								new ClassFileImporter().importClass(TaskDTO.class)
+//						);
+//
+//		fxBeanGenerator.run();
+//
+//		log.debug("create java fxml for bean editor based on interface Task");
+//		FXBeanEditorFXMLGenerator fxBeanEditorFXMLGenerator =
+//				new FXBeanEditorFXMLGenerator
+//						(
+//								Task.class.getPackageName(),
+//								Task.class.getSimpleName() + "FXBeanEditorDemo",
+//								new ClassFileImporter().importClass(Task.class)
+//						);
+//
+//		fxBeanEditorFXMLGenerator.run();
+//
+//		log.debug("create java fx component bundle");
+//		GeneratorFXCompBundle fxBeanEditorComponentBundleGenerator =
+//				new GeneratorFXCompBundle
+//						(
+//								Task.class.getPackageName(),
+//								"FXBeanEditorDemo"
+//						);
+//
+//		fxBeanEditorComponentBundleGenerator.run();
 	}
 }
