@@ -11,37 +11,27 @@ import java.util.Set;
 public interface Task
 {
 //	@NonNull
-//	UUID                          uuid();
+//	UUID      uuid();
 	@NonNull
-	TaskGroup                     taskGroup();
+	TaskGroup taskGroup();
 	@NonNull
-	Long                          id();
+	Long      id();
 	@NonNull
-	String                        name();
+	String    name();
 	@Nullable
-	String                        description();
-	@NonNull
-	default Optional<String>      descriptionOptional    () { return Optional.ofNullable(description()); };
+	String    description();
 	@Nullable
-	LocalDate                     startEstimated();
-	@NonNull
-	default Optional<LocalDate>   startEstimatedOptional () { return Optional.ofNullable(startEstimated()); };
+	LocalDate startEstimated();
 	@Nullable
-	LocalDate                     finishEstimated();
+	LocalDate finishEstimated();
 	@NonNull
-	default Optional<LocalDate>   finishEstimatedOptional() { return Optional.ofNullable(finishEstimated()); };
-	@Nullable
-	LocalDate                     startActual();
+	LocalDate startActual();
 	@NonNull
-	default Optional<LocalDate>   startActualOptional    () { return Optional.ofNullable(startActual()); };
-	@Nullable
-	LocalDate                     finishActual();
+	LocalDate finishActual();
 	@NonNull
-	default Optional<LocalDate>   finishActualOptional   () { return Optional.ofNullable(finishActual()); };
-	@Nullable
-	Duration                      effortActual();
+	Duration  effortEstimated();
 	@NonNull
-	default Optional<Duration>    effortActualOptional   () { return Optional.ofNullable(effortActual()); };
+	Duration  effortActual();
 
 	/**
 	 * @return tasks that have to be finished before this task can start
@@ -51,20 +41,20 @@ public interface Task
 	 *         loaded
 	 */
 	@NonNull
-	Optional<Set<? extends Task>> predecessors();
+	Optional<Set<Task>> predecessors();
 
 	/**
-	 * @return tasks that can only start after this task is finished
+	 * @return tasks that can not start until this task is finished
 	 *         <p>
 	 *         optional unmodifiable set of {@link Task}s, optional supports lazy loading, empty optional means no attempt
 	 *         was made to load successors, present optional but empty {@code Set} means, no successors could be loaded
 	 */
 	@NonNull
-	Optional<Set<? extends Task>> successors();
+	Optional<Set<Task>> successors();
 
 	/** @return superordinate task */
 	@NonNull
-	Optional<? extends Task> optionalParent();
+	Optional<Task> parent();
 
 	/**
 	 * @return subordinate tasks
@@ -73,5 +63,5 @@ public interface Task
 	 *         was made to load children, present optional but empty {@code Set} means, no children could be loaded
 	 */
 	@NonNull
-	Optional<Set<? extends Task>> children();
+	Optional<Set<Task>> children();
 }

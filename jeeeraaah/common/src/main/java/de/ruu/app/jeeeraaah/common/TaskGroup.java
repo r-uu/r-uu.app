@@ -9,5 +9,5 @@ public interface TaskGroup
 {
 //	@NonNull UUID uuid();
 	@NonNull String name();
-	@NonNull Optional<Set<? extends Task>> tasks();
+	@NonNull Optional<Set<Task>> tasks();
 }

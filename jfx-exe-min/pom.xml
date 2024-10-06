@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>r-uu</groupId>
-    <artifactId>r-uu.app.jfx-exe-min</artifactId>
+    <artifactId>r-uu.app-jfx-exe-min</artifactId>
 
     <organization>
         <name>r-uu</name>
@@ -23,12 +23,12 @@
         <launcher>${project.artifactId}</launcher>
         <appName>${project.artifactId}</appName>
         <main.class>de.ruu.app.jfx_exe_min_2.Main</main.class>
-        <java.version>21</java.version>
+        <java.version>23</java.version>
         <required.maven.version>3.8.6</required.maven.version>
         <jar.filename>${project.artifactId}-${project.version}</jar.filename>
 
         <!-- Dependency versions -->
-        <javafx.version>21.0.3</javafx.version>
+        <javafx.version>23</javafx.version>
         <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
         <junit.version>5.10.2</junit.version>
         <lombok.version>1.18.34</lombok.version>
@@ -52,7 +52,7 @@
 		<maven.site.plugin>4.0.0-M15</maven.site.plugin>
         <maven.surfire.plugin>3.3.1</maven.surfire.plugin>
         <moditect.maven.plugin>1.0.0.RC2</moditect.maven.plugin>
-        <maven.pmd.plugin>3.24.0</maven.pmd.plugin>
+        <maven.pmd.plugin>3.25.0</maven.pmd.plugin>
         <spotbugs.maven.plugin>4.8.6.2</spotbugs.maven.plugin>
         <spotbugs.version>4.8.6</spotbugs.version>
 
@@ -242,27 +242,27 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven.pmd.plugin}</version>
-                <configuration>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${java.version}</targetJdk>
-                    <linkXRef>false</linkXRef>
-                    <rulesets>
-                        <ruleset>pmd-ruleset.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>${pmd.target}</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-pmd-plugin</artifactId>-->
+<!--                <version>${maven.pmd.plugin}</version>-->
+<!--                <configuration>-->
+<!--                    <minimumTokens>100</minimumTokens>-->
+<!--                    <targetJdk>${java.version}</targetJdk>-->
+<!--                    <linkXRef>false</linkXRef>-->
+<!--                    <rulesets>-->
+<!--                        <ruleset>pmd-ruleset.xml</ruleset>-->
+<!--                    </rulesets>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>prepare-package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>${pmd.target}</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

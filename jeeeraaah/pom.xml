@@ -18,6 +18,8 @@
         <module>common</module>
         <module>client</module>
         <module>server</module>
+        <module>jpadto</module>
+        <module>jpadto-se</module>
     </modules>
 
 </project>
