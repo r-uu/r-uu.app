@@ -3,7 +3,7 @@ package de.ruu.app.demo.client.datamodel.fx.postaladdress;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.lib.gen.GeneratorException;
-import de.ruu.lib.gen.java.fx.bean.editor.FXBeanEditorFXMLGenerator;
+import de.ruu.lib.gen.java.fx.bean.editor.FXBeanViewFXMLGenerator;
 import de.ruu.lib.gen.java.fx.comp.GeneratorFXCompBundle;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,8 +20,8 @@ class FXBeanEditorPostalAddressGeneratorRunner
 		String   simpleFileName = PostalAddress.class.getSimpleName() + "FXBeanEditor";
 
 		log.debug("create java fxml for bean editor based on {}", generatorInput.getClass().getName());
-		FXBeanEditorFXMLGenerator fxBeanEditorFXMLGenerator =
-				new FXBeanEditorFXMLGenerator
+		FXBeanViewFXMLGenerator fxBeanEditorFXMLGenerator =
+				new FXBeanViewFXMLGenerator
 						(
 								packageName,
 								simpleFileName,

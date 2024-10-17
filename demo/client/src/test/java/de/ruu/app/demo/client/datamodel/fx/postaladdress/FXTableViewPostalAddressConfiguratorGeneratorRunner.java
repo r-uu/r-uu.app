@@ -3,7 +3,7 @@ package de.ruu.app.demo.client.datamodel.fx.postaladdress;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import de.ruu.app.datamodel.postaladdress.PostalAddress;
 import de.ruu.lib.gen.GeneratorException;
-import de.ruu.lib.gen.java.fx.tableview.FXTableViewConfiguratorGenerator;
+import de.ruu.lib.gen.java.fx.tableview.GeneratorFXTableViewConfigurator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -25,14 +25,14 @@ class FXTableViewPostalAddressConfiguratorGeneratorRunner
 //		Files.writeToFile("", path);
 
 		// generate table view configurator
-		FXTableViewConfiguratorGenerator fxTableViewConfiguratorGenerator =
-				new FXTableViewConfiguratorGenerator
+		GeneratorFXTableViewConfigurator generatorFXTableViewConfigurator =
+				new GeneratorFXTableViewConfigurator
 						(
 								packageName,
 								simpleFileName,
 								new ClassFileImporter().importClass(PostalAddressFXBean.class)
 						);
 
-		fxTableViewConfiguratorGenerator.run();
+		generatorFXTableViewConfigurator.run();
 	}
 }

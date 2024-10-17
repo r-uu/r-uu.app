@@ -47,6 +47,14 @@
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-jeeeraaah-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeeeraaah-common-jpadto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeeeraaah-common-jpadto-ee</artifactId>
+        </dependency>
     </dependencies>
 
 

@@ -97,8 +97,8 @@
 <!--					location="ruu.app.demo.server.war"-->
 <!--                    name="demo">-->
 	<webApplication contextRoot="/"
-					location="r-uu.app-demo-server.war"
-					name="r-uu.app-demo-server">
+					location="r-uu.app-jeeeraaah-server.war"
+					name="r-uu.app-jeeeraaah-server">
 <!-- TODO: reactivate for use of hibernate -->
 		<classloader commonLibraryRef="library-hibernate"/>
     </webApplication>

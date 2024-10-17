@@ -9,7 +9,7 @@ public interface Paths
 	String DEMO = "/demo";
 
 	/** constants for datamodel domain */
-	String DATAMODEL              = "/datamodel";
+	String DATAMODEL              =             "/datamodel";
 	String POSTAL_ADDRESS         = DATAMODEL + "/postaladdress";
 	String COMPANY                = DATAMODEL + "/company";
 	String DEPARTMENT             = DATAMODEL + "/department";

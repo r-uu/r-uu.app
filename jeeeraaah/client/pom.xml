@@ -16,6 +16,7 @@
 
     <modules>
         <module>fx</module>
+        <module>fx-executable</module>
         <module>rs</module>
     </modules>
 

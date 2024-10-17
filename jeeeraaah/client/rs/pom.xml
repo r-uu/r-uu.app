@@ -13,4 +13,27 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeeeraaah-common-jpadto-ee</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-jsonb</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

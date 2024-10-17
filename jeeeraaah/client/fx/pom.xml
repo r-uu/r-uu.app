@@ -52,7 +52,11 @@
         </dependency>
         <dependency>
             <groupId>r-uu</groupId>
-            <artifactId>r-uu.app-jeeeraaah-jpadto</artifactId>
+            <artifactId>r-uu.app-jeeeraaah-common-jpadto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeeeraaah-client-rs</artifactId>
         </dependency>
         <dependency>
             <groupId>r-uu</groupId>
@@ -68,6 +72,15 @@
             <groupId>r-uu</groupId>
             <artifactId>r-uu.lib-gen-java-fx-comp</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-gen-java-fx-tableview</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.app-jeeeraaah-client-rs</artifactId>
         </dependency>
     </dependencies>
 

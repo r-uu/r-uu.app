@@ -77,13 +77,6 @@ class PostalAddressFXBeanEditorController extends DefaultFXCViewController imple
 			tfStreet         .textProperty().bindBidirectional(newValue.street         ());
 			tfStreetNumber   .textProperty().bindBidirectional(newValue.streetNumber   ());
 			tfType           .textProperty().bindBidirectional(newValue.type           ());
-//			tfCity           .setText(newValue.city           ().getValue());
-//			tfCountry        .setText(newValue.country        ().getValue());
-//			tfPostalCode     .setText(newValue.postalCode     ().getValue());
-//			tfStateOrProvince.setText(newValue.stateOrProvince().getValue());
-//			tfStreet         .setText(newValue.street         ().getValue());
-//			tfStreetNumber   .setText(newValue.streetNumber   ().getValue());
-//			tfType           .setText(newValue.type           ().getValue());
 		}
 	}
 }

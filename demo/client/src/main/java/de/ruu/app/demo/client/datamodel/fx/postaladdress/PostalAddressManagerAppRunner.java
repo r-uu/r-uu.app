@@ -1,6 +1,7 @@
 package de.ruu.app.demo.client.datamodel.fx.postaladdress;
 
 import de.ruu.lib.fx.comp.FXCAppRunner;
+import de.ruu.lib.fx.comp.FXCAppStartedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,9 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class PostalAddressManagerAppRunner extends FXCAppRunner
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws ClassNotFoundException
 	{
 		log.debug("starting {}", PostalAddressManagerAppRunner.class.getName());
+
+		// force class to be loaded (and it's static initialiser to be executed)
+		// add-reads module of FXCAppStartedEvent to ALL-UNNAMED
+		Class<?> clazz = Class.forName(FXCAppStartedEvent.class.getName());
+		log.debug("loaded {}", clazz.getName());
+
 		FXCAppRunner.run(PostalAddressManagerApp.class, args);
 		log.debug("finished {}", PostalAddressManagerAppRunner.class.getName());
 	}
