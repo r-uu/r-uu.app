@@ -2,13 +2,14 @@ package de.ruu.app.jeeeraaah.common.jpa.se;
 
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.TaskGroup;
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntity;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.lib.cdi.common.CDIExtension;
 import de.ruu.lib.cdi.se.CDIContainer;
 import de.ruu.lib.jpa.se.TransactionalInterceptorCDI;
 import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.spi.CDI;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -53,7 +54,7 @@ class TaskGroupServiceJPASETest
 
 	@Test void testFindAll()
 	{
-		Set<TaskGroupEntity> all = service.findAll();
+		Set<TaskGroupEntityJPA> all = service.findAll();
 
 		assertThat(all, is(not(nullValue())));
 
@@ -64,13 +65,13 @@ class TaskGroupServiceJPASETest
 	{
 		String name = "name " + System.currentTimeMillis();
 
-		TaskGroup taskGroup = service.create(new TaskGroupEntity(name));
+		TaskGroup taskGroup = service.create(new TaskGroupEntityJPA(name));
 
 		log.info("\nreceived taskGroup\n{}", taskGroup);
 
-		if (taskGroup instanceof TaskGroupEntity)
+		if (taskGroup instanceof TaskGroupEntityJPA)
 		{
-			TaskGroupEntity entity = (TaskGroupEntity) taskGroup;
+			TaskGroupEntityJPA entity = (TaskGroupEntityJPA) taskGroup;
 
 			assertThat(entity.id  (), is(not(nullValue())));
 			assertThat(entity.name(), is(name));
@@ -88,24 +89,24 @@ class TaskGroupServiceJPASETest
 	{
 		String name = "name " + System.currentTimeMillis();
 
-		TaskGroup taskGroupIn = service.create(new TaskGroupEntity(name));
+		TaskGroup taskGroupIn = service.create(new TaskGroupEntityJPA(name));
 
-		if (taskGroupIn instanceof TaskGroupEntity)
+		if (taskGroupIn instanceof TaskGroupEntityJPA)
 		{
-			TaskGroupEntity entity = (TaskGroupEntity) taskGroupIn;
+			TaskGroupEntityJPA entity = (TaskGroupEntityJPA) taskGroupIn;
 
-			Optional<TaskGroupEntity> optional = service.read(entity.id());
+			Optional<TaskGroupEntityJPA> optional = service.read(entity.id());
 
 			assertThat(optional            , is(not(nullValue())));
 			assertThat(optional.isPresent(), is(not(false)));
 
-			TaskGroupEntity entityOut = optional.get();
+			TaskGroupEntityJPA entityOut = optional.get();
 
 			log.info("\nreceived company\n{}" + entityOut);
 
-			if (entityOut instanceof TaskGroupEntity)
+			if (entityOut instanceof TaskGroupEntityJPA)
 			{
-				entity = (TaskGroupEntity) entityOut;
+				entity = (TaskGroupEntityJPA) entityOut;
 
 				assertThat(entity.id  (), is(not(nullValue())));
 				assertThat(entity.name(), is(name));
@@ -124,7 +125,7 @@ class TaskGroupServiceJPASETest
 	{
 		String name = "name " + System.currentTimeMillis();
 
-		TaskGroupEntity taskGroupIn = service.create(new TaskGroupEntity(name));
+		TaskGroupEntityJPA taskGroupIn = service.create(new TaskGroupEntityJPA(name));
 
 		name = "modified " + System.currentTimeMillis();
 
@@ -134,9 +135,9 @@ class TaskGroupServiceJPASETest
 
 		log.info("\nreceived task group\n{}" + taskGroupOut);
 
-		if (taskGroupOut instanceof TaskGroupEntity)
+		if (taskGroupOut instanceof TaskGroupEntityJPA)
 		{
-			TaskGroupEntity entity = (TaskGroupEntity) taskGroupOut;
+			TaskGroupEntityJPA entity = (TaskGroupEntityJPA) taskGroupOut;
 
 			assertThat(entity.id(), is(not(nullValue())));
 
@@ -155,17 +156,17 @@ class TaskGroupServiceJPASETest
 	{
 		String name = "name " + System.currentTimeMillis();
 
-		TaskGroup taskGroup = service.create(new TaskGroupEntity(name));
+		TaskGroup taskGroup = service.create(new TaskGroupEntityJPA(name));
 
 		log.info("\nreceived task group\n{}", taskGroup);
 
-		if (taskGroup instanceof TaskGroupEntity)
+		if (taskGroup instanceof TaskGroupEntityJPA)
 		{
-			TaskGroupEntity entity = (TaskGroupEntity) taskGroup;
+			TaskGroupEntityJPA entity = (TaskGroupEntityJPA) taskGroup;
 
 			service.delete(entity.id());
 
-			Optional<TaskGroupEntity> optional = service.read(entity.id());
+			Optional<TaskGroupEntityJPA> optional = service.read(entity.id());
 
 			assertThat(optional            , is(not(nullValue())));
 			assertThat(optional.isPresent(), is(false));
@@ -182,26 +183,26 @@ class TaskGroupServiceJPASETest
 
 		String name = "name " + System.currentTimeMillis();
 
-		TaskGroupEntity taskGroup = service.create(new TaskGroupEntity(name));
+		TaskGroupEntityJPA taskGroup = service.create(new TaskGroupEntityJPA(name));
 
 		log.info("\nreceived task group\n{}", taskGroup);
 
-		TaskEntity task = new TaskEntity(taskGroup, name);
+		TaskEntityJPA task = new TaskEntityJPA(taskGroup, name);
 
 		task = taskService.create(task);
 
-		Optional<TaskGroupEntity> optional = service.findWithTasks(taskGroup.id());
+		Optional<TaskGroupEntityJPA> optional = service.findWithTasks(taskGroup.id());
 
 		assertThat(optional            , is(not(nullValue())));
 		assertThat(optional.isPresent(), is(true));
 
 		taskGroup = optional.get();
-		Optional<Set<Task>> optionalInner = taskGroup.tasks();
+		@NonNull Optional<Set<TaskEntityJPA>> optionalInner = taskGroup.tasks();
 
 		assertThat(optionalInner            , is(not(nullValue())));
 		assertThat(optionalInner.isPresent(), is(true));
 
-		Set<Task> tasks = optionalInner.get();
+		Set<? extends Task> tasks = optionalInner.get();
 
 		assertThat(tasks.size(), is(1));
 

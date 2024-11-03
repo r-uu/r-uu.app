@@ -1,15 +1,17 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup;
 
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.editor.TaskGroupEditor;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Mapper;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupDTO;
 import de.ruu.app.jeeeraaah.client.rs.ClientTaskGroup;
-import de.ruu.app.jeeeraaah.common.TaskGroup;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupDTO;
 import de.ruu.lib.fx.comp.DefaultFXCViewController;
-import de.ruu.lib.jpa.core.Entity;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -19,7 +21,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -36,17 +37,6 @@ import static javafx.scene.control.ButtonType.OK;
 @Slf4j
 class TaskGroupManagementController extends DefaultFXCViewController implements TaskGroupManagementService
 {
-	static class TaskGroupFXBeanWithEntityInfo extends TaskGroupFXBean
-	{
-		private Entity.EntityInfo<Long> info;
-
-		private TaskGroupFXBeanWithEntityInfo(@NonNull TaskGroup taskGroup)
-		{
-			super(taskGroup);
-			info = new Entity.EntityInfo<>((Entity<Long>) taskGroup);
-		}
-	}
-
 	@FXML private Button btnAdd;
 	@FXML private Button btnEdit;
 	@FXML private Button btnExit;
@@ -60,47 +50,65 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 	@FXML private AnchorPane root;
 	@FXML private ToolBar tbr1;
 	@FXML private ToolBar tbr2;
-	@FXML private TableView<TaskGroupFXBeanWithEntityInfo> tv;
+	@FXML private TableView<TaskGroupFXBean> tv;
 	@FXML private VBox vbx;
 
-	@Inject private ClientTaskGroup client;
+	@Inject
+	private TaskGroupEditor editor;
+	private Parent          editorLocalRoot;
 
-	@Inject private TaskGroupEditor editor;
+	@Inject
+	private ClientTaskGroup client;
 
 	@Override @FXML protected void initialize()
 	{
+		// force editor to fxml-inject internal fx-controls
+		editorLocalRoot = editor.getLocalRoot();
+
+		TableViewConfigurator.configure(tv);
+		client.findAll().forEach(tg -> tv.getItems().add(new TaskGroupFXBean(Mapper.INSTANCE.map((TaskGroupDTO) tg))));
+
 		btnAdd .setOnAction(e -> onAdd (e));
 		btnExit.setOnAction(e -> onExit(e));
 	}
 
 	private void onAdd(ActionEvent e)
 	{
-		TaskGroupFXBean taskGroupFXBean = new TaskGroupFXBean();
-
-		// populate editor with new item
+		// populate editor with new item, call to getService() has to be done after call to getLocalRoot() to make sure
+		// internal java fx bindings can be establihed (see initialize)
+		TaskGroupBean       taskGroupBean   = new TaskGroupBean("new task group");
+		TaskGroupFXBean     taskGroupFXBean = new TaskGroupFXBean(taskGroupBean);
 		editor.getService().taskGroup(taskGroupFXBean);
 
 		Dialog<TaskGroupFXBean> dialog = new Dialog<>();
 
 		DialogPane pane = dialog.getDialogPane();
-		pane.setContent(editor.getLocalRoot());
+		pane.setContent(editorLocalRoot);
 		pane.getButtonTypes().addAll(CANCEL, OK);
 
 		dialog.setTitle("new");
-		dialog.setResultConverter(btn -> dialogResultConverterFXBean(btn));
+		dialog.setResultConverter(this::dialogResultConverterFXBean);
 
 		Optional<TaskGroupFXBean> optional = dialog.showAndWait();
 
 		if (optional.isPresent())
 		{
-			// to create a new item in db the fx bean data has to be passed to
-			TaskGroupDTO taskGroupDTO = client.create(taskGroupFXBean.toSource());
+			taskGroupFXBean = optional.get();
+			taskGroupBean   = taskGroupFXBean.toFXSource();
 
-			TaskGroupFXBeanWithEntityInfo newItem = new TaskGroupFXBeanWithEntityInfo(taskGroupDTO);
+			// create a task group dto from task group bean (which is a task group dto)
+			TaskGroupDTO taskGroupDTO = taskGroupBean.toSource();
+
+			// let client create a new item in db
+			taskGroupDTO = (TaskGroupDTO) client.create(taskGroupDTO);
+			// create bean from dto
+			taskGroupBean = Mapper.INSTANCE.map(taskGroupDTO);
+			// create fx bean from bean
+			taskGroupFXBean = new TaskGroupFXBean(taskGroupBean);
 
 			// add and select item with retrieved item
-			tv.getItems().add(newItem);
-			tv.getSelectionModel().select(newItem);
+			tv.getItems().add(taskGroupFXBean);
+			tv.getSelectionModel().select(taskGroupFXBean);
 		}
 	}
 

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @ApplicationScoped
 @Slf4j
-public class TaskGroupRepository extends AbstractRepository<TaskGroupEntity, Long>
+public class TaskGroupRepository extends AbstractRepository<TaskGroupEntityJPA, Long>
 {
 	@PersistenceContext(name = "jeeeraaah") private EntityManager entityManager;
 
@@ -24,15 +24,15 @@ public class TaskGroupRepository extends AbstractRepository<TaskGroupEntity, Lon
 
 	@Override protected EntityManager entityManager() { return entityManager; }
 
-	public Optional<TaskGroupEntity> findWithTasks(@NonNull Long id)
+	public Optional<TaskGroupEntityJPA> findWithTasks(@NonNull Long id)
 	{
-		EntityGraph<TaskGroupEntity> entityGraph = entityManager.createEntityGraph(TaskGroupEntity.class);
-		entityGraph.addSubgraph(TaskGroupEntity_.tasks.getName());
+		EntityGraph<TaskGroupEntityJPA> entityGraph = entityManager.createEntityGraph(TaskGroupEntityJPA.class);
+		entityGraph.addSubgraph(TaskGroupEntityJPA_.tasks.getName());
 
 		Map<String, Object> hints = new HashMap<>();
 		hints.put(GraphType.FETCH.getName(), entityGraph);
 
-		TaskGroupEntity result = entityManager.find(TaskGroupEntity.class, id, hints);
+		TaskGroupEntityJPA result = entityManager.find(TaskGroupEntityJPA.class, id, hints);
 
 		return Optional.ofNullable(result);
 	}

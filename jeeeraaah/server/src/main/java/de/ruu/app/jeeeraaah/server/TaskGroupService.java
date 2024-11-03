@@ -1,7 +1,7 @@
 package de.ruu.app.jeeeraaah.server;
 
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupDTO;
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntity;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskGroupServiceJPA;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static de.ruu.app.jeeeraaah.common.Paths.BY_ID;
 import static de.ruu.app.jeeeraaah.common.Paths.BY_ID_WITH_TASKS;
-import static de.ruu.app.jeeeraaah.common.Paths.PATH_TO_DOMAIN_TASK_GROUP;
+import static de.ruu.app.jeeeraaah.common.Paths.PATH_APPENDER_TO_DOMAIN_TASK_GROUP;
 import static de.ruu.lib.util.BooleanFunctions.not;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.Response.Status.CONFLICT;
@@ -35,7 +35,7 @@ import static jakarta.ws.rs.core.Response.status;
 /**
  * REST controller providing REST endpoints.
  * <p>
- * Methods accept DTO parameters, transform DTOs to entities, delegate to {@link #service} and transform entity
+ * Methods accepting DTO parameters, transform DTOs to entities, delegate to {@link #service} and transform entity
  * return values from {@link #service} back to DTOs. The transformations from entities to DTOs are
  * intentionally done here after transactions were committed in {@link #service}. This ensures that version
  * attributes of DTOs are respected with their new values after commit in returned DTOs.
@@ -43,7 +43,7 @@ import static jakarta.ws.rs.core.Response.status;
  * @author r-uu
  */
 @RequestScoped
-@Path(PATH_TO_DOMAIN_TASK_GROUP)
+@Path(PATH_APPENDER_TO_DOMAIN_TASK_GROUP)
 @OpenAPIDefinition(info = @Info(version = "a version", title = "a title"))
 @Timed
 public class TaskGroupService
@@ -70,7 +70,7 @@ public class TaskGroupService
 	@Produces(APPLICATION_JSON)
 	public Response find(@PathParam("id") Long id)
 	{
-		Optional<TaskGroupEntity> result = service.read(id);
+		Optional<? extends TaskGroupEntityJPA> result = service.read(id);
 		if (not(result.isPresent()))
 				return status(NOT_FOUND).entity("task with id " + id + " not found").build();
 		else
@@ -88,7 +88,7 @@ public class TaskGroupService
 	@Produces(APPLICATION_JSON)
 	public Response findWithDepartments(@PathParam("id") Long id)
 	{
-		Optional<TaskGroupEntity> result = service.findWithTasks(id);
+		Optional<? extends TaskGroupEntityJPA> result = service.findWithTasks(id);
 
 		if (not(result.isPresent()))
 				return status(NOT_FOUND).entity("company with id " + id + " not found").build();
@@ -105,17 +105,17 @@ public class TaskGroupService
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response create(TaskGroupDTO dto)
+	public Response create(TaskGroupEntityDTO dto)
 	{
-		TaskGroupEntity entity = service.create(dto.toSource());
-		TaskGroupDTO    result = entity.toTarget();
+		TaskGroupEntityJPA entity = service.create(dto.toSource());
+		TaskGroupEntityDTO result = entity.toTarget();
 		return status(CREATED).entity(result).build();
 	}
 
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response update(TaskGroupDTO dto)
+	public Response update(TaskGroupEntityDTO dto)
 	{
 		return
 				ok

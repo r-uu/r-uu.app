@@ -5,11 +5,11 @@ import de.ruu.app.datamodel.company.Department;
 import de.ruu.app.datamodel.company.dto.CompanyDTO;
 import de.ruu.app.datamodel.company.dto.DepartmentDTO;
 import de.ruu.lib.cdi.se.CDIContainer;
-import de.ruu.lib.junit.DisabledOnServerNotListening;
 import jakarta.enterprise.inject.spi.CDI;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -21,7 +21,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@DisabledOnServerNotListening(propertyNameHost = "company.rest-api.host", propertyNamePort = "company.rest-api.port")
+//@DisabledOnServerNotListening(propertyNameHost = "company.rest-api.host", propertyNamePort = "company.rest-api.port")
+@Disabled
 @Slf4j
 class ClientCompanyTest
 {

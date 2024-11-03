@@ -1,9 +1,9 @@
 package de.ruu.app.jeeeraaah.common.jpadto;
 
-import de.ruu.app.jeeeraaah.common.dto.TaskDTO;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupDTO;
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntity;
+import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -23,20 +23,20 @@ public abstract class Mapper
 
 	private static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
 
-	public abstract @NonNull TaskGroupEntity map(@NonNull TaskGroupDTO input);
-	public abstract @NonNull TaskGroupDTO    map(@NonNull TaskGroupEntity input);
+	public abstract @NonNull TaskGroupEntityJPA map(@NonNull TaskGroupEntityDTO input);
+	public abstract @NonNull TaskGroupEntityDTO map(@NonNull TaskGroupEntityJPA input);
 
-	public abstract @NonNull TaskEntity map(@NonNull TaskDTO input);
-	public abstract @NonNull TaskDTO    map(@NonNull TaskEntity input);
+	public abstract @NonNull TaskEntityJPA map(@NonNull TaskEntityDTO input);
+	public abstract @NonNull TaskEntityDTO map(@NonNull TaskEntityJPA input);
 
-	public Optional<TaskEntity> getFromContext(TaskDTO    dto   ) { return Optional.ofNullable(CONTEXT.get(dto   , TaskEntity.class)); }
-	public Optional<TaskDTO>    getFromContext(TaskEntity entity) { return Optional.ofNullable(CONTEXT.get(entity, TaskDTO   .class)); }
+	public Optional<TaskEntityJPA> getFromContext(TaskEntityDTO dto   ) { return Optional.ofNullable(CONTEXT.get(dto   , TaskEntityJPA.class)); }
+	public Optional<TaskEntityDTO>    getFromContext(TaskEntityJPA entity) { return Optional.ofNullable(CONTEXT.get(entity, TaskEntityDTO.class)); }
 
 	/**
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@BeforeMapping
-	void beforeMapping(TaskGroupEntity source, @MappingTarget TaskGroupDTO target)
+	void beforeMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
@@ -46,7 +46,7 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@AfterMapping
-	void afterMapping(TaskGroupEntity source, @MappingTarget TaskGroupDTO target)
+	void afterMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
@@ -56,7 +56,7 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@BeforeMapping
-	void beforeMapping(TaskGroupDTO source, @MappingTarget TaskGroupEntity target)
+	void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
@@ -66,7 +66,7 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@AfterMapping
-	void afterMapping(TaskGroupDTO source, @MappingTarget TaskGroupEntity target)
+	void afterMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
@@ -76,7 +76,7 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@BeforeMapping
-	void beforeMapping(TaskEntity source, @MappingTarget TaskDTO target)
+	void beforeMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
@@ -86,17 +86,16 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@AfterMapping
-	void afterMapping(TaskEntity source, @MappingTarget TaskDTO target)
+	void afterMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
-		log.debug("");
 	}
 
 	/**
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@BeforeMapping
-	void beforeMapping(TaskDTO source, @MappingTarget TaskEntity target)
+	void beforeMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
@@ -106,20 +105,19 @@ public abstract class Mapper
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
 	 */
 	@AfterMapping
-	void afterMapping(TaskDTO source, @MappingTarget TaskEntity target)
+	void afterMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
 	{
 //		log.debug("\nsource\n{}\ntarget\n{}", source, target);
-		log.debug("");
 	}
 
 	@ObjectFactory
 	@NonNull
-	TaskGroupEntity lookupOrCreate(@NonNull TaskGroupDTO input)
+	TaskGroupEntityJPA lookupOrCreate(@NonNull TaskGroupEntityDTO input)
 	{
-		TaskGroupEntity result = CONTEXT.get(input, TaskGroupEntity.class);
+		TaskGroupEntityJPA result = CONTEXT.get(input, TaskGroupEntityJPA.class);
 		if (result == null)
 		{
-			result = new TaskGroupEntity(input.name());
+			result = new TaskGroupEntityJPA(input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -128,12 +126,12 @@ public abstract class Mapper
 
 	@ObjectFactory
 	@NonNull
-	TaskGroupDTO lookupOrCreate(@NonNull TaskGroupEntity input)
+	TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupEntityJPA input)
 	{
-		TaskGroupDTO result = CONTEXT.get(input, TaskGroupDTO.class);
+		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
 		if (result == null)
 		{
-			result = new TaskGroupDTO(input.name());
+			result = new TaskGroupEntityDTO(input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -142,13 +140,13 @@ public abstract class Mapper
 
 	@ObjectFactory
 	@NonNull
-	TaskEntity lookupOrCreate(@NonNull TaskDTO input)
+	TaskEntityJPA lookupOrCreate(@NonNull TaskEntityDTO input)
 	{
-		TaskEntity result = CONTEXT.get(input, TaskEntity.class);
+		TaskEntityJPA result = CONTEXT.get(input, TaskEntityJPA.class);
 		if (result == null)
 		{
-			TaskGroupEntity taskGroupEntity = lookupOrCreate(input.taskGroup());
-			result = new TaskEntity(taskGroupEntity, input.name());
+			TaskGroupEntityJPA taskGroupEntity = lookupOrCreate(input.taskGroup());
+			result = new TaskEntityJPA(taskGroupEntity, input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -157,13 +155,13 @@ public abstract class Mapper
 
 	@ObjectFactory
 	@NonNull
-	TaskDTO lookupOrCreate(@NonNull TaskEntity input)
+	TaskEntityDTO lookupOrCreate(@NonNull TaskEntityJPA input)
 	{
-		TaskDTO result = CONTEXT.get(input, TaskDTO.class);
+		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
 		if (result == null)
 		{
-			TaskGroupDTO taskGroupDTO = lookupOrCreate(input.taskGroup());
-			result = new TaskDTO(taskGroupDTO, input.name());
+			TaskGroupEntityDTO taskGroupDTO = lookupOrCreate(input.taskGroup());
+			result = new TaskEntityDTO(taskGroupDTO, input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}

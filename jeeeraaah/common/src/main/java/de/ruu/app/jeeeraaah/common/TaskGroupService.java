@@ -5,11 +5,11 @@ import java.util.Set;
 
 public interface TaskGroupService<TG extends TaskGroup>
 {
-	TG           create(TG   taskGroup);
-	Optional<TG> read  (Long id       );
-	TG           update(TG   taskGroup);
-	void         delete(Long id       );
+	TG                     create(TG   taskGroup);
+	Optional<? extends TG> read  (Long id       );
+	TG                     update(TG   taskGroup);
+	void                   delete(Long id       );
 
-	Set<TG>      findAll();
-	Optional<TG> findWithTasks(Long id);
+	Set     <? extends TG> findAll();
+	Optional<? extends TG> findWithTasks(Long id);
 }

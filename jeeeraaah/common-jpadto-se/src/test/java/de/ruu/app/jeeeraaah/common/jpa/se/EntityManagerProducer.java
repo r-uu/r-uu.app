@@ -1,7 +1,7 @@
 package de.ruu.app.jeeeraaah.common.jpa.se;
 
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntity;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.lib.jpa.se.hibernate.postgres.AbstractEntityManagerProducer;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
@@ -16,8 +16,8 @@ import java.util.List;
 		return
 				List.of
 				(
-						  TaskGroupEntity.class
-						, TaskEntity.class
+						  TaskGroupEntityJPA.class
+						, TaskEntityJPA.class
 				);
 	}
 

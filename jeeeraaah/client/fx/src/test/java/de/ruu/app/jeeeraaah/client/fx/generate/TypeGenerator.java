@@ -3,8 +3,8 @@ package de.ruu.app.jeeeraaah.client.fx.generate;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.TaskGroup;
-import de.ruu.app.jeeeraaah.common.dto.TaskDTO;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupDTO;
+import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.lib.gen.GeneratorException;
 import de.ruu.lib.gen.java.bean.BeanGenerator;
 import de.ruu.lib.gen.java.fx.bean.FXBeanGenerator;
@@ -23,7 +23,7 @@ public class TypeGenerator
 		Class<?> taskInterfaceType = Task.class;
 
 		generateJavaBeanClass                  (taskInterfaceType);
-		generateJavaFXBeanClass                (taskInterfaceType, TaskDTO.class);
+		generateJavaFXBeanClass                (taskInterfaceType, TaskEntityDTO.class);
 		generateJavaFXBeanViewFXML             (taskInterfaceType);
 		generateJavaFXBeanViewComponentBundle  (taskInterfaceType);
 		generateJavaFXBeanEditorComponentBundle(taskInterfaceType);
@@ -31,11 +31,11 @@ public class TypeGenerator
 		Class<?> taskGroupInterfaceType = TaskGroup.class;
 
 		generateJavaBeanClass                  (taskGroupInterfaceType);
-		generateJavaFXBeanClass                (taskGroupInterfaceType, TaskGroupDTO.class);
+		generateJavaFXBeanClass                (taskGroupInterfaceType, TaskGroupEntityDTO.class);
 		generateJavaFXBeanViewFXML             (taskGroupInterfaceType);
 		generateJavaFXBeanViewComponentBundle  (taskGroupInterfaceType);
 		generateJavaFXBeanEditorComponentBundle(taskGroupInterfaceType);
-		generateJavaFXCTableViewConfigurator   (TaskGroupDTO.class);
+		generateJavaFXCTableViewConfigurator   (TaskGroupEntityDTO.class);
 
 		generateJavaFXComponentMain();
 		generateJavaFXComponentTaskGroup();

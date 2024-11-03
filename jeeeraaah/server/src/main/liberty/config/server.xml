@@ -1,4 +1,4 @@
-<server description="demo liberty server">
+<server description="jeee-raaah liberty server">
     <featureManager>
 		<feature>adminCenter-1.0</feature>
         <!-- give openliberty access to shared library -->
@@ -90,12 +90,8 @@
     <!-- Automatically expand WAR files and EAR files -->
     <applicationManager autoExpand="true"/>
 
-    <variable name="de.ruu.app.demo.server.system.SystemResource_inMaintenance" value="false"/>
+    <variable name="de.ruu.app.jeeeraaah.server.system.SystemResource_inMaintenance" value="false"/>
 
-    <!-- configures the application on a specified context root -->
-<!--    <webApplication contextRoot="/"-->
-<!--					location="ruu.app.demo.server.war"-->
-<!--                    name="demo">-->
 	<webApplication contextRoot="/"
 					location="r-uu.app-jeeeraaah-server.war"
 					name="r-uu.app-jeeeraaah-server">

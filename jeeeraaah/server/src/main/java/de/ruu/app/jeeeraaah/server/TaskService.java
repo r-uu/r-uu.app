@@ -1,7 +1,7 @@
 package de.ruu.app.jeeeraaah.server;
 
-import de.ruu.app.jeeeraaah.common.dto.TaskDTO;
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
+import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskServiceJPA;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static de.ruu.app.jeeeraaah.common.Paths.BY_ID;
-import static de.ruu.app.jeeeraaah.common.Paths.PATH_TO_DOMAIN_TASK;
+import static de.ruu.app.jeeeraaah.common.Paths.PATH_APPENDER_TO_DOMAIN_TASK;
 import static de.ruu.lib.util.BooleanFunctions.not;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.Response.Status.CONFLICT;
@@ -42,7 +42,7 @@ import static jakarta.ws.rs.core.Response.status;
  * @author r-uu
  */
 @RequestScoped
-@Path(PATH_TO_DOMAIN_TASK)
+@Path(PATH_APPENDER_TO_DOMAIN_TASK)
 @OpenAPIDefinition(info = @Info(version = "a version", title = "a title"))
 @Timed
 public class TaskService
@@ -69,7 +69,7 @@ public class TaskService
 	@Produces(APPLICATION_JSON)
 	public Response find(@PathParam("id") Long id)
 	{
-		Optional<TaskEntity> result = service.read(id);
+		Optional<? extends TaskEntityJPA> result = service.read(id);
 		if (not(result.isPresent()))
 				return status(NOT_FOUND).entity("task with id " + id + " not found").build();
 		else
@@ -85,17 +85,17 @@ public class TaskService
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response create(TaskDTO dto)
+	public Response create(TaskEntityDTO dto)
 	{
-		TaskEntity entity = service.create(dto.toSource());
-		TaskDTO    result = entity.toTarget();
+		TaskEntityJPA entity = service.create(dto.toSource());
+		TaskEntityDTO result = entity.toTarget();
 		return status(CREATED).entity(result).build();
 	}
 
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
-	public Response update(TaskDTO dto)
+	public Response update(TaskEntityDTO dto)
 	{
 		return
 				ok

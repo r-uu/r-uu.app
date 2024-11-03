@@ -25,6 +25,10 @@
     </properties>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>jakarta.activation</groupId>-->
+<!--            <artifactId>jakarta.activation-api</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
@@ -32,6 +36,10 @@
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.health</groupId>
+            <artifactId>microprofile-health-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.microprofile.metrics</groupId>
@@ -54,6 +62,10 @@
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-jeeeraaah-common-jpadto-ee</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

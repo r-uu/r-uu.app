@@ -6,13 +6,13 @@ public interface Paths
 	String BY_ID = "/{id}";
 
 	/** constants for application */
-	String PATH_TO_APP               = "/jeee-raaa";
+	String PATH_TO_APP                        = "/jeee-raaah";
 
 	/** constants for domain taskgroup */
-	String PATH_TO_DOMAIN_TASK_GROUP = PATH_TO_APP + "/taskgroup";
+	String PATH_APPENDER_TO_DOMAIN_TASK_GROUP = "/taskgroup";
 	/** constants for domain task */
-	String PATH_TO_DOMAIN_TASK       = PATH_TO_APP + "/task";
+	String PATH_APPENDER_TO_DOMAIN_TASK       = "/task";
 
 	/** special purpose constants */
-	String BY_ID_WITH_TASKS          = BY_ID + "/optionalTasks";
+	String BY_ID_WITH_TASKS = BY_ID + "/optionalTasks";
 }

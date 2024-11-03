@@ -15,6 +15,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
         </dependency>
@@ -81,6 +85,10 @@
         <dependency>
             <groupId>r-uu</groupId>
             <artifactId>r-uu.app-jeeeraaah-client-rs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
         </dependency>
     </dependencies>
 

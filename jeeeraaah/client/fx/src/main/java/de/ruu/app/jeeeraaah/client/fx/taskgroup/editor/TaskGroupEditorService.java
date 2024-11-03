@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.editor;
 
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.TaskGroupFXBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import de.ruu.lib.fx.comp.FXCViewService;
 import lombok.NonNull;
 

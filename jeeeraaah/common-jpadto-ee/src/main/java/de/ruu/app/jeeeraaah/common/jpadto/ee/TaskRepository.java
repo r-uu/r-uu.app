@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.common.jpadto.ee;
 
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.lib.jpa.core.AbstractRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
-public class TaskRepository extends AbstractRepository<TaskEntity, Long>
+public class TaskRepository extends AbstractRepository<TaskEntityJPA, Long>
 {
 	@PersistenceContext(name = "jeeeraaah_test") private EntityManager entityManager;
 

@@ -43,6 +43,16 @@
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-jsonb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>r-uu</groupId>
+            <artifactId>r-uu.lib-jsonb</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -64,29 +74,29 @@
 <!--                    </execution>-->
 <!--                </executions>-->
 <!--            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
 
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>package</phase>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>default-jar</id>-->
+<!--                        <phase>package</phase>-->
 
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
 
-                        <configuration>
-                            <archive>
-                                <manifestEntries>
-                                    <Add-Reads>de.ruu.app.jeeeraaah.jpadto=ALL-UNNAMED</Add-Reads>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                        <configuration>-->
+<!--                            <archive>-->
+<!--                                <manifestEntries>-->
+<!--                                    <Add-Reads>de.ruu.app.jeeeraaah.jpadto=ALL-UNNAMED</Add-Reads>-->
+<!--                                </manifestEntries>-->
+<!--                            </archive>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
 
     </build>

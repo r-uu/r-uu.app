@@ -1,13 +1,10 @@
 package de.ruu.app.jeeeraaah.client.fx.task.view;
 
 import de.ruu.app.jeeeraaah.client.fx.task.TaskFXBean;
-import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.lib.cdi.se.EventDispatcher;
 import de.ruu.lib.fx.FXUtil;
 import de.ruu.lib.fx.comp.DefaultFXCViewController;
 import de.ruu.lib.fx.comp.FXCAppStartedEvent;
-import de.ruu.lib.jpa.core.Entity;
-import de.ruu.lib.jpa.core.Entity.EntityInfo;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -29,17 +26,6 @@ import java.util.Optional;
 @Slf4j
 class TaskViewController extends DefaultFXCViewController implements TaskViewService
 {
-	static class TaskFXBeanWithEntityInfo extends TaskFXBean
-	{
-		private EntityInfo<Long> info;
-
-		private TaskFXBeanWithEntityInfo(@NonNull Task task)
-		{
-			super(task);
-			info = new EntityInfo<>((Entity<Long>) task);
-		}
-	}
-
 	@FXML private Label lblActual;
 	@FXML private Label lblDescription;
 	@FXML private Label lblEstimated;
@@ -71,7 +57,7 @@ class TaskViewController extends DefaultFXCViewController implements TaskViewSer
 
 	@Override public void task(@NonNull TaskFXBean task)
 	{
-
+		// TODO
 	}
 
 	private void onAppStarted(FXCAppStartedEvent e)

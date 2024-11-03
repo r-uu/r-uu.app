@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.common.jpadto.ee;
 
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntity;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskGroupServiceJPA;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,12 +24,12 @@ public class TaskGroupServiceJPAEE implements TaskGroupServiceJPA
 	@PostConstruct
 	private void postConstruct() { log.debug("injected repository: {}", repository); }
 
-	@Override public @NonNull TaskGroupEntity create(@NonNull TaskGroupEntity entity) { return repository.save  (entity); }
-	@Override public @NonNull Optional<TaskGroupEntity> read  (@NonNull Long id                   ) { return repository.find  (id    ); }
-	@Override public @NonNull          TaskGroupEntity  update(@NonNull TaskGroupEntity entity) { return repository.save  (entity); }
+	@Override public @NonNull TaskGroupEntityJPA create(@NonNull TaskGroupEntityJPA entity) { return repository.save  (entity); }
+	@Override public @NonNull Optional<TaskGroupEntityJPA> read  (@NonNull Long id                   ) { return repository.find  (id    ); }
+	@Override public @NonNull TaskGroupEntityJPA update(@NonNull TaskGroupEntityJPA entity) { return repository.save  (entity); }
 	@Override public          void                          delete(@NonNull Long id                   ) {        repository.delete(id    ); }
 
-	@Override public @NonNull Set<TaskGroupEntity> findAll() { return new HashSet<>(repository.findAll()); }
+	@Override public @NonNull Set<TaskGroupEntityJPA> findAll() { return new HashSet<>(repository.findAll()); }
 
-	@Override public Optional<TaskGroupEntity> findWithTasks(Long id) { return repository.findWithTasks(id); }
+	@Override public Optional<TaskGroupEntityJPA> findWithTasks(Long id) { return repository.findWithTasks(id); }
 }

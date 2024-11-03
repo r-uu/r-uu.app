@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
-public class TaskRepository extends AbstractRepository<TaskEntity, Long>
+public class TaskRepository extends AbstractRepository<TaskEntityJPA, Long>
 {
 	@PersistenceContext(name = "jeeeraaah") private EntityManager entityManager;
 

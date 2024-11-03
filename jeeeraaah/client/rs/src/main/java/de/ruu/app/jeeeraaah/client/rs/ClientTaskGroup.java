@@ -1,9 +1,8 @@
 package de.ruu.app.jeeeraaah.client.rs;
 
 import de.ruu.app.jeeeraaah.common.Paths;
-import de.ruu.app.jeeeraaah.common.TaskGroup;
 import de.ruu.app.jeeeraaah.common.TaskGroupService;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupDTO;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.lib.jsonb.JsonbConfigurator;
 import de.ruu.lib.util.rs.RestClientCallException;
 import de.ruu.lib.util.rs.filter.logging.ClientRequestLoggingFilter;
@@ -31,31 +30,38 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Singleton
 @Slf4j
-public class ClientTaskGroup implements TaskGroupService<TaskGroup>
+public class ClientTaskGroup implements TaskGroupService<TaskGroupEntityDTO>
 {
 	private static final String UNEXPECTED_STATUS = "unexpected status: ";
 
 	private String scheme =
-			ConfigProvider.getConfig().getOptionalValue("postal-address.rest-api.scheme", String.class).orElse("http");
+			ConfigProvider.getConfig().getOptionalValue("jeeeraaah.rest-api.scheme", String.class).orElse("http");
 
 	private String host =
-			ConfigProvider.getConfig().getOptionalValue("postal-address.rest-api.host", String.class).orElse("127.0.0.1");
+			ConfigProvider.getConfig().getOptionalValue("jeeeraaah.rest-api.host", String.class).orElse("127.0.0.1");
 
 	private Integer port =
-			ConfigProvider.getConfig().getOptionalValue("postal-address.rest-api.port", Integer.class).orElse(8080);
+			ConfigProvider.getConfig().getOptionalValue("jeeeraaah.rest-api.port", Integer.class).orElse(9080);
 
 	private URI uri;
 
 	private Client client;
+
+//	public ClientTaskGroup()
+//	{
+//		log.debug("-".repeat(50));
+//	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// lifecycle methods
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	@PostConstruct public void postConstruct()
 	{
+//		log.debug("-".repeat(50));
+
 		String schemaHostPort = scheme + "://" + host + ":" + port;
 
-		uri = URI.create(schemaHostPort + Paths.PATH_TO_APP + Paths.PATH_TO_DOMAIN_TASK_GROUP);
+		uri = URI.create(schemaHostPort + Paths.PATH_TO_APP + Paths.PATH_APPENDER_TO_DOMAIN_TASK_GROUP);
 
 		log.debug("scheme        : {}", scheme);
 		log.debug("host          : {}", host);
@@ -74,7 +80,7 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 	// interface implementations
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override public @NonNull TaskGroupDTO create(@NonNull TaskGroup taskGroup)
+	@Override public TaskGroupEntityDTO create(TaskGroupEntityDTO taskGroup)
 	{
 		Response response = client.target(uri).request().post(Entity.entity(taskGroup, APPLICATION_JSON));
 
@@ -83,10 +89,10 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + uri, response);
 		}
 
-		return response.readEntity(TaskGroupDTO.class);
+		return response.readEntity(TaskGroupEntityDTO.class);
 	}
 
-	@Override public @NonNull Optional<TaskGroup> read(@NonNull Long id)
+	@Override public Optional<? extends TaskGroupEntityDTO> read(@NonNull Long id)
 	{
 		WebTarget target   = client.target(uri + Paths.BY_ID);
 		Response  response = target.resolveTemplate("id", id).request().get();
@@ -95,7 +101,7 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 
 		if (status == Status.OK.getStatusCode())
 		{
-			return Optional.of(response.readEntity(TaskGroupDTO.class));
+			return Optional.of(response.readEntity(TaskGroupEntityDTO.class));
 		}
 		else if (status == Status.NOT_FOUND.getStatusCode())
 		{
@@ -107,7 +113,7 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 		}
 	}
 
-	@Override public @NonNull TaskGroupDTO update(@NonNull TaskGroup taskGroup)
+	@Override public TaskGroupEntityDTO update(TaskGroupEntityDTO taskGroup)
 	{
 		Response response = client.target(uri).request().put(Entity.entity(taskGroup, APPLICATION_JSON));
 
@@ -116,7 +122,7 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + uri, response);
 		}
 
-		return response.readEntity(TaskGroupDTO.class);
+		return response.readEntity(TaskGroupEntityDTO.class);
 	}
 
 	@Override public void delete(@NonNull Long id)
@@ -130,7 +136,7 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 		}
 	}
 
-	@Override public @NonNull Set<TaskGroup> findAll()
+	@Override public Set<? extends TaskGroupEntityDTO> findAll()
 	{
 		Response response = client.target(uri).request().get();
 
@@ -139,10 +145,10 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + uri, response);
 		}
 
-		return new HashSet<>(response.readEntity(new GenericType<HashSet<TaskGroupDTO>>() {}));
+		return new HashSet<>(response.readEntity(new GenericType<HashSet<TaskGroupEntityDTO>>() {}));
 	}
 
-	@Override public Optional<TaskGroup> findWithTasks(Long id)
+	@Override public Optional<? extends TaskGroupEntityDTO> findWithTasks(Long id)
 	{
 		WebTarget target   = client.target(uri + Paths.BY_ID_WITH_TASKS);
 		Response  response = target.resolveTemplate("id", id).request().get();
@@ -152,6 +158,6 @@ public class ClientTaskGroup implements TaskGroupService<TaskGroup>
 			throw new RestClientCallException(UNEXPECTED_STATUS + response.getStatus() + "\nuri: " + target.getUri(), response);
 		}
 
-		return Optional.of(response.readEntity(TaskGroupDTO.class));
+		return Optional.of(response.readEntity(TaskGroupEntityDTO.class));
 	}
 }

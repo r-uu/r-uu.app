@@ -5,6 +5,7 @@ module de.ruu.app.jeeeraaah.jpadto
 	exports de.ruu.app.jeeeraaah.common.jpadto;
 
 	opens de.ruu.app.jeeeraaah.common.jpa;
+	opens de.ruu.app.jeeeraaah.common.dto to org.eclipse.yasson;
 
 	requires de.ruu.app.jeeeraaah.common;
 	requires de.ruu.lib.jpa.core;
@@ -18,4 +19,6 @@ module de.ruu.app.jeeeraaah.jpadto
 	requires jakarta.cdi;
 	requires jakarta.persistence;
 	requires org.mapstruct;
+	requires jakarta.validation;
+	requires org.apache.poi.poi;
 }

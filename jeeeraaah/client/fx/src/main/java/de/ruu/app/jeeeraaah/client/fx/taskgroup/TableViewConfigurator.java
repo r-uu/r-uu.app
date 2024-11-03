@@ -1,5 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup;
 
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -22,7 +23,7 @@ public abstract class TableViewConfigurator
 	private static <T extends TaskGroupFXBean> TableColumn<T, String> createColumnName()
 	{
 		TableColumn<T, String> result = new TableColumn<>("name");
-		result.setCellValueFactory(data -> data.getValue().getName());
+		result.setCellValueFactory(data -> data.getValue().nameProperty());
 		result.setCellFactory(TextFieldTableCell.forTableColumn());
 		return result;
 	}

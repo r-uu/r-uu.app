@@ -1,13 +1,18 @@
 package de.ruu.app.jeeeraaah.common;
 
+import jakarta.annotation.Nullable;
 import lombok.NonNull;
 
 import java.util.Optional;
 import java.util.Set;
 
-public interface TaskGroup
+public interface TaskGroup<T extends Task<? extends TaskGroup<T>, T>>
 {
-//	@NonNull UUID uuid();
-	@NonNull String name();
-	@NonNull Optional<Set<Task>> tasks();
+	@NonNull String           name();
+	@NonNull TaskGroup<T>     name(@NonNull String name);
+	@NonNull Optional<String> description();
+	@NonNull TaskGroup<T>     description(@Nullable String description);
+	@NonNull Optional<Set<T>> tasks();
+	boolean addTask   (T task);
+	boolean removeTask(T task);
 }

@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.common.jpa.se;
 
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntity;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskServiceJPA;
 import de.ruu.lib.jpa.se.Transactional;
 import jakarta.annotation.PostConstruct;
@@ -21,10 +21,10 @@ public class TaskServiceJPASE implements TaskServiceJPA
 
 	@PostConstruct private void postConstruct() { log.debug("injected repository: {}", repository); }
 
-	@Override public          TaskEntity  create(TaskEntity entity) { return repository.save(entity); }
-	@Override public Optional<TaskEntity> read  (Long id          ) { return repository.find(id);     }
-	@Override public          TaskEntity  update(TaskEntity entity) { return repository.save(entity); }
+	@Override public TaskEntityJPA create(TaskEntityJPA entity) { return repository.save(entity); }
+	@Override public Optional<TaskEntityJPA> read  (Long id          ) { return repository.find(id);     }
+	@Override public TaskEntityJPA update(TaskEntityJPA entity) { return repository.save(entity); }
 	@Override public void                 delete(Long id          ) {        repository.delete(id);   }
 
-	@Override public Set<TaskEntity> findAll() { return new HashSet<>(repository.findAll()); }
+	@Override public Set<TaskEntityJPA> findAll() { return new HashSet<>(repository.findAll()); }
 }
