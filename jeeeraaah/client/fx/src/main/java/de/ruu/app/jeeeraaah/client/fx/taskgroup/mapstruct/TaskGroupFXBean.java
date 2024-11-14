@@ -1,20 +1,19 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.client.fx.task.TaskFXBean;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
 import jakarta.annotation.Nullable;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.mapstruct.BeforeMapping;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,38 +29,42 @@ public class TaskGroupFXBean
 	@Setter(AccessLevel.NONE) @Nullable private Long  id;
 	@Setter(AccessLevel.NONE) @Nullable private Short version;
 
-	@NonNull  private final StringProperty nameProperty = new SimpleStringProperty();
-	@Nullable private       StringProperty descriptionProperty;
+	private final StringProperty nameProperty        = new SimpleStringProperty();
+	private final StringProperty descriptionProperty = new SimpleStringProperty();
 
-	@Nullable private SetProperty<TaskFXBean> tasksProperty;
+	@Nullable private ObservableSet<TaskFXBean> tasks;
+//	@Nullable private SetProperty<TaskFXBean> tasksProperty;
 
-	/** necessary for mapstruct, ... */
-	protected TaskGroupFXBean() { }
+//	/** necessary for mapstruct, ... */
+//	protected TaskGroupFXBean() { }
 
-	public TaskGroupFXBean(@NonNull TaskGroupBean taskGroup)
-	{
-		id      = taskGroup.id     ();
-		version = taskGroup.version();
+//	public TaskGroupFXBean(@NonNull TaskGroupBean taskGroup)
+//	{
+//		id      = taskGroup.id     ();
+//		version = taskGroup.version();
+//
+//		nameProperty.setValue(taskGroup.name());
+//
+//		taskGroup.description().ifPresent(d -> descriptionProperty = new SimpleStringProperty(d));
+//
+//		taskGroup.tasks().ifPresent
+//		(
+//				vs ->
+//				{
+//					tasksProperty = new SimpleSetProperty<>();
+//					vs.forEach(v -> tasksProperty.add(new TaskFXBean(v)));
+//				}
+//		);
+//	}
 
-		nameProperty.setValue(taskGroup.name());
-
-		taskGroup.description().ifPresent(descriptionProperty::setValue);
-
-		taskGroup.tasks().ifPresent
-		(
-				vs ->
-				{
-					tasksProperty = new SimpleSetProperty<>();
-					vs.forEach(v -> tasksProperty.add(new TaskFXBean(v)));
-				}
-		);
-	}
+	public TaskGroupFXBean(@NonNull String name) { name(name); }
 
 	// callbacks for mapstruct
-	public void beforeMapping(@NonNull TaskGroupBean source)
+	@BeforeMapping public void beforeMapping(@NonNull TaskGroupBean source)
 	{
 		id      = source.id     ();
 		version = source.version();
+
 		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(MapperFX.INSTANCE.lookupOrCreate(v))));
 	}
 	public void afterMapping (@NonNull TaskGroupBean source) { }
@@ -79,22 +82,18 @@ public class TaskGroupFXBean
 		return this;
 	}
 
-	@Override @NonNull public Optional<String> description()
-	{
-		if (isNull(descriptionProperty)) return Optional.empty();
-		return Optional.of(descriptionProperty.getValue());
-	}
+	@Override @NonNull public Optional<String> description() { return Optional.ofNullable(descriptionProperty.getValue()); }
 
 	@Override @NonNull public TaskGroupFXBean description(@Nullable String description)
 	{
-		if (isNull(descriptionProperty)) descriptionProperty = new SimpleStringProperty(description);
+		descriptionProperty.setValue(description);
 		return this;
 	}
 
 	@Override @NonNull public Optional<Set<TaskFXBean>> tasks()
 	{
-		if (isNull(tasksProperty)) return Optional.empty();
-		return Optional.of(Collections.unmodifiableSet(tasksProperty.getValue()));
+		if (isNull(tasks)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(tasks));
 	}
 
 	@Override public boolean addTask(TaskFXBean task)
@@ -112,16 +111,16 @@ public class TaskGroupFXBean
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
-	public String getName()                     { return nameProperty.get(); }
-	public void   setName(@NonNull String name) {        name(name);         }
+	public String getName()                     { return nameProperty.getValue(); }
+	public void   setName(@NonNull String name) {        name(name);              }
 
 	@Nullable
-	public String getDescription() { return descriptionProperty == null ? null : descriptionProperty.get(); }
-	public void   setDescription(String description) { descriptionProperty = new SimpleStringProperty(description); }
+	public String getDescription()                   { return descriptionProperty.getValue(); }
+	public void   setDescription(String description) {        description(description);       }
 
 	private @NonNull Set<TaskFXBean> nonNullTasks()
 	{
-		if (isNull(tasksProperty)) tasksProperty = new SimpleSetProperty<>();
-		return new HashSet<>(tasksProperty.getValue());
+		if (isNull(tasks)) tasks = FXCollections.observableSet();
+		return tasks;
 	}
 }

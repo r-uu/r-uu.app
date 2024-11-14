@@ -1,11 +1,12 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup;
 
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.editor.TaskGroupEditor;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Mapper;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.MapperFX;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupBean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupDTO;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import de.ruu.app.jeeeraaah.client.rs.ClientTaskGroup;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.lib.fx.comp.DefaultFXCViewController;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
@@ -66,7 +67,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 		editorLocalRoot = editor.getLocalRoot();
 
 		TableViewConfigurator.configure(tv);
-		client.findAll().forEach(tg -> tv.getItems().add(new TaskGroupFXBean(Mapper.INSTANCE.map((TaskGroupDTO) tg))));
+		client.findAll().forEach(tg -> tv.getItems().add(MapperFX.INSTANCE.map(Mapper.INSTANCE.map(tg))));
 
 		btnAdd .setOnAction(e -> onAdd (e));
 		btnExit.setOnAction(e -> onExit(e));
@@ -77,7 +78,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 		// populate editor with new item, call to getService() has to be done after call to getLocalRoot() to make sure
 		// internal java fx bindings can be establihed (see initialize)
 		TaskGroupBean       taskGroupBean   = new TaskGroupBean("new task group");
-		TaskGroupFXBean     taskGroupFXBean = new TaskGroupFXBean(taskGroupBean);
+		TaskGroupFXBean     taskGroupFXBean = taskGroupBean.toFXTarget();
 		editor.getService().taskGroup(taskGroupFXBean);
 
 		Dialog<TaskGroupFXBean> dialog = new Dialog<>();
@@ -97,14 +98,14 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 			taskGroupBean   = taskGroupFXBean.toFXSource();
 
 			// create a task group dto from task group bean (which is a task group dto)
-			TaskGroupDTO taskGroupDTO = taskGroupBean.toSource();
+			TaskGroupEntityDTO taskGroupDTO = taskGroupBean.toSource();
 
 			// let client create a new item in db
-			taskGroupDTO = (TaskGroupDTO) client.create(taskGroupDTO);
+			TaskGroupEntityDTO taskGroupEntityDTO = client.create(taskGroupDTO);
 			// create bean from dto
-			taskGroupBean = Mapper.INSTANCE.map(taskGroupDTO);
+			taskGroupBean = Mapper.INSTANCE.map(client.create(taskGroupDTO));
 			// create fx bean from bean
-			taskGroupFXBean = new TaskGroupFXBean(taskGroupBean);
+			taskGroupFXBean = taskGroupBean.toFXTarget();
 
 			// add and select item with retrieved item
 			tv.getItems().add(taskGroupFXBean);

@@ -1,20 +1,13 @@
-package de.ruu.app.jeeeraaah.client.fx.task;
+package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.BiMappedFXTarget;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.MapperFX;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskBean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupBean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
-import de.ruu.app.jeeeraaah.common.TaskGroup;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
-import de.ruu.lib.jpa.core.Entity;
 import jakarta.annotation.Nullable;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableSet;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,75 +42,97 @@ public class TaskFXBean
 	private final ObjectProperty<Duration>        effortEstimatedProperty = new SimpleObjectProperty<>();
 	private final ObjectProperty<Duration>        effortActualProperty    = new SimpleObjectProperty<>();
 
-	@Nullable private ObjectProperty<TaskFXBean>  parentProperty;
+	private final ObjectProperty<TaskFXBean>      parentProperty          = new SimpleObjectProperty<>();
 
-	@Nullable private SetProperty<TaskFXBean> childrenProperty;
-	@Nullable private SetProperty<TaskFXBean> predecessorsProperty;
-	@Nullable private SetProperty<TaskFXBean> successorsProperty;
+	@Nullable private ObservableSet<TaskFXBean> children;
+	@Nullable private ObservableSet<TaskFXBean> predecessors;
+	@Nullable private ObservableSet<TaskFXBean> successors;
 
 	/** necessary for mapstruct, ... */
-	protected TaskFXBean(@NonNull Entity<Long> task)
+	protected TaskFXBean() { }
+
+//	public TaskFXBean(@NonNull TaskBean task)
+//	{
+//		this((Entity<Long>) task);
+//
+//		// task.taskGroup and task.name are @NonNullables
+//		taskGroupProperty.setValue(task.taskGroup().toFXTarget());
+//		nameProperty     .setValue(task.name());
+//
+//		task.description    ().ifPresent(descriptionProperty    ::setValue);
+//		task.startEstimated ().ifPresent(startEstimatedProperty ::setValue);
+//		task.startActual    ().ifPresent(startActualProperty    ::setValue);
+//		task.finishEstimated().ifPresent(finishEstimatedProperty::setValue);
+//		task.finishActual   ().ifPresent(finishActualProperty   ::setValue);
+//		task.effortEstimated().ifPresent(effortEstimatedProperty::setValue);
+//		task.effortActual   ().ifPresent(effortActualProperty   ::setValue);
+//
+//		task.parent      ().ifPresent
+//		(
+//				v ->
+//				{
+//					parentProperty = new SimpleObjectProperty<>();
+//					parentProperty.setValue(new TaskFXBean((TaskBean) v));
+//				}
+//		);
+//		task.children    ().ifPresent
+//		(
+//				vs ->
+//				{
+//					children = new SimpleSetProperty<>();
+//					vs.forEach(v -> children.add(new TaskFXBean((TaskBean) v)));
+//				}
+//		);
+//		task.predecessors().ifPresent
+//		(
+//				vs ->
+//				{
+//					predecessors = new SimpleSetProperty<>();
+//					vs.forEach(v -> predecessors.add(new TaskFXBean((TaskBean) v)));
+//				}
+//		);
+//		task.successors  ().ifPresent
+//		(
+//				vs ->
+//				{
+//					successors = new SimpleSetProperty<>();
+//					vs.forEach(v -> successors.add(new TaskFXBean((TaskBean) v)));
+//				}
+//		);
+//	}
+
+	@Override public void beforeMapping(@NonNull TaskBean source)
 	{
-		id      = task.id     ();
-		version = task.version();
+		id      = source.id     ();
+		version = source.version();
+
+		// source.taskGroup and source.name are @NonNullables
+		taskGroupProperty.setValue(source.taskGroup().toFXTarget());
+		nameProperty     .setValue(source.name());
+
+		source.description    ().ifPresent(descriptionProperty    ::setValue);
+		source.startEstimated ().ifPresent(startEstimatedProperty ::setValue);
+		source.startActual    ().ifPresent(startActualProperty    ::setValue);
+		source.finishEstimated().ifPresent(finishEstimatedProperty::setValue);
+		source.finishActual   ().ifPresent(finishActualProperty   ::setValue);
+		source.effortEstimated().ifPresent(effortEstimatedProperty::setValue);
+		source.effortActual   ().ifPresent(effortActualProperty   ::setValue);
+
+		source.parent         ().ifPresent(t -> parentProperty.setValue(MapperFX.INSTANCE.map(t)));
+
+		source.children       ().ifPresent(vs -> vs.forEach(v -> addChild      (MapperFX.INSTANCE.map(v))));
+		source.predecessors   ().ifPresent(vs -> vs.forEach(v -> addPredecessor(MapperFX.INSTANCE.map(v))));
+		source.successors     ().ifPresent(vs -> vs.forEach(v -> addSuccessor  (MapperFX.INSTANCE.map(v))));
 	}
-
-	public TaskFXBean(@NonNull TaskBean task)
-	{
-		this((Entity<Long>) task);
-
-		// task.taskGroup and task.name are @NonNullables
-		taskGroupProperty.setValue(new TaskGroupFXBean((TaskGroupBean) task.taskGroup()));
-		nameProperty     .setValue(                                         task.name());
-
-		task.description    ().ifPresent(descriptionProperty    ::setValue);
-		task.startEstimated ().ifPresent(startEstimatedProperty ::setValue);
-		task.startActual    ().ifPresent(startActualProperty    ::setValue);
-		task.finishEstimated().ifPresent(finishEstimatedProperty::setValue);
-		task.finishActual   ().ifPresent(finishActualProperty   ::setValue);
-		task.effortEstimated().ifPresent(effortEstimatedProperty::setValue);
-		task.effortActual   ().ifPresent(effortActualProperty   ::setValue);
-
-		task.parent      ().ifPresent
-		(
-				v ->
-				{
-					parentProperty = new SimpleObjectProperty<>();
-					parentProperty.setValue(new TaskFXBean((TaskBean) v));
-				}
-		);
-		task.children    ().ifPresent
-		(
-				vs ->
-				{
-					childrenProperty = new SimpleSetProperty<>();
-					vs.forEach(v -> childrenProperty    .add(new TaskFXBean((TaskBean) v)));
-				}
-		);
-		task.predecessors().ifPresent
-		(
-				vs ->
-				{
-					predecessorsProperty = new SimpleSetProperty<>();
-					vs.forEach(v -> predecessorsProperty.add(new TaskFXBean((TaskBean) v)));
-				}
-		);
-		task.successors  ().ifPresent
-		(
-				vs ->
-				{
-					successorsProperty = new SimpleSetProperty<>();
-					vs.forEach(v -> successorsProperty  .add(new TaskFXBean((TaskBean) v)));
-				}
-		);
-	}
-
-	@Override public void beforeMapping(TaskBean source) { }
 	@Override public void afterMapping (TaskBean source) { }
 
 	@Override @NonNull public TaskBean toFXSource() { return MapperFX.INSTANCE.map(this); }
 
-	@Override public @NonNull TaskGroup<TaskFXBean> taskGroup() { return taskGroupProperty.getValue(); }
+	////////////////////////////////////////////////////////////////////////
+	// fluent style accessors generated by lombok if not specified otherwise
+	////////////////////////////////////////////////////////////////////////
+
+	@Override public @NonNull TaskGroupFXBean taskGroup() { return taskGroupProperty.getValue(); }
 
 	@Override @NonNull public String name() { return nameProperty.getValue(); }
 
@@ -171,34 +186,30 @@ public class TaskFXBean
 		return this;
 	}
 
-	@Override @NonNull public Optional<TaskFXBean> parent(TaskFXBean parent)
+	@Override @NonNull public TaskFXBean parent(TaskFXBean parent)
 	{
-		if (isNull(parentProperty)) parentProperty = new SimpleObjectProperty<>(parent);
-		return Optional.of(parentProperty.getValue());
+		parentProperty.setValue(parent);
+		return this;
 	}
 
-	@Override @NonNull public Optional<TaskFXBean> parent()
-	{
-		if (isNull(parentProperty)) return Optional.empty();
-		return Optional.of(parentProperty.getValue());
-	}
+	@Override @NonNull public Optional<TaskFXBean> parent() { return Optional.of(parentProperty.getValue()); }
 
 	@Override @NonNull public Optional<Set<TaskFXBean>> children()
 	{
-		if (isNull(childrenProperty)) return Optional.empty();
-		return Optional.of(Collections.unmodifiableSet(childrenProperty.getValue()));
+		if (isNull(children)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(children));
 	}
 
 	@Override @NonNull public Optional<Set<TaskFXBean>> predecessors()
 	{
-		if (isNull(successorsProperty)) return Optional.empty();
-		return Optional.of(Collections.unmodifiableSet(successorsProperty.getValue()));
+		if (isNull(successors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(successors));
 	}
 
 	@Override @NonNull public Optional<Set<TaskFXBean>> successors()
 	{
-		if (isNull(successorsProperty)) return Optional.empty();
-		return Optional.of(Collections.unmodifiableSet(successorsProperty.getValue()));
+		if (isNull(successors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(successors));
 	}
 
 	@Override public boolean addChild(TaskFXBean child)
@@ -224,8 +235,7 @@ public class TaskFXBean
 		return children().map(cs -> cs.remove(child)).orElse(false);
 	}
 
-	@Override
-	public boolean removePredecessor(TaskFXBean predecessor)
+	@Override public boolean removePredecessor(TaskFXBean predecessor)
 	{
 		return predecessors().map(cs -> cs.remove(predecessor)).orElse(false);
 	}
@@ -237,19 +247,19 @@ public class TaskFXBean
 
 	private @NonNull Set<TaskFXBean> nonNullChildren()
 	{
-		if (isNull(childrenProperty)) childrenProperty = new SimpleSetProperty<>();
-		return childrenProperty;
+		if (isNull(children)) children = new SimpleSetProperty<>();
+		return children;
 	}
 
 	private @NonNull Set<TaskFXBean> nonNullPredecessors()
 	{
-		if (isNull(predecessorsProperty)) predecessorsProperty = new SimpleSetProperty<>();
-		return predecessorsProperty;
+		if (isNull(predecessors)) predecessors = new SimpleSetProperty<>();
+		return predecessors;
 	}
 
 	private @NonNull Set<TaskFXBean> nonNullSuccessors()
 	{
-		if (isNull(successorsProperty)) successorsProperty = new SimpleSetProperty<>();
-		return successorsProperty;
+		if (isNull(successors)) successors = new SimpleSetProperty<>();
+		return successors;
 	}
 }

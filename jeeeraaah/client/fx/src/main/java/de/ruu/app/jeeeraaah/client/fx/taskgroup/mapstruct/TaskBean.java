@@ -1,10 +1,10 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.client.fx.task.TaskFXBean;
 import de.ruu.app.jeeeraaah.common.Task;
+import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
+import de.ruu.app.jeeeraaah.common.jpadto.TaskDTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import de.ruu.lib.jpa.core.AbstractEntity;
-import de.ruu.lib.mapstruct.BiMappedTarget;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
@@ -14,6 +14,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeforeMapping;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -36,10 +38,9 @@ import static java.util.Objects.nonNull;
 @Setter
 @Accessors(fluent = true)
 public class TaskBean
-		extends AbstractEntity<TaskDTO>
+		extends AbstractEntity<TaskEntityDTO>
 		implements
 				TaskEntity<TaskGroupBean, TaskBean>,
-				BiMappedTarget<TaskDTO>,
 				BiMappedFXSource<TaskFXBean>
 {
 	@Setter(AccessLevel.NONE)
@@ -118,7 +119,11 @@ public class TaskBean
 	/** necessary for mapstruct, ... */
 	protected TaskBean() { }
 
-	public TaskBean(@NonNull TaskGroupBean taskGroup) { this.taskGroup = taskGroup; }
+	public TaskBean(@NonNull TaskGroupBean taskGroup, @NonNull String name)
+	{
+		this.taskGroup = taskGroup;
+		name(name);
+	}
 
 	/**
 	 * Maps optional return values of {@link TaskDTO} field accessors to java bean style fields. This cannot be done by
@@ -126,12 +131,12 @@ public class TaskBean
 	 *
 	 * @param task
 	 */
-	@Override public void beforeMapping(@NonNull TaskDTO task)
+	@BeforeMapping void beforeMapping(@NonNull TaskEntityDTO task)
 	{
 		mapIdAndVersion(task);
 
-		name      = task.name();
-		taskGroup = Mapper.INSTANCE.map((TaskGroupDTO) task.taskGroup());
+		taskGroup = Mapper.INSTANCE.map(task.taskGroup());
+		name(task.name());
 
 		task.description    ().ifPresent(this::description);
 		task.startEstimated ().ifPresent(this::startEstimated);
@@ -141,22 +146,40 @@ public class TaskBean
 		task.effortEstimated().ifPresent(this::effortEstimated);
 		task.effortActual   ().ifPresent(this::effortActual);
 
-		task.parent      ().ifPresent(t  -> parent(                        Mapper.INSTANCE.lookupOrCreate((TaskDTO) t)));
+		task.parent().map(t -> parent(Mapper.INSTANCE.map(t)));
 
-		task.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (Mapper.INSTANCE.lookupOrCreate((TaskDTO) t))));
-		task.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(Mapper.INSTANCE.lookupOrCreate((TaskDTO) t))));
-		task.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Mapper.INSTANCE.lookupOrCreate((TaskDTO) t))));
+		task.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (Mapper.INSTANCE.map(t))));
+		task.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(Mapper.INSTANCE.map(t))));
+		task.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Mapper.INSTANCE.map(t))));
 	}
-	@Override public void afterMapping (@NonNull TaskDTO input) { }
+	@AfterMapping void afterMapping (@NonNull TaskEntityDTO task) { }
 
-	@Override public @NonNull TaskDTO toSource() { return Mapper.INSTANCE.map(this); }
+	public @NonNull TaskEntityDTO toSource() { return Mapper.INSTANCE.map(this); }
 
-	@Override public void beforeMapping(@NonNull TaskFXBean input)
+	@BeforeMapping
+	@Override public void beforeMapping(@NonNull TaskFXBean task)
 	{
-		mapIdAndVersion(input);
+		mapIdAndVersion(task);
+
+		taskGroup = MapperFX.INSTANCE.map(task.taskGroup());
+		name(task.name());
+
+		task.description    ().ifPresent(this::description);
+		task.startEstimated ().ifPresent(this::startEstimated);
+		task.startActual    ().ifPresent(this::startActual);
+		task.finishEstimated().ifPresent(this::finishEstimated);
+		task.finishActual   ().ifPresent(this::finishActual);
+		task.effortEstimated().ifPresent(this::effortEstimated);
+		task.effortActual   ().ifPresent(this::effortActual);
+
+		task.parent().map(t -> parent(MapperFX.INSTANCE.map(t)));
+
+		task.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (MapperFX.INSTANCE.map(t))));
+		task.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(MapperFX.INSTANCE.map(t))));
+		task.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (MapperFX.INSTANCE.map(t))));
 	}
 
-	@Override public void afterMapping (@NonNull TaskFXBean input) { }
+	@AfterMapping @Override public void afterMapping (@NonNull TaskFXBean task) { }
 
 	@Override public @NonNull TaskFXBean toFXTarget() { return MapperFX.INSTANCE.map(this); }
 
@@ -254,16 +277,12 @@ public class TaskBean
 	////////////////////////
 
 	/** @throws IllegalArgumentException if {@code parent} is {@code this} */
-	@NonNull public Optional<TaskBean> parent(@Nullable TaskBean parent)
+	@NonNull public TaskBean parent(@Nullable TaskBean parent)
 	{
 		if (parent == this) throw new IllegalArgumentException("parent must not be this");
-
 		this.parent = parent;
-
-		if (parent != null)
-				parent.nonNullChildren().add(this);
-
-		return Optional.of(this);
+		if (parent != null) parent.nonNullChildren().add(this);
+		return this;
 	}
 
 	/**

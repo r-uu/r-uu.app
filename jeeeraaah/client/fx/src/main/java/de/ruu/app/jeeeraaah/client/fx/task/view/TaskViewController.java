@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.task.view;
 
-import de.ruu.app.jeeeraaah.client.fx.task.TaskFXBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskFXBean;
 import de.ruu.lib.cdi.se.EventDispatcher;
 import de.ruu.lib.fx.FXUtil;
 import de.ruu.lib.fx.comp.DefaultFXCViewController;

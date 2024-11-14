@@ -1,6 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.common.TaskGroup;
+import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,11 +14,17 @@ class TestMapStructWithTaskGroupBeanAndTaskGroupDTO
 	@Test void testStandalone()
 	{
 		TaskGroupBean bean = createTaskGroup();
+		bean.description("description");
 
 		// mapping
-		TaskGroupDTO dto = bean.toSource();
+		TaskGroupEntityDTO dto = bean.toSource();
 
 		assertIs(bean, dto);
+
+		// re-mapping
+		TaskGroupBean bean1 = Mapper.INSTANCE.map(dto);
+
+		assertThat(bean, is(bean1));
 	}
 
 	@Test void testWithTasks()
@@ -27,13 +33,20 @@ class TestMapStructWithTaskGroupBeanAndTaskGroupDTO
 		createTasks(bean, 3).forEach(bean::addTask);
 
 		// mapping
-		TaskGroupDTO dto = bean.toSource();
+		TaskGroupEntityDTO dto = bean.toSource();
 
 		assertIs(bean, dto);
+
+		// re-mapping
+		TaskGroupBean bean1 = Mapper.INSTANCE.map(dto);
+
+		assertThat(bean, is(bean1));
 	}
 
-	private void assertIs(TaskGroupBean bean, TaskGroupDTO dto)
+	private void assertIs(TaskGroupBean bean, TaskGroupEntityDTO dto)
 	{
+		assertThat(bean.id               (), is(dto.id               ()));
+		assertThat(bean.version          (), is(dto.version          ()));
 		assertThat(bean.name             (), is(dto.name             ()));
 		assertThat(bean.description      (), is(dto.description      ()));
 		assertThat(bean.tasks().isPresent(), is(dto.tasks().isPresent()));
@@ -41,14 +54,9 @@ class TestMapStructWithTaskGroupBeanAndTaskGroupDTO
 		bean.tasks().ifPresent(ts -> assertThat(ts.size(), is(dto.tasks().get().size())));
 	}
 
-	private TaskGroupBean createTaskGroup() { return new TaskGroupBean("task group name"); }
-	private TaskBean      createTask(TaskGroup<?> taskGroup, String name)
-	{
-		TaskBean result = new TaskBean((TaskGroupBean) taskGroup);
-		result.name(name);
-		return result;
-	}
-	private List<TaskBean> createTasks(TaskGroupBean taskGroup, int count)
+	private TaskGroupBean  createTaskGroup() { return new TaskGroupBean("task group name"); }
+	private TaskBean       createTask     (TaskGroupBean taskGroup, String name) { return new TaskBean(taskGroup, name); }
+	private List<TaskBean> createTasks    (TaskGroupBean taskGroup, int count)
 	{
 		List<TaskBean> result = new ArrayList<>();
 		for (int i = 0; i < count; i++) result.add(createTask(taskGroup, "task " + i));

@@ -111,6 +111,8 @@ public class TaskEntityDTO
   // constructors
 	///////////////
 
+	// --- none ---
+
 	/** provide handmade required args constructor to properly handle relationships */
 	public TaskEntityDTO(@NonNull TaskGroupEntityDTO taskGroup, @NonNull String name)
 	{
@@ -172,17 +174,23 @@ public class TaskEntityDTO
 		return Optional.empty();
 	}
 
+	///////////////////////
+	// additional accessors
+	///////////////////////
+
+	// --- none ---
+
 	////////////////////////
 	// relationship handling
 	////////////////////////
 
 	/** @throws IllegalArgumentException if {@code parent} is {@code this} */
-	@Override @NonNull public Optional<TaskEntityDTO> parent(@Nullable TaskEntityDTO parent)
+	@Override @NonNull public TaskEntityDTO parent(@Nullable TaskEntityDTO parent)
 	{
 		if (parent == this) throw new IllegalArgumentException("parent must not be this");
 		this.parent = parent;
 		if (nonNull(parent)) parent.nonNullChildren().add(this);
-		return Optional.ofNullable(parent);
+		return this;
 	}
 
 	/**
@@ -313,31 +321,80 @@ public class TaskEntityDTO
 		throw new IllegalStateException("could not remove entity from children");
 	}
 
-	///////////////////////
-	// additional accessors
-	///////////////////////
+	//////////////////////
+	// mapstruct callbacks
+	//////////////////////
 
-	@Override public void beforeMapping(@NonNull TaskEntityJPA input)
+	@Override public void beforeMapping(@NonNull TaskEntityJPA source)
 	{
-		super.beforeMapping(input);
+		super.beforeMapping(source);
+		// mapping of other fields is done via mapstruct using java-beans accessors
 
-		input.parent      ().ifPresent(                 this::lookupOrMapParent);
-		input.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
-		input.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
-		input.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
+		source.parent      ().ifPresent(                 this::lookupOrMapParent);
+		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
+		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
+		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
 
-		if (input.description    ().isPresent()) description    (input.description    ().get());
-		if (input.startEstimated ().isPresent()) startEstimated (input.startEstimated ().get());
-		if (input.startActual    ().isPresent()) startActual    (input.startActual    ().get());
-		if (input.finishEstimated().isPresent()) finishEstimated(input.finishEstimated().get());
-		if (input.finishActual   ().isPresent()) finishActual   (input.startActual    ().get());
-		if (input.effortEstimated().isPresent()) effortEstimated(input.effortEstimated().get());
-		if (input.effortActual   ().isPresent()) effortActual   (input.effortActual   ().get());
+		if (source.description    ().isPresent()) description    (source.description    ().get());
+		if (source.startEstimated ().isPresent()) startEstimated (source.startEstimated ().get());
+		if (source.startActual    ().isPresent()) startActual    (source.startActual    ().get());
+		if (source.finishEstimated().isPresent()) finishEstimated(source.finishEstimated().get());
+		if (source.finishActual   ().isPresent()) finishActual   (source.startActual    ().get());
+		if (source.effortEstimated().isPresent()) effortEstimated(source.effortEstimated().get());
+		if (source.effortActual   ().isPresent()) effortActual   (source.effortActual   ().get());
 	}
-
-	@Override public void afterMapping(@NonNull TaskEntityJPA input) { }
+	@Override public void afterMapping(@NonNull TaskEntityJPA source) { }
 
 	@Override public @NonNull TaskEntityJPA toSource() { return Mapper.INSTANCE.map(this); }
+
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
+	public @NonNull String getName()
+			{ return name;                              }
+	public          void   setName(@NonNull String name)
+			{   name(name);                             }
+
+	public @Nullable String getDescription()
+			{ return description;                       }
+	public           void   setDescription(@Nullable String description)
+			{   this.description = description;         }
+
+	public @Nullable LocalDate getStartEstimated()
+			{ return startEstimated;                    }
+	public           void      setStartEstimated(@Nullable LocalDate startEstimated)
+			{   this.startEstimated = startEstimated;   }
+
+	public @Nullable LocalDate getStartActual()
+			{ return startActual;                       }
+	public           void      setStartActual(@Nullable LocalDate startActual)
+			{   this.startActual = startActual;         }
+
+	public @Nullable LocalDate getFinishEstimated()
+			{ return finishEstimated;                   }
+	public           void      setFinishEstimated(@Nullable LocalDate finishEstimated)
+			{   this.finishEstimated = finishEstimated; }
+
+	public @Nullable LocalDate getFinishActual()
+			{ return finishActual;                      }
+	public           void      setFinishActual(@Nullable LocalDate finishActual)
+			{   this.finishActual = finishActual;       }
+
+	public @Nullable Duration getEffortEstimated()
+			{ return effortEstimated;                   }
+	public           void     setEffortEstimated(@Nullable Duration effortEstimated)
+			{   this.effortEstimated = effortEstimated; }
+
+	public @Nullable Duration getEffortActual()
+			{ return effortActual;                      }
+	public           void     setEffortActual(@Nullable Duration effortActual)
+			{   this.effortActual = effortActual;       }
+
+	public @Nullable TaskEntityDTO getParent()
+			{ return parent;                            }
+	public void setParent(@Nullable TaskEntityDTO parent)
+			{   this.parent = parent;                   }
 
 	@NonNull private Set<TaskEntityDTO> nonNullChildren()
 	{
@@ -378,6 +435,34 @@ public class TaskEntityDTO
 		return children.contains(entity);
 	}
 
+	private void lookupOrMapParent(TaskEntityJPA parent)
+	{
+		Optional<TaskEntityDTO> optionalParentDTO = Mapper.INSTANCE.getFromContext(parent);
+
+		if (optionalParentDTO.isPresent())
+		{
+			parent(optionalParentDTO.get());
+		}
+		else
+		{
+			parent(parent.toTarget());
+		}
+	}
+
+	private void lookupOrMapChild(TaskEntityJPA child)
+	{
+		Optional<TaskEntityDTO> optionalChildDTO = Mapper.INSTANCE.getFromContext(child);
+
+		if (optionalChildDTO.isPresent())
+		{
+			addChild(optionalChildDTO.get());
+		}
+		else
+		{
+			addChild(child.toTarget());
+		}
+	}
+
 	private void lookupOrMapPredecessor(TaskEntityJPA predecessor)
 	{
 		Optional<TaskEntityDTO> optionalPredecessorDTO = Mapper.INSTANCE.getFromContext(predecessor);
@@ -403,34 +488,6 @@ public class TaskEntityDTO
 		else
 		{
 			addSuccessor(successor.toTarget());
-		}
-	}
-
-	private void lookupOrMapChild(TaskEntityJPA child)
-	{
-		Optional<TaskEntityDTO> optionalChildDTO = Mapper.INSTANCE.getFromContext(child);
-
-		if (optionalChildDTO.isPresent())
-		{
-			addChild(optionalChildDTO.get());
-		}
-		else
-		{
-			addChild(child.toTarget());
-		}
-	}
-
-	private void lookupOrMapParent(TaskEntityJPA parent)
-	{
-		Optional<TaskEntityDTO> optionalParentDTO = Mapper.INSTANCE.getFromContext(parent);
-
-		if (optionalParentDTO.isPresent())
-		{
-			parent(optionalParentDTO.get());
-		}
-		else
-		{
-			parent(parent.toTarget());
 		}
 	}
 }

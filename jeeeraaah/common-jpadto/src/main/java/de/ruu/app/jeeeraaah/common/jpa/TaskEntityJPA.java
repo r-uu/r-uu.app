@@ -226,12 +226,12 @@ public class TaskEntityJPA
 	////////////////////////
 
 	/** @throws IllegalArgumentException if {@code parent} is {@code this} */
-	@Override@NonNull public Optional<TaskEntityJPA> parent(@Nullable TaskEntityJPA parent)
+	@Override@NonNull public TaskEntityJPA parent(@Nullable TaskEntityJPA parent)
 	{
 		if (parent == this) throw new IllegalArgumentException("parent must not be this");
 		this.parent = parent;
 		if (nonNull(parent)) parent.nonNullChildren().add(this);
-		return Optional.ofNullable(parent);
+		return this;
 	}
 
 	/**

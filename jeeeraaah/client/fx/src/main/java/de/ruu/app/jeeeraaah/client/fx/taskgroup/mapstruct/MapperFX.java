@@ -1,6 +1,5 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.client.fx.task.TaskFXBean;
 import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +26,12 @@ public abstract class MapperFX
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupBean source, @MappingTarget TaskGroupFXBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping void afterMapping(TaskGroupBean source, @MappingTarget TaskGroupFXBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
@@ -53,28 +50,24 @@ public abstract class MapperFX
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping void afterMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupFXBean source, @MappingTarget TaskGroupBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping void afterMapping(TaskGroupFXBean source, @MappingTarget TaskGroupBean target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
@@ -85,7 +78,7 @@ public abstract class MapperFX
 		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
 		if (result == null)
 		{
-			result = lookupOrCreate(input);
+			result = new TaskGroupBean(input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -99,7 +92,14 @@ public abstract class MapperFX
 		TaskGroupFXBean result = CONTEXT.get(input, TaskGroupFXBean.class);
 		if (result == null)
 		{
-			result = new TaskGroupFXBean(input);
+			result = new TaskGroupFXBean(input.name());
+			if (input.tasks().isPresent())
+			{
+				for (TaskBean taskBean : input.tasks().get())
+				{
+					result.addTask(MapperFX.INSTANCE.map(taskBean));
+				}
+			}
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -127,7 +127,7 @@ public abstract class MapperFX
 		TaskFXBean result = CONTEXT.get(input, TaskFXBean.class);
 		if (result == null)
 		{
-			result = new TaskFXBean(input);
+			result = new TaskFXBean();
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}

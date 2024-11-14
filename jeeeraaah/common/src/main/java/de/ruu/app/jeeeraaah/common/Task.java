@@ -29,7 +29,7 @@ public interface Task<TG extends TaskGroup<T>, T extends Task<TG, T>>
 
 	/** @return superordinate task */
 	@NonNull Optional<T> parent();
-	@NonNull Optional<T> parent(T parent);
+	@NonNull          T  parent(T parent);
 
 	/**
 	 * @return subordinate tasks

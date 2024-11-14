@@ -30,7 +30,7 @@ public abstract class Mapper
 	public abstract @NonNull TaskEntityDTO map(@NonNull TaskEntityJPA input);
 
 	public Optional<TaskEntityJPA> getFromContext(TaskEntityDTO dto   ) { return Optional.ofNullable(CONTEXT.get(dto   , TaskEntityJPA.class)); }
-	public Optional<TaskEntityDTO>    getFromContext(TaskEntityJPA entity) { return Optional.ofNullable(CONTEXT.get(entity, TaskEntityDTO.class)); }
+	public Optional<TaskEntityDTO> getFromContext(TaskEntityJPA entity) { return Optional.ofNullable(CONTEXT.get(entity, TaskEntityDTO.class)); }
 
 	/**
 	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
