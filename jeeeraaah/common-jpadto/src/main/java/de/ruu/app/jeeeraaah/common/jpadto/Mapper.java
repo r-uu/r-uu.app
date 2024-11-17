@@ -32,87 +32,58 @@ public abstract class Mapper
 	public Optional<TaskEntityJPA> getFromContext(TaskEntityDTO dto   ) { return Optional.ofNullable(CONTEXT.get(dto   , TaskEntityJPA.class)); }
 	public Optional<TaskEntityDTO> getFromContext(TaskEntityJPA entity) { return Optional.ofNullable(CONTEXT.get(entity, TaskEntityDTO.class)); }
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@BeforeMapping
-	void beforeMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@BeforeMapping void beforeMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@AfterMapping
-	void afterMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@AfterMapping void afterMapping(TaskGroupEntityJPA source, @MappingTarget TaskGroupEntityDTO target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@BeforeMapping
-	void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@BeforeMapping void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@AfterMapping
-	void afterMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@AfterMapping void afterMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupEntityJPA target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@BeforeMapping
-	void beforeMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@BeforeMapping void beforeMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@AfterMapping
-	void afterMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@AfterMapping void afterMapping(TaskEntityJPA source, @MappingTarget TaskEntityDTO target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
+		target.afterMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping
 	void beforeMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
 		target.beforeMapping(source); // invoke callback for mapping
 	}
 
-	/**
-	 * annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called
-	 */
-	@AfterMapping
-	void afterMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
+	@AfterMapping void afterMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
 	{
-//		log.debug("\nsource\n{}\ntarget\n{}", source, target);
+		target.afterMapping(source); // invoke callback for mapping
 	}
 
+	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull
-	TaskGroupEntityJPA lookupOrCreate(@NonNull TaskGroupEntityDTO input)
+	@NonNull TaskGroupEntityJPA lookupOrCreate(@NonNull TaskGroupEntityDTO input)
 	{
 		TaskGroupEntityJPA result = CONTEXT.get(input, TaskGroupEntityJPA.class);
 		if (result == null)
@@ -124,9 +95,9 @@ public abstract class Mapper
 		return result;
 	}
 
+	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull
-	TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupEntityJPA input)
+	@NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupEntityJPA input)
 	{
 		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
 		if (result == null)
@@ -139,8 +110,7 @@ public abstract class Mapper
 	}
 
 	@ObjectFactory
-	@NonNull
-	TaskEntityJPA lookupOrCreate(@NonNull TaskEntityDTO input)
+	@NonNull TaskEntityJPA lookupOrCreate(@NonNull TaskEntityDTO input)
 	{
 		TaskEntityJPA result = CONTEXT.get(input, TaskEntityJPA.class);
 		if (result == null)
@@ -154,8 +124,7 @@ public abstract class Mapper
 	}
 
 	@ObjectFactory
-	@NonNull
-	TaskEntityDTO lookupOrCreate(@NonNull TaskEntityJPA input)
+	@NonNull TaskEntityDTO lookupOrCreate(@NonNull TaskEntityJPA input)
 	{
 		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
 		if (result == null)

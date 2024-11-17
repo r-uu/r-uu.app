@@ -71,9 +71,9 @@ public abstract class MapperFX
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
+	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull
-	TaskGroupBean lookupOrCreate(@NonNull TaskGroupFXBean input)
+	@NonNull TaskGroupBean lookupOrCreate(@NonNull TaskGroupFXBean input)
 	{
 		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
 		if (result == null)
@@ -85,9 +85,9 @@ public abstract class MapperFX
 		return result;
 	}
 
+	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull
-	TaskGroupFXBean lookupOrCreate(@NonNull TaskGroupBean input)
+	@NonNull TaskGroupFXBean lookupOrCreate(@NonNull TaskGroupBean input)
 	{
 		TaskGroupFXBean result = CONTEXT.get(input, TaskGroupFXBean.class);
 		if (result == null)
@@ -106,14 +106,15 @@ public abstract class MapperFX
 		return result;
 	}
 
+	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull
-	TaskBean lookupOrCreate(@NonNull TaskFXBean input)
+	@NonNull TaskBean lookupOrCreate(@NonNull TaskFXBean input)
 	{
 		TaskBean result = CONTEXT.get(input, TaskBean.class);
 		if (result == null)
 		{
-			result = new TaskBean();
+			TaskGroupBean taskGroupEntity = lookupOrCreate(input.taskGroup());
+			result = new TaskBean(taskGroupEntity, input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}
@@ -121,13 +122,13 @@ public abstract class MapperFX
 	}
 
 	@ObjectFactory
-	@NonNull
-	TaskFXBean lookupOrCreate(@NonNull TaskBean input)
+	@NonNull TaskFXBean lookupOrCreate(@NonNull TaskBean input)
 	{
 		TaskFXBean result = CONTEXT.get(input, TaskFXBean.class);
 		if (result == null)
 		{
-			result = new TaskFXBean();
+			TaskGroupFXBean taskGroupEntity = lookupOrCreate(input.taskGroup());
+			result = new TaskFXBean(taskGroupEntity, input.name());
 			CONTEXT.put(input, result);
 			CONTEXT.put(result, input);
 		}

@@ -1,6 +1,7 @@
 package de.ruu.app.jeeeraaah.common.dto;
 
 import de.ruu.app.jeeeraaah.common.Task;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpadto.Mapper;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
@@ -130,6 +131,13 @@ public class TaskGroupEntityDTO
 	@Override public void beforeMapping(@NonNull TaskGroupEntityJPA source)
 	{
 		super.beforeMapping(source); // maps id and version
+		if (source.tasks().isPresent())
+		{
+			for (TaskEntityJPA taskBean : source.tasks().get())
+			{
+				addTask(Mapper.INSTANCE.map(taskBean));
+			}
+		}
 		// mapping of other fields is done via mapstruct using java-beans accessors
 	}
 	@Override public void afterMapping (@NonNull TaskGroupEntityJPA source) { }

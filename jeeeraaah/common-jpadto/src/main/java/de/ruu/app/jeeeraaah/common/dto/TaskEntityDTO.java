@@ -66,7 +66,7 @@ public class TaskEntityDTO
 	@Setter(AccessLevel.NONE) // provide handmade setter that handles bidirectional relation properly
 	@ManyToOne
 	@JoinColumn(name = "idParent")
-	@Nullable private TaskEntityDTO      parent;
+	@Nullable private TaskEntityDTO parent;
 
 	/**
 	 * prevent direct access to this modifiable set from outside this class, use {@link #addChild(TaskEntityDTO)} and
@@ -111,8 +111,6 @@ public class TaskEntityDTO
   // constructors
 	///////////////
 
-	// --- none ---
-
 	/** provide handmade required args constructor to properly handle relationships */
 	public TaskEntityDTO(@NonNull TaskGroupEntityDTO taskGroup, @NonNull String name)
 	{
@@ -139,9 +137,6 @@ public class TaskEntityDTO
 		return this;
 	}
 
-	@Override @NonNull public TaskGroupEntityDTO      taskGroup      () { return taskGroup; }
-	@Override @NonNull public String                  name           () { return name;      }
-
 	@Override @NonNull public Optional<String>        description    () { return Optional.ofNullable(description);     }
 	@Override @NonNull public Optional<LocalDate>     startEstimated () { return Optional.ofNullable(startEstimated);  }
 	@Override @NonNull public Optional<LocalDate>     finishEstimated() { return Optional.ofNullable(finishEstimated); }
@@ -155,23 +150,20 @@ public class TaskEntityDTO
 	/** @return {@link #children wrapped in unmodifiable      */
 	@Override @NonNull public Optional<Set<TaskEntityDTO>> children()
 	{
-		if (nonNull(children))
-				return Optional.of(Collections.unmodifiableSet(children));
-		return Optional.empty();
+		if (isNull(children)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(children));
 	}
 	/** @return {@link #predecessors} wrapped in unmodifiable */
 	@Override @NonNull public Optional<Set<TaskEntityDTO>> predecessors()
 	{
-		if (nonNull(predecessors))
-				return Optional.of(Collections.unmodifiableSet(predecessors));
-		return Optional.empty();
+		if (isNull(predecessors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(predecessors));
 	}
 	/** @return {@link #successors} wrapped in unmodifiable   */
 	@Override @NonNull public Optional<Set<TaskEntityDTO>> successors()
 	{
-		if (nonNull(successors))
-				return Optional.of(Collections.unmodifiableSet(successors));
-		return Optional.empty();
+		if (isNull(successors)) return Optional.empty();
+		return Optional.of(Collections.unmodifiableSet(successors));
 	}
 
 	///////////////////////
@@ -283,65 +275,66 @@ public class TaskEntityDTO
 
 	@Override public boolean removePredecessor(@NonNull TaskEntityDTO dto)
 	{
-		if (nonNull(dto.successors))
-				if (dto.successors.remove(this))
-						if (nonNull(predecessors))
-								return predecessors.remove(dto);
+		if (nonNull(dto.successors) && nonNull(predecessors))
+		{
+			if (dto.successors.remove(this)) return predecessors.remove(dto);
+		}
 
-		throw new IllegalStateException("could not remove this from successors of dto");
+		throw new IllegalStateException("could not remove this from successors of task");
 	}
 
 	@Override public boolean removeSuccessor(@NonNull TaskEntityDTO dto)
 	{
-		if (nonNull(dto.predecessors))
-				if (dto.predecessors.remove(this))
-						if (nonNull(successors))
-								return successors.remove(dto);
-
-		throw new IllegalStateException("could not remove this from predecessors of dto");
-	}
-
-	@Override public boolean removeChild(@NonNull TaskEntityDTO dto)
-	{
-		TaskEntityDTO entityParent = dto.parent;
-
-		if (nonNull(children))
+		if (nonNull(dto.predecessors) && nonNull(successors))
 		{
-			dto.parent = null;
-			boolean result = children.remove(dto);
-
-			if (result == false)
-			{
-				// rollback changes
-				dto.parent = entityParent;
-			}
-			return result;
+			if (dto.predecessors.remove(this)) return successors.remove(dto);
 		}
 
-		throw new IllegalStateException("could not remove entity from children");
+		throw new IllegalStateException("could not remove this from predecessors of task");
+	}
+
+	@Override public boolean removeChild(@NonNull TaskEntityDTO child)
+	{
+		if (nonNull(children))
+		{
+			// TODO should not parent == this?
+			TaskEntityDTO parent = child.parent; // remember parent in case removal has to be rolled back
+
+			child.parent = null;            // remove parent in child
+			if (children.remove(child)) return true;
+			child.parent = parent;          // rollback removal (reset parent in child)
+		}
+
+		throw new IllegalStateException("could not remove child from parent");
 	}
 
 	//////////////////////
 	// mapstruct callbacks
 	//////////////////////
 
+	/**
+	 * Maps optional return values of {@link TaskEntityJPA} field accessors to java bean style fields. This cannot be done by
+	 * mapstruct.
+	 *
+	 * @param source
+	 */
 	@Override public void beforeMapping(@NonNull TaskEntityJPA source)
 	{
 		super.beforeMapping(source);
 		// mapping of other fields is done via mapstruct using java-beans accessors
 
-		source.parent      ().ifPresent(                 this::lookupOrMapParent);
+		source.description    ().ifPresent(this::description);
+		source.startEstimated ().ifPresent(this::startEstimated);
+		source.startActual    ().ifPresent(this::startActual);
+		source.finishEstimated().ifPresent(this::finishEstimated);
+		source.finishActual   ().ifPresent(this::finishActual);
+		source.effortEstimated().ifPresent(this::effortEstimated);
+		source.effortActual   ().ifPresent(this::effortActual);
+
+		source.parent      ().ifPresent(                                    this::lookupOrMapParent);
 		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
 		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
 		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
-
-		if (source.description    ().isPresent()) description    (source.description    ().get());
-		if (source.startEstimated ().isPresent()) startEstimated (source.startEstimated ().get());
-		if (source.startActual    ().isPresent()) startActual    (source.startActual    ().get());
-		if (source.finishEstimated().isPresent()) finishEstimated(source.finishEstimated().get());
-		if (source.finishActual   ().isPresent()) finishActual   (source.startActual    ().get());
-		if (source.effortEstimated().isPresent()) effortEstimated(source.effortEstimated().get());
-		if (source.effortActual   ().isPresent()) effortActual   (source.effortActual   ().get());
 	}
 	@Override public void afterMapping(@NonNull TaskEntityJPA source) { }
 
@@ -351,50 +344,41 @@ public class TaskEntityDTO
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
-	public @NonNull String getName()
-			{ return name;                              }
-	public          void   setName(@NonNull String name)
-			{   name(name);                             }
+	@NonNull
+	public String    getName()                                               { return name;                              }
+	public void      setName(@NonNull String name)                           {   name(name);                             }
 
-	public @Nullable String getDescription()
-			{ return description;                       }
-	public           void   setDescription(@Nullable String description)
-			{   this.description = description;         }
+	@Nullable
+	public String    getDescription()                                        { return description;                       }
+	public void      setDescription(@Nullable String description)            {   this.description = description;         }
 
-	public @Nullable LocalDate getStartEstimated()
-			{ return startEstimated;                    }
-	public           void      setStartEstimated(@Nullable LocalDate startEstimated)
-			{   this.startEstimated = startEstimated;   }
+	@Nullable
+	public LocalDate getStartEstimated()                                     { return startEstimated;                    }
+	public void      setStartEstimated(@Nullable LocalDate startEstimated)   {   this.startEstimated = startEstimated;   }
 
-	public @Nullable LocalDate getStartActual()
-			{ return startActual;                       }
-	public           void      setStartActual(@Nullable LocalDate startActual)
-			{   this.startActual = startActual;         }
+	@Nullable
+	public LocalDate getStartActual()                                        { return startActual;                       }
+	public void      setStartActual(@Nullable LocalDate startActual)         {   this.startActual = startActual;         }
 
-	public @Nullable LocalDate getFinishEstimated()
-			{ return finishEstimated;                   }
-	public           void      setFinishEstimated(@Nullable LocalDate finishEstimated)
-			{   this.finishEstimated = finishEstimated; }
+	@Nullable
+	public LocalDate getFinishEstimated()                                    { return finishEstimated;                   }
+	public void      setFinishEstimated(@Nullable LocalDate finishEstimated) {   this.finishEstimated = finishEstimated; }
 
-	public @Nullable LocalDate getFinishActual()
-			{ return finishActual;                      }
-	public           void      setFinishActual(@Nullable LocalDate finishActual)
-			{   this.finishActual = finishActual;       }
+	@Nullable
+	public LocalDate getFinishActual()                                       { return finishActual;                      }
+	public void      setFinishActual(@Nullable LocalDate finishActual)       {   this.finishActual = finishActual;       }
 
-	public @Nullable Duration getEffortEstimated()
-			{ return effortEstimated;                   }
-	public           void     setEffortEstimated(@Nullable Duration effortEstimated)
-			{   this.effortEstimated = effortEstimated; }
+	@Nullable
+	public Duration  getEffortEstimated()                                    { return effortEstimated;                   }
+	public void      setEffortEstimated(@Nullable Duration effortEstimated)  {   this.effortEstimated = effortEstimated; }
 
-	public @Nullable Duration getEffortActual()
-			{ return effortActual;                      }
-	public           void     setEffortActual(@Nullable Duration effortActual)
-			{   this.effortActual = effortActual;       }
+	@Nullable
+	public Duration  getEffortActual()                                       { return effortActual;                      }
+	public void      setEffortActual(@Nullable Duration effortActual)        {   this.effortActual = effortActual;       }
 
-	public @Nullable TaskEntityDTO getParent()
-			{ return parent;                            }
-	public void setParent(@Nullable TaskEntityDTO parent)
-			{   this.parent = parent;                   }
+//	@Nullable
+//	public TaskEntityDTO getParent()                                         { return parent;                            }
+//	public void          setParent(@Nullable TaskEntityDTO parent)           {   this.parent = parent;                   }
 
 	@NonNull private Set<TaskEntityDTO> nonNullChildren()
 	{
@@ -435,59 +419,43 @@ public class TaskEntityDTO
 		return children.contains(entity);
 	}
 
-	private void lookupOrMapParent(TaskEntityJPA parent)
+	private void lookupOrMapParent(@NonNull TaskEntityJPA parent)
 	{
-		Optional<TaskEntityDTO> optionalParentDTO = Mapper.INSTANCE.getFromContext(parent);
-
-		if (optionalParentDTO.isPresent())
-		{
-			parent(optionalParentDTO.get());
-		}
-		else
-		{
-			parent(parent.toTarget());
-		}
+		Optional<TaskEntityDTO> optionalParent = Mapper.INSTANCE.getFromContext(parent);
+		optionalParent.ifPresentOrElse
+		(
+				(p) -> parent(p),
+				()            -> parent(Mapper.INSTANCE.map(parent))
+		);
 	}
 
-	private void lookupOrMapChild(TaskEntityJPA child)
+	private void lookupOrMapChild(@NonNull TaskEntityJPA child)
 	{
-		Optional<TaskEntityDTO> optionalChildDTO = Mapper.INSTANCE.getFromContext(child);
-
-		if (optionalChildDTO.isPresent())
-		{
-			addChild(optionalChildDTO.get());
-		}
-		else
-		{
-			addChild(child.toTarget());
-		}
+		Optional<TaskEntityDTO> optionalChild = Mapper.INSTANCE.getFromContext(child);
+		optionalChild.ifPresentOrElse
+		(
+				(c) -> addChild(c),
+				()            -> addChild(Mapper.INSTANCE.map(child))
+		);
 	}
 
-	private void lookupOrMapPredecessor(TaskEntityJPA predecessor)
+	private void lookupOrMapPredecessor(@NonNull TaskEntityJPA predecessor)
 	{
-		Optional<TaskEntityDTO> optionalPredecessorDTO = Mapper.INSTANCE.getFromContext(predecessor);
-
-		if (optionalPredecessorDTO.isPresent())
-		{
-			addPredecessor(optionalPredecessorDTO.get());
-		}
-		else
-		{
-			addPredecessor(predecessor.toTarget());
-		}
+		Optional<TaskEntityDTO> optionalPredecessor = Mapper.INSTANCE.getFromContext(predecessor);
+		optionalPredecessor.ifPresentOrElse
+		(
+				(p) -> addPredecessor(p),
+				()            -> addChild(Mapper.INSTANCE.map(predecessor))
+		);
 	}
 
-	private void lookupOrMapSuccessor(TaskEntityJPA successor)
+	private void lookupOrMapSuccessor(@NonNull TaskEntityJPA successor)
 	{
-		Optional<TaskEntityDTO> optionalSuccessorDTO = Mapper.INSTANCE.getFromContext(successor);
-
-		if (optionalSuccessorDTO.isPresent())
-		{
-			addSuccessor(optionalSuccessorDTO.get());
-		}
-		else
-		{
-			addSuccessor(successor.toTarget());
-		}
+		Optional<TaskEntityDTO> optionalPredecessor = Mapper.INSTANCE.getFromContext(successor);
+		optionalPredecessor.ifPresentOrElse
+		(
+				(s) -> addPredecessor(s),
+				()            -> addChild(Mapper.INSTANCE.map(successor))
+		);
 	}
 }

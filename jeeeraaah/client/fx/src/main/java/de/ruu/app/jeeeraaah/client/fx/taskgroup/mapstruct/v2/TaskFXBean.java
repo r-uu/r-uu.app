@@ -1,4 +1,4 @@
-package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
+package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.v2;
 
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import jakarta.annotation.Nullable;
@@ -26,13 +26,13 @@ import static java.util.Objects.isNull;
 @Accessors(fluent = true)
 public class TaskFXBean
 		implements
-				TaskEntity<TaskGroupFXBean, TaskFXBean>,
+				TaskEntity<de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean, TaskFXBean>,
 				BiMappedFXTarget<TaskBean>
 {
 	@Setter(AccessLevel.NONE) @Nullable private Long  id     ;
 	@Setter(AccessLevel.NONE) @Nullable private Short version;
 
-	private final ObjectProperty<TaskGroupFXBean> taskGroupProperty       = new SimpleObjectProperty<>();
+	private final ObjectProperty<de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean> taskGroupProperty       = new SimpleObjectProperty<>();
 	private final StringProperty                  nameProperty            = new SimpleStringProperty  ();
 	private final StringProperty                  descriptionProperty     = new SimpleStringProperty  ();
 	private final ObjectProperty<LocalDate>       startEstimatedProperty  = new SimpleObjectProperty<>();
@@ -53,7 +53,7 @@ public class TaskFXBean
 	///////////////
 
 	/** provide handmade required args constructor to properly handle relationships */
-	public TaskFXBean(@NonNull TaskGroupFXBean taskGroup, @NonNull String name)
+	public TaskFXBean(@NonNull de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean taskGroup, @NonNull String name)
 	{
 		taskGroupProperty.setValue(taskGroup);
 		nameProperty.setValue(name);
@@ -110,7 +110,7 @@ public class TaskFXBean
 //		);
 //	}
 
-	@Override public void beforeMapping(@NonNull TaskBean source)
+	@Override public void beforeMapping(@NonNull de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskBean source)
 	{
 		id      = source.id     ();
 		version = source.version();
@@ -133,7 +133,7 @@ public class TaskFXBean
 		source.predecessors   ().ifPresent(vs -> vs.forEach(v -> addPredecessor(MapperFX.INSTANCE.map(v))));
 		source.successors     ().ifPresent(vs -> vs.forEach(v -> addSuccessor  (MapperFX.INSTANCE.map(v))));
 	}
-	@Override public void afterMapping (TaskBean source) { }
+	@Override public void afterMapping (de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskBean source) { }
 
 	@Override @NonNull public TaskBean toFXSource() { return MapperFX.INSTANCE.map(this); }
 
