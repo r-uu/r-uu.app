@@ -15,36 +15,28 @@ class TestMapStructWithTaskGroupFXBeanAndTaskGroupBean
 		TaskGroupBean bean = createTaskGroup();
 		bean.description("description");
 
-		TaskGroupFXBean fxBean = bean.toFXTarget();
+		TaskGroupFXBean fxBean   = MapperFX.INSTANCE.map(bean); // mapping
+		TaskGroupBean   remapped = fxBean.toFXSource();         // re-mapping
 
-		// mapping
-		TaskGroupBean   bean1  = fxBean.toFXSource();
-
-		assertIs(bean, fxBean);
-
-		// re-mapping
-		TaskGroupFXBean taskGroupFXBean1 = bean1.toFXTarget();
-
-		assertThat(fxBean, is(taskGroupFXBean1));
+		assertIs  (bean  , fxBean      );
+		assertThat(fxBean, is(remapped));
 	}
 
 	@Test void testWithTasks()
 	{
 		TaskGroupBean   bean   = createTaskGroup();
-		TaskGroupFXBean fxBean = bean.toFXTarget();
+		TaskGroupFXBean fxBean = MapperFX.INSTANCE.map(bean);     // mapping
 
-		createTasks(bean, 3).forEach(t -> fxBean.addTask(t.toFXTarget()));
+		createTasks(bean, 3).forEach(t -> fxBean.addTask(MapperFX.INSTANCE.map(t)));
 
-		// mapping
-		TaskGroupBean bean1 = fxBean.toFXSource();
+		TaskGroupBean mapped = fxBean.toFXSource();               // re-mapping
 
-		assertIs(bean , fxBean);
-		assertIs(bean1, fxBean);
+		assertIs(bean  , fxBean);
+		assertIs(mapped, fxBean);
 
-		// re-mapping
-		TaskGroupFXBean fxBean1 = bean1.toFXTarget();
+		TaskGroupFXBean reMapped = MapperFX.INSTANCE.map(mapped); // re-re-mapping
 
-		assertIs(bean, fxBean1);
+		assertIs(bean, reMapped);
 	}
 
 	private void assertIs(TaskGroupBean bean, TaskGroupFXBean fxBean)

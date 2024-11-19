@@ -20,8 +20,8 @@ public abstract class MapperFX
 	public abstract @NonNull TaskGroupBean   map(@NonNull TaskGroupFXBean input);
 	public abstract @NonNull TaskGroupFXBean map(@NonNull TaskGroupBean   input);
 
-	public abstract @NonNull TaskBean   map(@NonNull TaskFXBean input);
-	public abstract @NonNull TaskFXBean map(@NonNull TaskBean   input);
+	public abstract @NonNull TaskBean        map(@NonNull TaskFXBean      input);
+	public abstract @NonNull TaskFXBean      map(@NonNull TaskBean        input);
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupBean source, @MappingTarget TaskGroupFXBean target)
@@ -73,13 +73,14 @@ public abstract class MapperFX
 
 	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull TaskGroupBean lookupOrCreate(@NonNull TaskGroupFXBean input)
+	@NonNull
+	TaskGroupBean lookupOrCreate(@NonNull TaskGroupFXBean input)
 	{
 		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
 		if (result == null)
 		{
 			result = new TaskGroupBean(input.name());
-			CONTEXT.put(input, result);
+			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);
 		}
 		return result;
@@ -87,20 +88,14 @@ public abstract class MapperFX
 
 	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull TaskGroupFXBean lookupOrCreate(@NonNull TaskGroupBean input)
+	@NonNull
+	TaskGroupFXBean lookupOrCreate(@NonNull TaskGroupBean input)
 	{
 		TaskGroupFXBean result = CONTEXT.get(input, TaskGroupFXBean.class);
 		if (result == null)
 		{
 			result = new TaskGroupFXBean(input.name());
-			if (input.tasks().isPresent())
-			{
-				for (TaskBean taskBean : input.tasks().get())
-				{
-					result.addTask(MapperFX.INSTANCE.map(taskBean));
-				}
-			}
-			CONTEXT.put(input, result);
+			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);
 		}
 		return result;
@@ -108,28 +103,30 @@ public abstract class MapperFX
 
 	/** object factory will be called by mapstruct */
 	@ObjectFactory
-	@NonNull TaskBean lookupOrCreate(@NonNull TaskFXBean input)
+	@NonNull
+	TaskBean lookupOrCreate(@NonNull TaskFXBean input)
 	{
 		TaskBean result = CONTEXT.get(input, TaskBean.class);
 		if (result == null)
 		{
-			TaskGroupBean taskGroupEntity = lookupOrCreate(input.taskGroup());
-			result = new TaskBean(taskGroupEntity, input.name());
-			CONTEXT.put(input, result);
+			TaskGroupBean taskGroupBean = lookupOrCreate(input.taskGroup());
+			result = new TaskBean(taskGroupBean, input.name());
+			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);
 		}
 		return result;
 	}
 
 	@ObjectFactory
-	@NonNull TaskFXBean lookupOrCreate(@NonNull TaskBean input)
+	@NonNull
+	TaskFXBean lookupOrCreate(@NonNull TaskBean input)
 	{
 		TaskFXBean result = CONTEXT.get(input, TaskFXBean.class);
 		if (result == null)
 		{
-			TaskGroupFXBean taskGroupEntity = lookupOrCreate(input.taskGroup());
-			result = new TaskFXBean(taskGroupEntity, input.name());
-			CONTEXT.put(input, result);
+			TaskGroupFXBean taskGroupFXBean = lookupOrCreate((TaskGroupBean) input.taskGroup());
+			result = new TaskFXBean(taskGroupFXBean, input.name());
+			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);
 		}
 		return result;

@@ -77,8 +77,8 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 	{
 		// populate editor with new item, call to getService() has to be done after call to getLocalRoot() to make sure
 		// internal java fx bindings can be establihed (see initialize)
-		TaskGroupBean       taskGroupBean   = new TaskGroupBean("new task group");
-		TaskGroupFXBean     taskGroupFXBean = taskGroupBean.toFXTarget();
+		TaskGroupBean taskGroupBean   = new TaskGroupBean("new task group");
+		TaskGroupFXBean     taskGroupFXBean = taskGroupBean.toFXSource();
 		editor.getService().taskGroup(taskGroupFXBean);
 
 		Dialog<TaskGroupFXBean> dialog = new Dialog<>();
@@ -98,14 +98,14 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 			taskGroupBean   = taskGroupFXBean.toFXSource();
 
 			// create a task group dto from task group bean (which is a task group dto)
-			TaskGroupEntityDTO taskGroupDTO = taskGroupBean.toSource();
+			TaskGroupEntityDTO taskGroupDTO = taskGroupBean.toDTOSource();
 
 			// let client create a new item in db
 			TaskGroupEntityDTO taskGroupEntityDTO = client.create(taskGroupDTO);
 			// create bean from dto
 			taskGroupBean = Mapper.INSTANCE.map(client.create(taskGroupDTO));
 			// create fx bean from bean
-			taskGroupFXBean = taskGroupBean.toFXTarget();
+			taskGroupFXBean = taskGroupBean.toFXSource();
 
 			// add and select item with retrieved item
 			tv.getItems().add(taskGroupFXBean);

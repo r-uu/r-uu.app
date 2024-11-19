@@ -50,16 +50,6 @@ class TaskViewController extends DefaultFXCViewController implements TaskViewSer
 		eventDispatcherFXCAppStarted.add(e -> onAppStarted(e));
 	}
 
-	@Override public @NonNull Optional<TaskFXBean> task()
-	{
-		return Optional.empty();
-	}
-
-	@Override public void task(@NonNull TaskFXBean task)
-	{
-		// TODO
-	}
-
 	private void onAppStarted(FXCAppStartedEvent e)
 	{
 		Optional<Stage> optional = FXUtil.getStage(tfName);
@@ -68,5 +58,17 @@ class TaskViewController extends DefaultFXCViewController implements TaskViewSer
 		{
 			optional.get().setTitle("task view");
 		}
+	}
+
+	@Override
+	public @NonNull Optional<TaskFXBean> task()
+	{
+		return Optional.empty();
+	}
+
+	@Override
+	public void task(@NonNull TaskFXBean task)
+	{
+
 	}
 }
