@@ -89,19 +89,19 @@ public abstract class Mapper
 		return result;
 	}
 
-//	/** object factory will be called by mapstruct TODO ambiguous */
-//	@ObjectFactory
-//	@NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupBean input)
-//	{
-//		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
-//		if (result == null)
-//		{
-//			result = new TaskGroupEntityDTO(input.name());
-//			CONTEXT.put(input , result);
-//			CONTEXT.put(result, input);
-//		}
-//		return result;
-//	}
+	/** object factory will be called by mapstruct TODO ambiguous */
+	@ObjectFactory
+	@NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupBean input)
+	{
+		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
+		if (result == null)
+		{
+			result = new TaskGroupEntityDTO(input.name());
+			CONTEXT.put(input , result);
+			CONTEXT.put(result, input);
+		}
+		return result;
+	}
 
 	/** object factory will be called by mapstruct */
 	@ObjectFactory
@@ -118,18 +118,18 @@ public abstract class Mapper
 		return result;
 	}
 
-//	/** object factory will be called by mapstruct */
-//	@ObjectFactory
-//	@NonNull TaskEntityDTO lookupOrCreate(@NonNull TaskBean input)
-//	{
-//		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
-//		if (result == null)
-//		{
-//			TaskGroupEntityDTO taskGroupEntityDTO = lookupOrCreate(input.taskGroup());
-//			result = new TaskEntityDTO(taskGroupEntityDTO, input.name());
-//			CONTEXT.put(input , result);
-//			CONTEXT.put(result, input);
-//		}
-//		return result;
-//	}
+	/** object factory will be called by mapstruct */
+	@ObjectFactory
+	@NonNull TaskEntityDTO lookupOrCreate(@NonNull TaskBean input)
+	{
+		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
+		if (result == null)
+		{
+			TaskGroupEntityDTO taskGroupEntityDTO = lookupOrCreate(input.taskGroup());
+			result = new TaskEntityDTO(taskGroupEntityDTO, input.name());
+			CONTEXT.put(input , result);
+			CONTEXT.put(result, input);
+		}
+		return result;
+	}
 }

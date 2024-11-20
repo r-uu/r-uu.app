@@ -18,7 +18,7 @@ class TestMapStructWithEntityDTOAndBean
 	{
 		TaskEntityDTO taskEntityDTO = createTaskDTO(createTaskGroupDTO(), "task name");
 		TaskBean      taskBean      = Mapper.INSTANCE.map(taskEntityDTO); //    mapping
-		TaskEntityDTO remapped      = Mapper.INSTANCE.map(taskBean     ); // re-mapping
+		TaskEntityDTO remapped      = taskBean.toDTOSource();             // re-mapping
 
 		assertIs  (taskEntityDTO, taskBean    );
 		assertThat(taskEntityDTO, is(remapped));

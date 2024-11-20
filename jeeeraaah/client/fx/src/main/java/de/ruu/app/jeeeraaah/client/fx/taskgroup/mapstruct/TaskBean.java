@@ -1,6 +1,7 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
+import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import de.ruu.lib.jpa.core.AbstractDTO;
 import de.ruu.lib.jpa.core.AbstractEntity;
 import de.ruu.lib.jpa.core.Entity;
@@ -11,7 +12,7 @@ import org.mapstruct.BeforeMapping;
 import java.util.Optional;
 
 /** JavaBean for implementing business logic */
-public class TaskBean extends TaskEntityDTO
+public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 {
 	public TaskBean(TaskGroupBean taskGroupBean, @NonNull String name) { super(taskGroupBean, name); }
 
