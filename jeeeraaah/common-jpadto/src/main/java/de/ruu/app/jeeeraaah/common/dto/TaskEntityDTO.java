@@ -2,20 +2,12 @@ package de.ruu.app.jeeeraaah.common.dto;
 
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
-import de.ruu.app.jeeeraaah.common.jpadto.Mapper;
+import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +41,6 @@ public class TaskEntityDTO
 
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
-	@Setter(AccessLevel.PROTECTED)
 	@NonNull  private String    name;
 	@Nullable private String    description;
 	@Nullable private LocalDate startEstimated;
@@ -64,8 +55,6 @@ public class TaskEntityDTO
 	@ToString.Exclude
 	@Getter(AccessLevel.NONE) // provide handmade getter that returns optional
 	@Setter(AccessLevel.NONE) // provide handmade setter that handles bidirectional relation properly
-	@ManyToOne
-	@JoinColumn(name = "idParent")
 	@Nullable private TaskEntityDTO parent;
 
 	/**
@@ -331,14 +320,14 @@ public class TaskEntityDTO
 		source.effortEstimated().ifPresent(this::effortEstimated);
 		source.effortActual   ().ifPresent(this::effortActual);
 
-		source.parent      ().ifPresent(                                    this::lookupOrMapParent);
+		source.parent      ().ifPresent(                 this::lookupOrMapParent);
 		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
 		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
 		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
 	}
 	@Override public void afterMapping(@NonNull TaskEntityJPA source) { }
 
-	@Override public @NonNull TaskEntityJPA toSource() { return Mapper.INSTANCE.map(this); }
+	@Override public @NonNull TaskEntityJPA toSource() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
@@ -375,10 +364,6 @@ public class TaskEntityDTO
 	@Nullable
 	public Duration  getEffortActual()                                       { return effortActual;                      }
 	public void      setEffortActual(@Nullable Duration effortActual)        {   this.effortActual = effortActual;       }
-
-//	@Nullable
-//	public TaskEntityDTO getParent()                                         { return parent;                            }
-//	public void          setParent(@Nullable TaskEntityDTO parent)           {   this.parent = parent;                   }
 
 	@NonNull private Set<TaskEntityDTO> nonNullChildren()
 	{
@@ -421,41 +406,41 @@ public class TaskEntityDTO
 
 	private void lookupOrMapParent(@NonNull TaskEntityJPA parent)
 	{
-		Optional<TaskEntityDTO> optionalParent = Mapper.INSTANCE.getFromContext(parent);
+		Optional<TaskEntityDTO> optionalParent = Map_Task_JPA_DTO.INSTANCE.getFromContext(parent);
 		optionalParent.ifPresentOrElse
 		(
 				(p) -> parent(p),
-				()            -> parent(Mapper.INSTANCE.map(parent))
+				()            -> parent(Map_Task_JPA_DTO.INSTANCE.map(parent))
 		);
 	}
 
 	private void lookupOrMapChild(@NonNull TaskEntityJPA child)
 	{
-		Optional<TaskEntityDTO> optionalChild = Mapper.INSTANCE.getFromContext(child);
+		Optional<TaskEntityDTO> optionalChild = Map_Task_JPA_DTO.INSTANCE.getFromContext(child);
 		optionalChild.ifPresentOrElse
 		(
 				(c) -> addChild(c),
-				()            -> addChild(Mapper.INSTANCE.map(child))
+				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(child))
 		);
 	}
 
 	private void lookupOrMapPredecessor(@NonNull TaskEntityJPA predecessor)
 	{
-		Optional<TaskEntityDTO> optionalPredecessor = Mapper.INSTANCE.getFromContext(predecessor);
+		Optional<TaskEntityDTO> optionalPredecessor = Map_Task_JPA_DTO.INSTANCE.getFromContext(predecessor);
 		optionalPredecessor.ifPresentOrElse
 		(
 				(p) -> addPredecessor(p),
-				()            -> addChild(Mapper.INSTANCE.map(predecessor))
+				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(predecessor))
 		);
 	}
 
 	private void lookupOrMapSuccessor(@NonNull TaskEntityJPA successor)
 	{
-		Optional<TaskEntityDTO> optionalPredecessor = Mapper.INSTANCE.getFromContext(successor);
+		Optional<TaskEntityDTO> optionalPredecessor = Map_Task_JPA_DTO.INSTANCE.getFromContext(successor);
 		optionalPredecessor.ifPresentOrElse
 		(
 				(s) -> addPredecessor(s),
-				()            -> addChild(Mapper.INSTANCE.map(successor))
+				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(successor))
 		);
 	}
 }

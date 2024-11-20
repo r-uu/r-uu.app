@@ -2,9 +2,7 @@ package de.ruu.app.jeeeraaah.common.jpa;
 
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
-import de.ruu.app.jeeeraaah.common.jpadto.Mapper;
-import de.ruu.app.jeeeraaah.common.jpadto.TaskDTO;
+import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedEntity;
 import de.ruu.lib.util.Strings;
@@ -32,7 +30,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -386,7 +383,7 @@ public class TaskEntityJPA
 
 	@Override public void afterMapping(@NonNull TaskEntityDTO input) { }
 
-	@Override public @NonNull TaskEntityDTO toTarget() { return Mapper.INSTANCE.map(this); }
+	@Override public @NonNull TaskEntityDTO toTarget() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
 
 	@NonNull private Set<TaskEntityJPA> nonNullPredecessors()
 	{
@@ -429,7 +426,7 @@ public class TaskEntityJPA
 
 	private void lookupOrMapPredecessor(TaskEntityDTO predecessor)
 	{
-		Optional<TaskEntityJPA> optionalPredecessorEntity = Mapper.INSTANCE.getFromContext(predecessor);
+		Optional<TaskEntityJPA> optionalPredecessorEntity = Map_Task_JPA_DTO.INSTANCE.getFromContext(predecessor);
 
 		if (optionalPredecessorEntity.isPresent())
 		{
@@ -443,7 +440,7 @@ public class TaskEntityJPA
 
 	private void lookupOrMapSuccessor(TaskEntityDTO successor)
 	{
-		Optional<TaskEntityJPA> optionalSuccessorEntity = Mapper.INSTANCE.getFromContext(successor);
+		Optional<TaskEntityJPA> optionalSuccessorEntity = Map_Task_JPA_DTO.INSTANCE.getFromContext(successor);
 
 		if (optionalSuccessorEntity.isPresent())
 		{
@@ -457,7 +454,7 @@ public class TaskEntityJPA
 
 	private void lookupOrMapChild(TaskEntityDTO child)
 	{
-		Optional<TaskEntityJPA> optionalChildEntity = Mapper.INSTANCE.getFromContext(child);
+		Optional<TaskEntityJPA> optionalChildEntity = Map_Task_JPA_DTO.INSTANCE.getFromContext(child);
 
 		if (optionalChildEntity.isPresent())
 		{
@@ -471,7 +468,7 @@ public class TaskEntityJPA
 
 	private void lookupOrMapParent(TaskEntityDTO parent)
 	{
-		Optional<TaskEntityJPA> optionalParentEntity = Mapper.INSTANCE.getFromContext(parent);
+		Optional<TaskEntityJPA> optionalParentEntity = Map_Task_JPA_DTO.INSTANCE.getFromContext(parent);
 
 		if (optionalParentEntity.isPresent())
 		{

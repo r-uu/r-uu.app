@@ -1,29 +1,19 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.Task;
-import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
-import de.ruu.lib.jpa.core.AbstractDTO;
-import de.ruu.lib.jpa.core.AbstractEntity;
-import de.ruu.lib.jpa.core.Entity;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 /** JavaBean for implementing business logic */
 @EqualsAndHashCode
@@ -63,6 +53,10 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 	// constructors
 	///////////////
 
+	/**
+	 * provide hand-made required args constructor to guarantee usage of hand made accessors.
+	 * @param name non-empty name
+	 */
 	public TaskGroupBean(@NonNull String name) { name(name); }
 
 	////////////////////////////////////////////////////////////////////////
@@ -130,10 +124,7 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 		id      = source.id     ();
 		version = source.version();
 
-		source.tasks().ifPresent
-		(
-				vs -> vs.forEach(v -> addTask(Mapper.INSTANCE.lookupOrCreate(v)))
-		);
+		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Mapper.INSTANCE.lookupOrCreate(t))));
 	}
 
 	@AfterMapping  void afterMapping (@NonNull TaskGroupEntityDTO source) { }
@@ -142,9 +133,9 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 
 	@BeforeMapping void beforeMapping(@NonNull TaskGroupFXBean source)
 	{
-		mapIdAndVersion(new EntitySimple(source));
+		id      = source.id     ();
+		version = source.version();
 
-//		name(source.name());
 		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(MapperFX.INSTANCE.lookupOrCreate(v))));
 	}
 
@@ -152,10 +143,22 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 
 	@NonNull public TaskGroupFXBean toFXSource() { return MapperFX.INSTANCE.map(this); }
 
-	private class AbstractEntitySimple extends AbstractEntity<AbstractDTOSimple> { }
-	private class AbstractDTOSimple    extends AbstractDTO<AbstractEntitySimple> { }
-	private class EntitySimple         extends AbstractEntity<AbstractDTOSimple>
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
+	//////////////////////////////////////////////////////////////////////////////////////////////
+
+	@NonNull
+	public String getName()                     { return name(); }
+	public void   setName(@NonNull String name) { name(name); }
+
+	@Nullable
+	public String getDescription()                             { return description().orElse(null); }
+	public void   setDescription(@Nullable String description) { description(description); }
+	// do _NOT_ define getter for tasks to avoid handling of tasks by mapstruct automatism
+
+	private @NonNull Set<TaskBean> nonNullTasks()
 	{
-		public EntitySimple(Entity<Long> entity) { super(entity); }
+		if (isNull(tasks)) tasks = new HashSet<>();
+		return tasks;
 	}
 }

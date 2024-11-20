@@ -2,8 +2,7 @@ package de.ruu.app.jeeeraaah.common.jpa;
 
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
-import de.ruu.app.jeeeraaah.common.jpadto.Mapper;
-import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
+import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedEntity;
 import de.ruu.lib.util.Strings;
@@ -115,7 +114,7 @@ public class TaskGroupEntityJPA
 
 	@Override public @NonNull TaskGroupEntityDTO toTarget()
 	{
-		return Mapper.INSTANCE.map(this);
+		return Map_Task_JPA_DTO.INSTANCE.map(this);
 	}
 
 	////////////////////////

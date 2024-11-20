@@ -18,8 +18,8 @@ class TestMapStructWithEntityDTOAndEntityJPA
 	@Test void testStandaloneDTO()
 	{
 		TaskEntityDTO taskEntityDTO = createTaskDTO(createTaskGroupDTO(), "task name");
-		TaskEntityJPA taskEntityJPA = taskEntityDTO.toSource();           //    mapping
-		TaskEntityDTO remapped      = Mapper.INSTANCE.map(taskEntityJPA); // re-mapping
+		TaskEntityJPA taskEntityJPA = taskEntityDTO.toSource();                     //    mapping
+		TaskEntityDTO remapped      = Map_Task_JPA_DTO.INSTANCE.map(taskEntityJPA); // re-mapping
 
 		assertIs(taskEntityDTO, taskEntityJPA);
 		assertThat(taskEntityDTO, is(remapped));
@@ -28,8 +28,8 @@ class TestMapStructWithEntityDTOAndEntityJPA
 	@Test void testStandaloneJPA()
 	{
 		TaskEntityJPA taskEntityJPA = createTaskJPA(createTaskGroupJPA(), "task name");
-		TaskEntityDTO taskEntityDTO = taskEntityJPA.toTarget();           //    mapping
-		TaskEntityJPA remapped      = Mapper.INSTANCE.map(taskEntityDTO); // re-mapping
+		TaskEntityDTO taskEntityDTO = taskEntityJPA.toTarget();                     //    mapping
+		TaskEntityJPA remapped      = Map_Task_JPA_DTO.INSTANCE.map(taskEntityDTO); // re-mapping
 
 		assertIs(taskEntityDTO, taskEntityJPA);
 		assertThat(taskEntityJPA, is(remapped));

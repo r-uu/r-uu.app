@@ -28,13 +28,14 @@ public abstract class Mapper
 	public abstract @NonNull TaskBean           map(@NonNull TaskEntityDTO      source);
 
 	Optional<TaskBean>      getFromContext(TaskEntityDTO dto ) { return Optional.ofNullable(CONTEXT.get(dto , TaskBean.class     )); }
-//	Optional<TaskEntityDTO> getFromContext(TaskBean      bean) { return Optional.ofNullable(CONTEXT.get(bean, TaskEntityDTO.class)); }
+	Optional<TaskEntityDTO> getFromContext(TaskBean      bean) { return Optional.ofNullable(CONTEXT.get(bean, TaskEntityDTO.class)); }
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupBean target)
 	{
 		target.beforeMapping(source); // invoke callback for mapping
 	}
+
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping  void afterMapping (TaskGroupEntityDTO source, @MappingTarget TaskGroupBean target)
 	{
@@ -53,6 +54,7 @@ public abstract class Mapper
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
+	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupBean source, @MappingTarget TaskGroupEntityDTO target)
 	{
 		lookupOrCreate(target).beforeMapping(source);
