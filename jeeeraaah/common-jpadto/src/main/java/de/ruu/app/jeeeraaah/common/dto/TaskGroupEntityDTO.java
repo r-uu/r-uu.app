@@ -3,16 +3,27 @@ package de.ruu.app.jeeeraaah.common.dto;
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpadto.Map_TaskGroup_JPA_DTO;
 import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
 import de.ruu.lib.jpa.core.mapstruct.AbstractMappedDTO;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 
@@ -121,7 +132,7 @@ public class TaskGroupEntityDTO
 	// mapstruct callbacks
 	//////////////////////
 
-	@Override public void beforeMapping(@NonNull TaskGroupEntityJPA source)
+	protected void beforeMapping(@NonNull TaskGroupEntityJPA source)
 	{
 		super.beforeMapping(source); // maps id and version
 		if (source.tasks().isPresent())
@@ -133,9 +144,10 @@ public class TaskGroupEntityDTO
 		}
 		// mapping of other fields is done via mapstruct using java-beans accessors
 	}
-	@Override public void afterMapping (@NonNull TaskGroupEntityJPA source) { }
 
-	@Override public @NonNull TaskGroupEntityJPA toSource() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
+	protected void afterMapping (@NonNull TaskGroupEntityJPA source) { }
+
+	@Override public @NonNull TaskGroupEntityJPA toSource() { return Map_TaskGroup_JPA_DTO.INSTANCE.map(this); }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)

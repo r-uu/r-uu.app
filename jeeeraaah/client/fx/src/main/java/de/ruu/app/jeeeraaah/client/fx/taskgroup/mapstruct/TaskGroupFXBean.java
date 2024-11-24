@@ -70,7 +70,7 @@ public class TaskGroupFXBean
 				(
 						t ->
 						{
-							TaskBean taskBean = Mapper.INSTANCE.map(t);
+							TaskBean taskBean = Map_Task_DTO_Bean.INSTANCE.map(t);
 							addTask(taskBean.toFXSource());
 						}
 				)

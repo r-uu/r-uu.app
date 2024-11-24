@@ -6,10 +6,12 @@ import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
+@Mapper
 public abstract class Map_TaskGroup_JPA_DTO
 {
 	public final static Map_TaskGroup_JPA_DTO INSTANCE = Mappers.getMapper(Map_TaskGroup_JPA_DTO.class);

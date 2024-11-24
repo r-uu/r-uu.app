@@ -15,14 +15,11 @@ import java.util.Optional;
 
 @Slf4j
 @org.mapstruct.Mapper
-public abstract class Mapper
+public abstract class Map_Task_DTO_Bean
 {
-	public final static Mapper INSTANCE = Mappers.getMapper(Mapper.class);
+	public final static Map_Task_DTO_Bean INSTANCE = Mappers.getMapper(Map_Task_DTO_Bean.class);
 
 	private final static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
-
-	public abstract @NonNull TaskGroupEntityDTO map(@NonNull TaskGroupBean      source);
-	public abstract @NonNull TaskGroupBean      map(@NonNull TaskGroupEntityDTO source);
 
 	public abstract @NonNull TaskEntityDTO      map(@NonNull TaskBean           source);
 	public abstract @NonNull TaskBean           map(@NonNull TaskEntityDTO      source);
@@ -31,78 +28,27 @@ public abstract class Mapper
 	Optional<TaskEntityDTO> getFromContext(TaskBean      bean) { return Optional.ofNullable(CONTEXT.get(bean, TaskEntityDTO.class)); }
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupBean target)
-	{
-		target.beforeMapping(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@AfterMapping  void afterMapping (TaskGroupEntityDTO source, @MappingTarget TaskGroupBean target)
-	{
-		target.afterMapping(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskEntityDTO source, @MappingTarget TaskBean target)
 	{
-		target.beforeMapping(source); // invoke callback for mapping
+		target.beforeMappingDTO(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping  void afterMapping (TaskEntityDTO source, @MappingTarget TaskBean target)
 	{
-		target.afterMapping(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping void beforeMapping(TaskGroupBean source, @MappingTarget TaskGroupEntityDTO target)
-	{
-		lookupOrCreate(target).beforeMapping(source);
-	}
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@AfterMapping  void afterMapping (TaskGroupBean source, @MappingTarget TaskGroupEntityDTO target)
-	{
-		lookupOrCreate(target).afterMapping(source);
+		target.afterMappingDTO(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskBean source, @MappingTarget TaskEntityDTO target)
 	{
-		lookupOrCreate(target).beforeMapping(source);
+		target.beforeMapping(source);
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping  void afterMapping (TaskBean source, @MappingTarget TaskEntityDTO target)
 	{
-		lookupOrCreate(target).afterMapping(source);
-	}
-
-	/** object factory will be called by mapstruct TODO ambiguous */
-	@ObjectFactory
-	@NonNull TaskGroupBean lookupOrCreate(@NonNull TaskGroupEntityDTO input)
-	{
-		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
-		if (result == null)
-		{
-			result = new TaskGroupBean(input.name());
-			CONTEXT.put(input , result);
-			CONTEXT.put(result, input);
-		}
-		return result;
-	}
-
-	/** object factory will be called by mapstruct TODO ambiguous */
-	@ObjectFactory
-	@NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupBean input)
-	{
-		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
-		if (result == null)
-		{
-			result = new TaskGroupEntityDTO(input.name());
-			CONTEXT.put(input , result);
-			CONTEXT.put(result, input);
-		}
-		return result;
+		target.afterMapping(source);
 	}
 
 	/** object factory will be called by mapstruct */
@@ -112,7 +58,7 @@ public abstract class Mapper
 		TaskBean result = CONTEXT.get(input, TaskBean.class);
 		if (result == null)
 		{
-			TaskGroupBean taskGroupBean = lookupOrCreate(input.taskGroup());
+			TaskGroupBean taskGroupBean = Map_TaskGroup_DTO_Bean.INSTANCE.lookupOrCreate(input.taskGroup());
 			result = new TaskBean(taskGroupBean, input.name());
 			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);
@@ -127,7 +73,7 @@ public abstract class Mapper
 		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
 		if (result == null)
 		{
-			TaskGroupEntityDTO taskGroupEntityDTO = lookupOrCreate(input.taskGroup());
+			TaskGroupEntityDTO taskGroupEntityDTO = Map_TaskGroup_DTO_Bean.INSTANCE.lookupOrCreate(input.taskGroup());
 			result = new TaskEntityDTO(taskGroupEntityDTO, input.name());
 			CONTEXT.put(input , result);
 			CONTEXT.put(result, input);

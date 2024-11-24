@@ -17,7 +17,7 @@ class TestMapStructWithEntityDTOAndBean
 	@Test void testStandaloneDTO()
 	{
 		TaskEntityDTO taskEntityDTO = createTaskDTO(createTaskGroupDTO(), "task name");
-		TaskBean      taskBean      = Mapper.INSTANCE.map(taskEntityDTO); //    mapping
+		TaskBean      taskBean      = Map_Task_DTO_Bean.INSTANCE.map(taskEntityDTO); //    mapping
 		TaskEntityDTO remapped      = taskBean.toDTOSource();             // re-mapping
 
 		assertIs  (taskEntityDTO, taskBean    );
@@ -27,8 +27,8 @@ class TestMapStructWithEntityDTOAndBean
 	@Test void testStandaloneBean()
 	{
 		TaskBean      bean     = createTaskBean(createTaskGroupBean(), "task name");
-		TaskEntityDTO dto      = Mapper.INSTANCE.map(bean); //    mapping
-		TaskBean      remapped = Mapper.INSTANCE.map(dto ); // re-mapping
+		TaskEntityDTO dto      = Map_Task_DTO_Bean.INSTANCE.map(bean); //    mapping
+		TaskBean      remapped = Map_Task_DTO_Bean.INSTANCE.map(dto ); // re-mapping
 
 		assertIs  (dto , bean        );
 		assertThat(bean, is(remapped));
@@ -48,8 +48,8 @@ class TestMapStructWithEntityDTOAndBean
 		createTaskBeans(taskGroupBean, count, "predecessor ").forEach(taskBean::addPredecessor);
 		createTaskBeans(taskGroupBean, count, "successor "  ).forEach(taskBean::addSuccessor);
 
-		TaskEntityDTO dto      = Mapper.INSTANCE.map(taskBean);	// mapping
-		TaskBean      remapped = Mapper.INSTANCE.map(dto     ); // re-mapping
+		TaskEntityDTO dto      = Map_Task_DTO_Bean.INSTANCE.map(taskBean);	// mapping
+		TaskBean      remapped = Map_Task_DTO_Bean.INSTANCE.map(dto     ); // re-mapping
 
 		assertIs  (dto     , taskBean    );
 		assertThat(taskBean, is(remapped));

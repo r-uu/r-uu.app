@@ -5,13 +5,22 @@ import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 
@@ -119,19 +128,19 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 	// mapstruct callbacks
 	//////////////////////
 
-	@BeforeMapping void beforeMapping(@NonNull TaskGroupEntityDTO source)
+	@BeforeMapping void beforeMappingDTO(@NonNull TaskGroupEntityDTO source)
 	{
 		id      = source.id     ();
 		version = source.version();
 
-		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Mapper.INSTANCE.lookupOrCreate(t))));
+		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Map_Task_DTO_Bean.INSTANCE.lookupOrCreate(t))));
 	}
 
-	@AfterMapping  void afterMapping (@NonNull TaskGroupEntityDTO source) { }
+	@AfterMapping void afterMappingDTO (@NonNull TaskGroupEntityDTO source) { }
 
-	@NonNull public TaskGroupEntityDTO toDTOSource() { return Mapper.INSTANCE.map(this); }
+	@NonNull public TaskGroupEntityDTO toDTOSource() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
 
-	@BeforeMapping void beforeMapping(@NonNull TaskGroupFXBean source)
+	@BeforeMapping void beforeMappingFX(@NonNull TaskGroupFXBean source)
 	{
 		id      = source.id     ();
 		version = source.version();
@@ -139,9 +148,19 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(MapperFX.INSTANCE.lookupOrCreate(v))));
 	}
 
-	@AfterMapping void afterMapping (@NonNull TaskGroupFXBean source) { }
+	@AfterMapping void afterMappingFX (@NonNull TaskGroupFXBean source) { }
 
 	@NonNull public TaskGroupFXBean toFXSource() { return MapperFX.INSTANCE.map(this); }
+
+	@BeforeMapping public void beforeMapping(@NonNull TaskGroupBean source)
+	{
+		id      = source.id     ();
+		version = source.version();
+
+		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Map_Task_DTO_Bean.INSTANCE.lookupOrCreate(t))));
+	}
+
+	@BeforeMapping public void afterMapping(@NonNull TaskGroupBean source) { }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)

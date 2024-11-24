@@ -2,11 +2,16 @@ package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.Task;
 import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskEntity;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
@@ -127,7 +132,6 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		this.name = name;
 		return this;
 	}
-
 
 	@Override @NonNull public Optional<String>        description    () { return Optional.ofNullable(description);     }
 	@Override @NonNull public Optional<LocalDate>     startEstimated () { return Optional.ofNullable(startEstimated);  }
@@ -305,12 +309,12 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 	//////////////////////
 
 	/**
-	 * Maps optional return values of {@link TaskEntityJPA} field accessors to java bean style fields. This cannot be done by
-	 * mapstruct.
+	 * Maps optional return values of {@link TaskEntityDTO} field accessors to java bean style fields. This cannot be done
+	 * by mapstruct automatically.
 	 *
 	 * @param source
 	 */
-	@BeforeMapping void beforeMapping(@NonNull TaskEntityDTO source)
+	@BeforeMapping void beforeMappingDTO(@NonNull TaskEntityDTO source)
 	{
 		id      = source.id();
 		version = source.version();
@@ -329,11 +333,17 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
 		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
 	}
-	@AfterMapping void afterMapping (@NonNull TaskEntityDTO source) { }
+	@AfterMapping void afterMappingDTO(@NonNull TaskEntityDTO source) { }
 
-	public @NonNull TaskEntityDTO toDTOSource() { return Mapper.INSTANCE.map(this); }
+	public @NonNull TaskEntityDTO toDTOSource() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
 
-	@BeforeMapping public void beforeMapping(@NonNull TaskFXBean source)
+	/**
+	 * Maps optional return values of {@link TaskFXBean} field accessors to java bean style fields. This cannot be done
+	 * by mapstruct automatically.
+	 *
+	 * @param source
+	 */
+	@BeforeMapping public void beforeMappingFX(@NonNull TaskFXBean source)
 	{
 		id      = source.id();
 		version = source.version();
@@ -356,7 +366,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		source.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(MapperFX.INSTANCE.map(t))));
 		source.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (MapperFX.INSTANCE.map(t))));
 	}
-	@AfterMapping public void afterMapping (@NonNull TaskFXBean source) { }
+	@AfterMapping public void afterMappingFX(@NonNull TaskFXBean source) { }
 
 	public @NonNull TaskFXBean toFXSource() { return MapperFX.INSTANCE.map(this); }
 
@@ -437,41 +447,41 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 
 	private void lookupOrMapParent(@NonNull TaskEntityDTO parent)
 	{
-		Optional<TaskBean> optionalParent = Mapper.INSTANCE.getFromContext(parent);
+		Optional<TaskBean> optionalParent = Map_Task_DTO_Bean.INSTANCE.getFromContext(parent);
 		optionalParent.ifPresentOrElse
 		(
 				(p) -> parent(p),
-				()            -> parent(Mapper.INSTANCE.map(parent))
+				()            -> parent(Map_Task_DTO_Bean.INSTANCE.map(parent))
 		);
 	}
 
 	private void lookupOrMapChild(@NonNull TaskEntityDTO child)
 	{
-		Optional<TaskBean> optionalChild = Mapper.INSTANCE.getFromContext(child);
+		Optional<TaskBean> optionalChild = Map_Task_DTO_Bean.INSTANCE.getFromContext(child);
 		optionalChild.ifPresentOrElse
 		(
 				(c) -> addChild(c),
-				()            -> addChild(Mapper.INSTANCE.map(child))
+				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(child))
 		);
 	}
 
 	private void lookupOrMapPredecessor(@NonNull TaskEntityDTO predecessor)
 	{
-		Optional<TaskBean> optionalPredecessor = Mapper.INSTANCE.getFromContext(predecessor);
+		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(predecessor);
 		optionalPredecessor.ifPresentOrElse
 		(
 				(p) -> addPredecessor(p),
-				()            -> addChild(Mapper.INSTANCE.map(predecessor))
+				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(predecessor))
 		);
 	}
 
 	private void lookupOrMapSuccessor(@NonNull TaskEntityDTO successor)
 	{
-		Optional<TaskBean> optionalPredecessor = Mapper.INSTANCE.getFromContext(successor);
+		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(successor);
 		optionalPredecessor.ifPresentOrElse
 		(
 				(s) -> addPredecessor(s),
-				()            -> addChild(Mapper.INSTANCE.map(successor))
+				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(successor))
 		);
 	}
 }

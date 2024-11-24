@@ -50,13 +50,13 @@ public abstract class MapperFX
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-		target.beforeMapping(source); // invoke callback for mapping
+		target.beforeMappingFX(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@AfterMapping void afterMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-		target.afterMapping(source); // invoke callback for mapping
+		target.afterMappingFX(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */

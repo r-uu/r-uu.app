@@ -115,7 +115,7 @@ public class TaskFXBean
 		version = source.version();
 
 		// source.taskGroup and source.name are @NonNull-ables
-		taskGroupProperty.setValue(Mapper.INSTANCE.map(source.taskGroup()).toFXSource());
+		taskGroupProperty.setValue(Map_Task_DTO_Bean.INSTANCE.map(source.taskGroup()).toFXSource());
 		nameProperty     .setValue(source.name());
 
 		source.description    ().ifPresent(descriptionProperty    ::setValue);
@@ -126,11 +126,11 @@ public class TaskFXBean
 		source.effortEstimated().ifPresent(effortEstimatedProperty::setValue);
 		source.effortActual   ().ifPresent(effortActualProperty   ::setValue);
 
-		source.parent         ().ifPresent(t -> parentProperty.setValue(Mapper.INSTANCE.map(t).toFXSource()));
+		source.parent         ().ifPresent(t -> parentProperty.setValue(Map_Task_DTO_Bean.INSTANCE.map(t).toFXSource()));
 
-		source.children       ().ifPresent(ts -> ts.forEach(t -> addChild      (Mapper.INSTANCE.map(t).toFXSource())));
-		source.predecessors   ().ifPresent(ts -> ts.forEach(t -> addPredecessor(Mapper.INSTANCE.map(t).toFXSource())));
-		source.successors     ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Mapper.INSTANCE.map(t).toFXSource())));
+		source.children       ().ifPresent(ts -> ts.forEach(t -> addChild      (Map_Task_DTO_Bean.INSTANCE.map(t).toFXSource())));
+		source.predecessors   ().ifPresent(ts -> ts.forEach(t -> addPredecessor(Map_Task_DTO_Bean.INSTANCE.map(t).toFXSource())));
+		source.successors     ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Map_Task_DTO_Bean.INSTANCE.map(t).toFXSource())));
 	}
 	public void afterMapping (TaskBean source) { }
 

@@ -16,8 +16,8 @@ class TestMapStructWithTaskGroupBeanAndTaskGroupDTO
 		TaskGroupBean bean = createTaskGroup();
 		bean.description("description");
 
-		TaskGroupEntityDTO dto      = Mapper.INSTANCE.map(bean); // mapping
-		TaskGroupBean      remapped = Mapper.INSTANCE.map(dto ); // re-mapping
+		TaskGroupEntityDTO dto      = Map_Task_DTO_Bean.INSTANCE.map(bean); // mapping
+		TaskGroupBean      remapped = Map_Task_DTO_Bean.INSTANCE.map(dto ); // re-mapping
 
 		assertIs  (bean, dto         );
 		assertThat(bean, is(remapped));
@@ -28,8 +28,8 @@ class TestMapStructWithTaskGroupBeanAndTaskGroupDTO
 		TaskGroupBean bean = createTaskGroup();
 		createTasks(bean, 3).forEach(bean::addTask);
 
-		TaskGroupEntityDTO dto      = Mapper.INSTANCE.map(bean); // mapping
-		TaskGroupBean      remappad = Mapper.INSTANCE.map(dto ); // re-mapping
+		TaskGroupEntityDTO dto      = Map_Task_DTO_Bean.INSTANCE.map(bean); // mapping
+		TaskGroupBean      remappad = Map_Task_DTO_Bean.INSTANCE.map(dto ); // re-mapping
 
 		assertIs(bean, dto);
 		assertThat(bean, is(remappad));

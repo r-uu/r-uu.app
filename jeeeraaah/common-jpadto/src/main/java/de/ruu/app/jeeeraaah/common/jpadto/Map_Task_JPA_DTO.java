@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
@@ -16,7 +17,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.Optional;
 
 @Slf4j
-@org.mapstruct.Mapper
+@Mapper
 public abstract class Map_Task_JPA_DTO
 {
 	public final static Map_Task_JPA_DTO INSTANCE = Mappers.getMapper(Map_Task_JPA_DTO.class);
