@@ -5,8 +5,29 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/config/server/openliberty/pom.xml" />
+        <option value="$PROJECT_DIR$/datamodel/company/common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/company/jpadto-ee/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/company/jpadto-se/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/company/jpadto/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/postaladdress/common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/postaladdress/jpadto-ee/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/postaladdress/jpadto-se/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/datamodel/postaladdress/jpadto/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/demo/client-executable-jpackage-maven/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/demo/client/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/demo/common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/demo/server/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jeeeraaah/client/fx-executable/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jeeeraaah/client/rs/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jeeeraaah/common-jpadto-ee/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jeeeraaah/common-jpadto-se/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jeeeraaah/common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jfx-exe-min-1/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jfx-exe-min-2/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/jfx-exe-min/target/maven-archiver/pom.properties" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="22" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="23" project-jdk-type="JavaSDK" />
 </project>

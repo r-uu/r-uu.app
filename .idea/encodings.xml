@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/datamodel/company/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto-ee/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto-ee/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto-se/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto-se/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/jpadto/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/company/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto-ee/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto-ee/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto-se/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto-se/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/jpadto/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/postaladdress/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/datamodel/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo/client-executable-jpackage-maven/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo/client-executable-jpackage-maven/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo/client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo/client/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo/common.demo/src/main/java" charset="UTF-8" />
@@ -17,6 +41,32 @@
     <file url="file://$PROJECT_DIR$/demo/server/target/m2e-wtp/web-resources/META-INF/maven/r-uu/r-uu.app-demo-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/demo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/fx-executable/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/fx-executable/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/fx/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/fx/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/rs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/rs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto-ee/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto-ee/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto-se/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto-se/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common-jpadto/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jeeeraaah/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min-1/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min-1/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min-2/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min-2/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jfx-exe-min/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
