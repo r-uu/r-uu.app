@@ -15,9 +15,9 @@ import org.mapstruct.factory.Mappers;
 @org.mapstruct.Mapper
 public abstract class Mapper
 {
-	public static final Mapper INSTANCE = Mappers.getMapper(Mapper.class);
+	public  static final Mapper INSTANCE = Mappers.getMapper(Mapper.class);
 
-	private static ReferenceCycleTracking CONTEXT  = new ReferenceCycleTracking();
+	private static final ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
 
 	public abstract @NonNull PostalAddressEntity map(@NonNull PostalAddressDTO    dto   );
 	public abstract @NonNull PostalAddressDTO    map(@NonNull PostalAddressEntity entity);

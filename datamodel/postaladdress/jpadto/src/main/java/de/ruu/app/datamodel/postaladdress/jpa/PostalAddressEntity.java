@@ -84,16 +84,8 @@ public class PostalAddressEntity extends AbstractMappedEntity<PostalAddressDTO> 
 	@Override public @NonNull String getType() { return type; }
 	@Override public void setType(@NonNull String type) { this.type = type; }
 
-	@Override public void beforeMapping(@NonNull PostalAddressDTO input)
-	{
-		super.beforeMapping(input);
-	}
-
-	@Override public void afterMapping(@NonNull PostalAddressDTO input)
-	{
-		log.debug("after mapping starting");
-		log.debug("after mapping finished");
-	}
+//	void beforeMapping(@NonNull PostalAddressDTO input) { super.beforeMapping(input); }
+//	void afterMapping (@NonNull PostalAddressDTO input) { super.afterMapping (input); }
 
 	@Override public @NonNull PostalAddressDTO toTarget() { return Mapper.INSTANCE.map(this); }
 }
