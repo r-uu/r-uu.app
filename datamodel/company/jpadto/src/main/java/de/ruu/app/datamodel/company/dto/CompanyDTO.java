@@ -47,7 +47,8 @@ public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Comp
 			@JsonbProperty("name")        String             name,
 			@JsonbProperty("departments") Set<DepartmentDTO> departments)
 	{
-		super(id, version);
+		mapIdAndVersion(new EntityInfo<Long>(id, version));
+
 		this.name        = name;
 		this.departments = departments;
 
@@ -74,7 +75,8 @@ public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Comp
 	@Override public @NonNull String  getName()                     { return name();     }
 	@Override public @NonNull Company setName(@NonNull String name) { return name(name); }
 
-	@Override public void beforeMapping(@NonNull CompanyEntity input)
+	// make mapstruct callback methods available to public (mapper lives in another package)
+	public void beforeMapping(@NonNull CompanyEntity input)
 	{
 		log.debug("before mapping starting");
 		super.beforeMapping(input);
@@ -84,7 +86,7 @@ public class CompanyDTO extends AbstractMappedDTO<CompanyEntity> implements Comp
 		log.debug("before mapping finished");
 	}
 
-	@Override public void afterMapping(@NonNull CompanyEntity input)
+	public void afterMapping(@NonNull CompanyEntity input)
 	{
 		log.debug("after mapping starting");
 		log.debug("after mapping finished");

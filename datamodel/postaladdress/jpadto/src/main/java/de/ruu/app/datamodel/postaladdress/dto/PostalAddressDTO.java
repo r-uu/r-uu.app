@@ -60,8 +60,9 @@ public class PostalAddressDTO extends AbstractMappedDTO<PostalAddressEntity> imp
 	@Override public @NonNull String getType() { return type; }
 	@Override public void setType(String type) { this.type = type; }
 
-//	void beforeMapping(@NonNull PostalAddressEntity input) { super.beforeMapping(input); }
-//	void afterMapping( @NonNull PostalAddressEntity input) { super.afterMapping (input); }
-
 	@Override public @NonNull PostalAddressEntity toSource() { return Mapper.INSTANCE.map(this); }
+
+	// make mapstruct callback methods available to public (mapper lives in another package)
+	public void beforeMapping(@NonNull PostalAddressEntity input) { super.beforeMapping(input); }
+	public void afterMapping( @NonNull PostalAddressEntity input) { super.afterMapping (input); }
 }

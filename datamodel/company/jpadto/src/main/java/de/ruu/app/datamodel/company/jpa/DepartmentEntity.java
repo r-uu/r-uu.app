@@ -97,7 +97,7 @@ public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implem
 
 	@Override @NonNull public Company getCompany() { return company(); }
 
-	@Override public void beforeMapping(@NonNull DepartmentDTO input)
+	public void beforeMapping(@NonNull DepartmentDTO input)
 	{
 		log.debug("before mapping starting");
 		super.beforeMapping(input);
@@ -105,7 +105,7 @@ public class DepartmentEntity extends AbstractMappedEntity<DepartmentDTO> implem
 		log.debug("before mapping finished");
 	}
 
-	@Override public void afterMapping(@NonNull DepartmentDTO input)
+	public void afterMapping(@NonNull DepartmentDTO input)
 	{
 		log.debug("after mapping starting");
 		log.debug("after mapping finished");

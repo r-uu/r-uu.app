@@ -94,7 +94,7 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 	@Override @NonNull public String  getName()                     { return name(); }
 	@Override @NonNull public Company setName(@NonNull String name) { return name(name); }
 
-	@Override public void beforeMapping(@NonNull CompanyDTO input)
+	public void beforeMapping(@NonNull CompanyDTO input)
 	{
 		log.debug("before mapping starting");
 		super.beforeMapping(input);
@@ -104,7 +104,7 @@ public class CompanyEntity extends AbstractMappedEntity<CompanyDTO> implements C
 		log.debug("before mapping finished");
 	}
 
-	@Override public void afterMapping(@NonNull CompanyDTO input)
+	public void afterMapping(@NonNull CompanyDTO input)
 	{
 		log.debug("after mapping starting");
 		log.debug("after mapping finished");

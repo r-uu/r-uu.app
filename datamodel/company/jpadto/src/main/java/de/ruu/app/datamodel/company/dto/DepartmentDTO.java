@@ -35,7 +35,7 @@ public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implement
 			@JsonbProperty("version") Short  version,
 			@JsonbProperty("name")    String name)
 	{
-		super(id, version);
+		mapIdAndVersion(new EntityInfo<>(id, version));
 		this.name = name;
 	}
 
@@ -79,7 +79,7 @@ public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implement
 
 	@Override @NonNull public Company getCompany() { return company(); }
 
-	@Override public void beforeMapping(@NonNull DepartmentEntity input)
+	public void beforeMapping(@NonNull DepartmentEntity input)
 	{
 		log.debug("before mapping starting");
 		super.beforeMapping(input);
@@ -87,7 +87,7 @@ public class DepartmentDTO extends AbstractMappedDTO<DepartmentEntity> implement
 		log.debug("before mapping finished");
 	}
 
-	@Override public void afterMapping(@NonNull DepartmentEntity input)
+	public void afterMapping(@NonNull DepartmentEntity input)
 	{
 		log.debug("before mapping starting");
 		log.debug("before mapping finished");
