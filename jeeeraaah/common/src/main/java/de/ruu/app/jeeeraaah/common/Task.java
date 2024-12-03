@@ -7,6 +7,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Generic, technology (JPA, JSONB, JAXB, MapStruct, ...) agnostic interface for tasks
+ *
+ * @param <T>  {@link Task} implementation for {@link #parent()}, {@link #children()}, {@link #predecessors()} and
+ *             {@link #successors()} of this task
+ * @param <TG> {@link TaskGroup} implementation for the task group that all {@link #parent()}, {@link #children()},
+ *             {@link #predecessors()} and {@link #successors()} belong to
+ */
 public interface Task<TG extends TaskGroup<T>, T extends Task<TG, T>>
 {
 	@NonNull TG                  taskGroup      ();

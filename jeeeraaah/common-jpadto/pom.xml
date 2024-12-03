@@ -48,11 +48,6 @@
             <artifactId>r-uu.lib-jsonb</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>r-uu</groupId>
-            <artifactId>r-uu.lib-jsonb</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

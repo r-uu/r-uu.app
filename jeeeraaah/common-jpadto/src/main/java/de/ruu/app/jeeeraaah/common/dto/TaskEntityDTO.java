@@ -330,29 +330,29 @@ public class TaskEntityDTO
 
 	@Override public @NonNull TaskEntityJPA toSource() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
 
-	public void beforeMapping(@NonNull TaskEntity<?, ?> source)
-	{
-		super.beforeMapping(source);
-		// mapping of other fields is done via mapstruct using java-beans accessors
-
-		source.description    ().ifPresent(this::description);
-		source.startEstimated ().ifPresent(this::startEstimated);
-		source.startActual    ().ifPresent(this::startActual);
-		source.finishEstimated().ifPresent(this::finishEstimated);
-		source.finishActual   ().ifPresent(this::finishActual);
-		source.effortEstimated().ifPresent(this::effortEstimated);
-		source.effortActual   ().ifPresent(this::effortActual);
-
-		if (source.parent().isPresent())
-		{
-			TaskEntity<?, ?> taskEntity = source.parent().get();
-			lookupOrMapParent(taskEntity);
-		}
-		source.parent      ().ifPresent(                 this::lookupOrMapParent);
-		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
-		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
-		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
-	}
+//	protected void beforeMapping(@NonNull TaskEntity<?, ?> source)
+//	{
+//		super.beforeMapping(source);
+//		// mapping of other fields is done via mapstruct using java-beans accessors
+//
+//		source.description    ().ifPresent(this::description);
+//		source.startEstimated ().ifPresent(this::startEstimated);
+//		source.startActual    ().ifPresent(this::startActual);
+//		source.finishEstimated().ifPresent(this::finishEstimated);
+//		source.finishActual   ().ifPresent(this::finishActual);
+//		source.effortEstimated().ifPresent(this::effortEstimated);
+//		source.effortActual   ().ifPresent(this::effortActual);
+//
+//		if (source.parent().isPresent())
+//		{
+//			TaskEntity<?, ?> taskEntity = source.parent().get();
+//			lookupOrMapParent(taskEntity);
+//		}
+//		source.parent      ().ifPresent(                 this::lookupOrMapParent);
+//		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
+//		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
+//		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
+//	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)

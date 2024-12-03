@@ -154,8 +154,6 @@ public class TaskEntityJPA
 	// constructors
 	///////////////
 
-	protected TaskEntityJPA(@NonNull de.ruu.lib.jpa.core.Entity<Long> entity) { super(entity); }
-
 	/** provide handmade required args constructor to properly handle relationships */
 	public TaskEntityJPA(@NonNull TaskGroupEntityJPA taskGroup, @NonNull String name)
 	{
@@ -363,7 +361,11 @@ public class TaskEntityJPA
 	// additional accessors
 	///////////////////////
 
-	@Override public void beforeMapping(@NonNull TaskEntityDTO input)
+	//////////////////////
+	// mapstruct callbacks
+	//////////////////////
+
+	void beforeMapping(@NonNull TaskEntityDTO input)
 	{
 		super.beforeMapping(input);
 
@@ -381,7 +383,7 @@ public class TaskEntityJPA
 		if (input.effortActual   ().isPresent()) effortActual   (input.effortActual   ().get());
 	}
 
-	@Override public void afterMapping(@NonNull TaskEntityDTO input) { }
+	void afterMapping(@NonNull TaskEntityDTO input) { }
 
 	@Override public @NonNull TaskEntityDTO toTarget() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
 

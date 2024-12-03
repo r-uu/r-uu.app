@@ -83,10 +83,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>r-uu</groupId>
-            <artifactId>r-uu.app-jeeeraaah-client-rs</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
         </dependency>
