@@ -365,7 +365,7 @@ public class TaskEntityJPA
 	// mapstruct callbacks
 	//////////////////////
 
-	void beforeMapping(@NonNull TaskEntityDTO input)
+	public void beforeMapping(@NonNull TaskEntityDTO input)
 	{
 		super.beforeMapping(input);
 
@@ -374,6 +374,8 @@ public class TaskEntityJPA
 		input.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
 		input.parent      ().ifPresent(                 this::lookupOrMapParent);
 
+		// TODO mapstruct seems to map these fields automatically based on a mixture of java beans and fluent accessors
+		//      this means these manual mapping are superfluous
 		if (input.description    ().isPresent()) description    (input.description    ().get());
 		if (input.startEstimated ().isPresent()) startEstimated (input.startEstimated ().get());
 		if (input.startActual    ().isPresent()) startActual    (input.startActual    ().get());
@@ -383,7 +385,7 @@ public class TaskEntityJPA
 		if (input.effortActual   ().isPresent()) effortActual   (input.effortActual   ().get());
 	}
 
-	void afterMapping(@NonNull TaskEntityDTO input) { }
+	public void afterMapping(@NonNull TaskEntityDTO input) { }
 
 	@Override public @NonNull TaskEntityDTO toTarget() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
 

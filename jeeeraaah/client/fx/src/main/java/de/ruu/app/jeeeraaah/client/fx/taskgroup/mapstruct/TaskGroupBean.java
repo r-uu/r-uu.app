@@ -1,7 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.Task;
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.app.jeeeraaah.common.jpadto.TaskGroupEntity;
 import de.ruu.lib.util.Strings;
 import jakarta.annotation.Nullable;
@@ -28,14 +27,14 @@ import static java.util.Objects.isNull;
 @EqualsAndHashCode
 @ToString(callSuper = true)
 @Slf4j
-@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
-@Setter                   // generate setter methods for all fields using lombok unless configured otherwise ({@code
+@Getter                   // generate getter methods for all fields using lombok unless configured otherwise
+@Setter                   // generate setter methods for all fields using lombok unless configured otherwise
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
-// with ide, fluent accessors will (usually / by default) be ignored by mapstruct
+                          // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
 public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 {
-	@Nullable private Long  id;
-	@Nullable private Short version;
+	@Setter(AccessLevel.NONE) @Nullable private Long  id;
+	@Setter(AccessLevel.NONE) @Nullable private Short version;
 
 	/** mutable non-null */
 	// no lombok-generation of setter because of additional validation in manually created method
@@ -128,37 +127,34 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 	// mapstruct callbacks
 	//////////////////////
 
-	@BeforeMapping void beforeMappingDTO(@NonNull TaskGroupEntityDTO source)
+	/** {@link TaskGroupDTO} -> {@link TaskGroupBean} */
+	@BeforeMapping void beforeMapping(@NonNull TaskGroupDTO source)
 	{
 		id      = source.id     ();
 		version = source.version();
 
-		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Map_Task_DTO_Bean.INSTANCE.lookupOrCreate(t))));
+		source.taskDTOs().ifPresent(ts -> ts.forEach(t -> addTask(Map_Task_DTO_Bean.INSTANCE.map(t))));
 	}
 
-	@AfterMapping void afterMappingDTO (@NonNull TaskGroupEntityDTO source) { }
+	/** {@link TaskGroupDTO} -> {@link TaskGroupBean} */
+	@AfterMapping void afterMapping(@NonNull TaskGroupDTO source) { }
 
-	@NonNull public TaskGroupEntityDTO toDTOSource() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
+	@NonNull public TaskGroupDTO toDTO() { return Map_TaskGroup_DTO_Bean.INSTANCE.map(this); }
 
-	@BeforeMapping void beforeMappingFX(@NonNull TaskGroupFXBean source)
+	/** {@link TaskGroupFXBean} -> {@link TaskGroupBean} */
+	@BeforeMapping void beforeMapping(@NonNull TaskGroupFXBean source)
 	{
 		id      = source.id     ();
 		version = source.version();
 
-		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(MapperFX.INSTANCE.lookupOrCreate(v))));
+//		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(Map_TaskGroup_Bean_FXBean.INSTANCE.lookupOrCreate(v))));
+		source.tasks().ifPresent(vs -> vs.forEach(v -> addTask(v.toBean())));
 	}
 
-	@AfterMapping void afterMappingFX (@NonNull TaskGroupFXBean source) { }
+	/** {@link TaskGroupFXBean} -> {@link TaskGroupBean} */
+	@AfterMapping void afterMapping(@NonNull TaskGroupFXBean source) { }
 
-	@NonNull public TaskGroupFXBean toFXSource() { return MapperFX.INSTANCE.map(this); }
-
-	@BeforeMapping public void beforeMapping(@NonNull TaskGroupBean source)
-	{
-		id      = source.id     ();
-		version = source.version();
-
-		source.tasks().ifPresent(ts -> ts.forEach(t -> addTask(Map_Task_DTO_Bean.INSTANCE.lookupOrCreate(t))));
-	}
+	@NonNull public TaskGroupFXBean toFXSource() { return Map_TaskGroup_Bean_FXBean.INSTANCE.map(this); }
 
 	@BeforeMapping public void afterMapping(@NonNull TaskGroupBean source) { }
 
@@ -168,7 +164,7 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 
 	@NonNull
 	public String getName()                     { return name(); }
-	public void   setName(@NonNull String name) { name(name); }
+	public void   setName(@NonNull String name) {   name(name);  }
 
 	@Nullable
 	public String getDescription()                             { return description().orElse(null); }

@@ -31,15 +31,15 @@ import static java.util.Objects.nonNull;
 @EqualsAndHashCode
 @ToString(callSuper = true)
 @Slf4j
-@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
-@Setter                   // generate setter methods for all fields using lombok unless configured otherwise ({@code
+@Getter                   // generate getter methods for all fields using lombok unless configured otherwise
+@Setter                   // generate setter methods for all fields using lombok unless configured otherwise
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
 // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
 public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 {
-	@Nullable private Long  id;
-	@Nullable private Short version;
+	@Setter(AccessLevel.NONE) @Nullable private Long  id;
+	@Setter(AccessLevel.NONE) @Nullable private Short version;
 
 	/** mutable, but not nullable */
 	@EqualsAndHashCode.Exclude
@@ -133,15 +133,15 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		return this;
 	}
 
-	@Override @NonNull public Optional<String>        description    () { return Optional.ofNullable(description);     }
-	@Override @NonNull public Optional<LocalDate>     startEstimated () { return Optional.ofNullable(startEstimated);  }
+	@Override @NonNull public Optional<String>        description    () { return Optional.ofNullable(description    ); }
+	@Override @NonNull public Optional<LocalDate>     startEstimated () { return Optional.ofNullable(startEstimated ); }
 	@Override @NonNull public Optional<LocalDate>     finishEstimated() { return Optional.ofNullable(finishEstimated); }
-	@Override @NonNull public Optional<LocalDate>     startActual    () { return Optional.ofNullable(startActual);     }
-	@Override @NonNull public Optional<LocalDate>     finishActual   () { return Optional.ofNullable(finishActual);    }
+	@Override @NonNull public Optional<LocalDate>     startActual    () { return Optional.ofNullable(startActual    ); }
+	@Override @NonNull public Optional<LocalDate>     finishActual   () { return Optional.ofNullable(finishActual   ); }
 	@Override @NonNull public Optional<Duration>      effortEstimated() { return Optional.ofNullable(effortEstimated); }
-	@Override @NonNull public Optional<Duration>      effortActual   () { return Optional.ofNullable(effortActual);    }
+	@Override @NonNull public Optional<Duration>      effortActual   () { return Optional.ofNullable(effortActual   ); }
 
-	@Override @NonNull public Optional<TaskBean> parent         () { return Optional.ofNullable(parent); }
+	@Override @NonNull public Optional<TaskBean>      parent         () { return Optional.ofNullable(parent         ); }
 
 	/** @return {@link #children wrapped in unmodifiable      */
 	@Override @NonNull public Optional<Set<TaskBean>> children()
@@ -314,7 +314,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 	 *
 	 * @param source
 	 */
-	@BeforeMapping void beforeMappingDTO(@NonNull TaskEntityDTO source)
+	@BeforeMapping void beforeMappingDTO(@NonNull TaskDTO source)
 	{
 		id      = source.id();
 		version = source.version();
@@ -328,14 +328,19 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		source.effortEstimated().ifPresent(this::effortEstimated);
 		source.effortActual   ().ifPresent(this::effortActual);
 
-		source.parent      ().ifPresent(                 this::lookupOrMapParent);
-		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
-		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
-		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
+		source.parent      ().ifPresent(t  ->                 lookupOrMapParent     (Map_Task_EntityDTO_DTO.INSTANCE.map(t)));
+		source.predecessors().ifPresent(ts -> ts.forEach(t -> lookupOrMapPredecessor(Map_Task_EntityDTO_DTO.INSTANCE.map(t))));
+		source.successors  ().ifPresent(ts -> ts.forEach(t -> lookupOrMapSuccessor  (Map_Task_EntityDTO_DTO.INSTANCE.map(t))));
+		source.children    ().ifPresent(ts -> ts.forEach(t -> lookupOrMapChild      (Map_Task_EntityDTO_DTO.INSTANCE.map(t))));
 	}
+
 	@AfterMapping void afterMappingDTO(@NonNull TaskEntityDTO source) { }
 
-	public @NonNull TaskEntityDTO toDTOSource() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
+	///////////
+	// mappings
+	///////////
+
+	public @NonNull TaskDTO toDTO() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
 
 	/**
 	 * Maps optional return values of {@link TaskFXBean} field accessors to java bean style fields. This cannot be done
@@ -349,7 +354,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		version = source.version();
 		// mapping of other fields is done via mapstruct using java-beans accessors
 
-		taskGroup(MapperFX.INSTANCE.map(source.taskGroup()));
+		taskGroup(Map_TaskGroup_Bean_FXBean.INSTANCE.map(source.taskGroup()));
 	//	name(source.name());
 
 		source.description    ().ifPresent(this::description);
@@ -360,15 +365,15 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		source.effortEstimated().ifPresent(this::effortEstimated);
 		source.effortActual   ().ifPresent(this::effortActual);
 
-		source.parent().map(t -> parent(MapperFX.INSTANCE.map(t)));
+		source.parent().map(t -> parent(Map_Task_Bean_FXBean.INSTANCE.map(t)));
 
-		source.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (MapperFX.INSTANCE.map(t))));
-		source.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(MapperFX.INSTANCE.map(t))));
-		source.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (MapperFX.INSTANCE.map(t))));
+		source.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (Map_Task_Bean_FXBean.INSTANCE.map(t))));
+		source.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(Map_Task_Bean_FXBean.INSTANCE.map(t))));
+		source.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Map_Task_Bean_FXBean.INSTANCE.map(t))));
 	}
 	@AfterMapping public void afterMappingFX(@NonNull TaskFXBean source) { }
 
-	public @NonNull TaskFXBean toFXSource() { return MapperFX.INSTANCE.map(this); }
+	public @NonNull TaskFXBean toFXBean() { return Map_Task_Bean_FXBean.INSTANCE.map(this); }
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// java bean style accessors for those who do not work with fluent style accessors (mapstruct)
@@ -445,7 +450,11 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		return children.contains(bean);
 	}
 
-	private void lookupOrMapParent(@NonNull TaskEntityDTO parent)
+	///////////////////////////////
+	// lookup or map beans for DTOs
+	///////////////////////////////
+
+	private void lookupOrMapParent(@NonNull TaskDTO parent)
 	{
 		Optional<TaskBean> optionalParent = Map_Task_DTO_Bean.INSTANCE.getFromContext(parent);
 		optionalParent.ifPresentOrElse
@@ -455,7 +464,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		);
 	}
 
-	private void lookupOrMapChild(@NonNull TaskEntityDTO child)
+	private void lookupOrMapChild(@NonNull TaskDTO child)
 	{
 		Optional<TaskBean> optionalChild = Map_Task_DTO_Bean.INSTANCE.getFromContext(child);
 		optionalChild.ifPresentOrElse
@@ -465,7 +474,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		);
 	}
 
-	private void lookupOrMapPredecessor(@NonNull TaskEntityDTO predecessor)
+	private void lookupOrMapPredecessor(@NonNull TaskDTO predecessor)
 	{
 		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(predecessor);
 		optionalPredecessor.ifPresentOrElse
@@ -475,7 +484,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		);
 	}
 
-	private void lookupOrMapSuccessor(@NonNull TaskEntityDTO successor)
+	private void lookupOrMapSuccessor(@NonNull TaskDTO successor)
 	{
 		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(successor);
 		optionalPredecessor.ifPresentOrElse

@@ -5,35 +5,21 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
 @Slf4j
-@org.mapstruct.Mapper
-public abstract class MapperFX
+@Mapper
+public abstract class Map_Task_Bean_FXBean
 {
-	public final static MapperFX INSTANCE = Mappers.getMapper(MapperFX.class);
+	public final static Map_Task_Bean_FXBean INSTANCE = Mappers.getMapper(Map_Task_Bean_FXBean.class);
 
 	private final static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
 
-	public abstract @NonNull TaskGroupBean   map(@NonNull TaskGroupFXBean input);
-	public abstract @NonNull TaskGroupFXBean map(@NonNull TaskGroupBean   input);
-
 	public abstract @NonNull TaskBean        map(@NonNull TaskFXBean      input);
 	public abstract @NonNull TaskFXBean      map(@NonNull TaskBean        input);
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping void beforeMapping(TaskGroupBean source, @MappingTarget TaskGroupFXBean target)
-	{
-		target.beforeMapping(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@AfterMapping void afterMapping(TaskGroupBean source, @MappingTarget TaskGroupFXBean target)
-	{
-		target.afterMapping(source); // invoke callback for mapping
-	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskBean source, @MappingTarget TaskFXBean target)
@@ -57,18 +43,6 @@ public abstract class MapperFX
 	@AfterMapping void afterMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
 		target.afterMappingFX(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping void beforeMapping(TaskGroupFXBean source, @MappingTarget TaskGroupBean target)
-	{
-		target.beforeMapping(source); // invoke callback for mapping
-	}
-
-	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@AfterMapping void afterMapping(TaskGroupFXBean source, @MappingTarget TaskGroupBean target)
-	{
-		target.afterMapping(source); // invoke callback for mapping
 	}
 
 	/** object factory will be called by mapstruct */

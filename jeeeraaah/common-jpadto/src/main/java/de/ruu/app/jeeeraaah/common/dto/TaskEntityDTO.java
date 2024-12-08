@@ -24,8 +24,8 @@ import static java.util.Objects.nonNull;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Slf4j
-@Getter                   // generate getter methods for all fields using lombok unless configured otherwise ({@code
-@Setter                   // generate setter methods for all fields using lombok unless configured otherwise ({@code
+@Getter                   // generate getter methods for all fields using lombok unless configured otherwise
+@Setter                   // generate setter methods for all fields using lombok unless configured otherwise
 @Accessors(fluent = true) // generate fluent accessors with lombok and java-bean-style-accessors in non-abstract classes
                           // with ide, fluent accessors will (usually / by default) be ignored by mapstruct
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // generate no args constructor for jsonb, jaxb, mapstruct, ...
@@ -134,7 +134,7 @@ public class TaskEntityDTO
 	@Override @NonNull public Optional<Duration>      effortEstimated() { return Optional.ofNullable(effortEstimated); }
 	@Override @NonNull public Optional<Duration>      effortActual   () { return Optional.ofNullable(effortActual);    }
 
-	@Override @NonNull public Optional<TaskEntityDTO> parent         () { return Optional.ofNullable(parent); }
+	@Override @NonNull public Optional<TaskEntityDTO> parent         () { return Optional.ofNullable(parent);          }
 
 	/** @return {@link #children wrapped in unmodifiable      */
 	@Override @NonNull public Optional<Set<TaskEntityDTO>> children()
@@ -305,30 +305,32 @@ public class TaskEntityDTO
 	 * Maps optional return values of {@link TaskEntityJPA} field accessors to java bean style fields. This cannot be done by
 	 * mapstruct.
 	 *
-	 * @param source
+	 * @param input
 	 */
-	protected void beforeMapping(@NonNull TaskEntityJPA source)
+	public void beforeMapping(@NonNull TaskEntityJPA input)
 	{
-		super.beforeMapping(source);
-		// mapping of other fields is done via mapstruct using java-beans accessors
+		super.beforeMapping(input);
 
-		source.description    ().ifPresent(this::description);
-		source.startEstimated ().ifPresent(this::startEstimated);
-		source.startActual    ().ifPresent(this::startActual);
-		source.finishEstimated().ifPresent(this::finishEstimated);
-		source.finishActual   ().ifPresent(this::finishActual);
-		source.effortEstimated().ifPresent(this::effortEstimated);
-		source.effortActual   ().ifPresent(this::effortActual);
+		input.parent      ().ifPresent(                 this::lookupOrMapParent);
+		input.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
+		input.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
+		input.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
 
-		source.parent      ().ifPresent(                 this::lookupOrMapParent);
-		source.predecessors().ifPresent(ts -> ts.forEach(this::lookupOrMapPredecessor));
-		source.successors  ().ifPresent(ts -> ts.forEach(this::lookupOrMapSuccessor));
-		source.children    ().ifPresent(ts -> ts.forEach(this::lookupOrMapChild));
+		// TODO find out if the following mappings are done by mapstruct automatically
+		input.description    ().ifPresent(this::description);
+		input.startEstimated ().ifPresent(this::startEstimated);
+		input.startActual    ().ifPresent(this::startActual);
+		input.finishEstimated().ifPresent(this::finishEstimated);
+		input.finishActual   ().ifPresent(this::finishActual);
+		input.effortEstimated().ifPresent(this::effortEstimated);
+		input.effortActual   ().ifPresent(this::effortActual);
 	}
 
-	protected void afterMapping(@NonNull TaskEntityJPA source) { }
+	public void afterMapping(@NonNull TaskEntityJPA source) { }
 
-	@Override public @NonNull TaskEntityJPA toSource() { return Map_Task_JPA_DTO.INSTANCE.map(this); }
+	@Override
+	public @NonNull TaskEntityJPA toSource   () { return Map_Task_JPA_DTO.INSTANCE.map(this); }
+	public @NonNull TaskEntityJPA toJPAEntity() { return toSource(); }
 
 //	protected void beforeMapping(@NonNull TaskEntity<?, ?> source)
 //	{
@@ -435,7 +437,7 @@ public class TaskEntityDTO
 		optionalParent.ifPresentOrElse
 		(
 				(p) -> parent(p),
-				()            -> parent(Map_Task_JPA_DTO.INSTANCE.map(parent))
+				( ) -> parent(Map_Task_JPA_DTO.INSTANCE.map(parent))
 		);
 	}
 
@@ -445,7 +447,7 @@ public class TaskEntityDTO
 		optionalChild.ifPresentOrElse
 		(
 				(c) -> addChild(c),
-				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(child))
+				( ) -> addChild(Map_Task_JPA_DTO.INSTANCE.map(child))
 		);
 	}
 
@@ -455,7 +457,7 @@ public class TaskEntityDTO
 		optionalPredecessor.ifPresentOrElse
 		(
 				(p) -> addPredecessor(p),
-				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(predecessor))
+				( ) -> addPredecessor(Map_Task_JPA_DTO.INSTANCE.map(predecessor))
 		);
 	}
 
@@ -464,8 +466,8 @@ public class TaskEntityDTO
 		Optional<TaskEntityDTO> optionalPredecessor = Map_Task_JPA_DTO.INSTANCE.getFromContext(successor);
 		optionalPredecessor.ifPresentOrElse
 		(
-				(s) -> addPredecessor(s),
-				()            -> addChild(Map_Task_JPA_DTO.INSTANCE.map(successor))
+				(s) -> addSuccessor(s),
+				( ) -> addSuccessor(Map_Task_JPA_DTO.INSTANCE.map(successor))
 		);
 	}
 }

@@ -1,29 +1,104 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
+import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
-import de.ruu.lib.jpa.core.Entity;
-import lombok.NoArgsConstructor;
+import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
+import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
+import de.ruu.lib.util.BooleanFunctions;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
+import org.apache.poi.sl.draw.geom.GuideIf;
+import org.apache.poi.ss.formula.functions.T;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.ObjectFactory;
 
-class TaskGroupDTO extends TaskGroupEntityDTO
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static de.ruu.lib.util.BooleanFunctions.not;
+
+@EqualsAndHashCode(callSuper = true)
+@ToString         (callSuper = true)
+public class TaskGroupDTO extends TaskGroupEntityDTO
 {
+	///////////////
+	// constructors
+	///////////////
+
+	/**
+	 * provide hand-made required args constructor to guarantee usage of hand made accessors.
+	 * @param name non-empty name
+	 */
 	public TaskGroupDTO(@NonNull String name) { super(name); }
 
-	// "closes" map struct callbacks from superclass
-	/** @throws UnsupportedOperationException */
-	@Override protected final void beforeMapping(@NonNull Entity<Long> input) throws UnsupportedOperationException
+	///////////////////////
+	// additional accessors
+	///////////////////////
+
+	public Optional<Set<TaskDTO>> taskDTOs()
 	{
-		throw new UnsupportedOperationException("use beforeMapping(TaskGroupEntityDTO arg) instead");
+		if (not(super.tasks().isPresent())) return Optional.empty();
+
+		Set<TaskDTO> result = new HashSet<>();
+		super.tasks().get().forEach(t -> result.add(Map_Task_EntityDTO_DTO.INSTANCE.map(t)));
+		return Optional.of(result);
 	}
 
+	////////////////////////
+	// relationship handling
+	////////////////////////
 
-	/** @throws UnsupportedOperationException */
-	@Override protected final void afterMapping(@NonNull Entity<Long> input) throws UnsupportedOperationException
+	// --- none ---
+
+	///////////
+	// mappings
+	///////////
+
+	public @NonNull TaskGroupBean      toBean     () { return Map_TaskGroup_DTO_Bean     .INSTANCE.map(this); }
+	public @NonNull TaskGroupEntityDTO toEntityDTO() { return Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(this); }
+
+	//////////////////////
+	// mapstruct callbacks
+	//////////////////////
+
+	/** {@link TaskGroupEntityDTO} -> {@link TaskGroupDTO} */
+	@BeforeMapping void beforeMapping(@NonNull TaskGroupEntityDTO source)
 	{
-		throw new UnsupportedOperationException("use afterMapping(TaskGroupEntityDTO arg) instead");
+		super.beforeMapping(source); // maps id and version
+
+		if (source.tasks().isPresent())
+		{
+			for (TaskEntityDTO task : source.tasks().get())
+			{
+				addTask(Map_Task_EntityDTO_DTO.INSTANCE.map(task));
+			}
+		}
+		// mapping of other fields is done via mapstruct using java-beans accessors
 	}
 
-	// "opens" map struct callbacks from superclass
-	void beforeMapping(@NonNull TaskGroupEntityDTO input) { super.beforeMapping(input); }
-	void afterMapping (@NonNull TaskGroupEntityDTO input) { super.afterMapping (input); }
+	/** {@link TaskGroupEntityDTO} -> {@link TaskGroupDTO} */
+	@AfterMapping void afterMapping(@NonNull TaskGroupEntityDTO source) { }
+
+	/** {@link TaskGroupBean} -> {@link TaskGroupDTO} */
+	@BeforeMapping void beforeMapping(@NonNull TaskGroupBean source)
+	{
+		super.beforeMapping(source); // maps id and version
+
+		if (source.tasks().isPresent())
+		{
+			for (TaskBean task : source.tasks().get())
+			{
+				addTask(Map_Task_DTO_Bean.INSTANCE.map(task));
+			}
+		}
+		// mapping of other fields is done via mapstruct using java-beans accessors
+	}
+
+	/** {@link TaskGroupBean} -> {@link TaskGroupDTO} */
+	@AfterMapping void afterMapping(@NonNull TaskGroupBean source) { }
 }

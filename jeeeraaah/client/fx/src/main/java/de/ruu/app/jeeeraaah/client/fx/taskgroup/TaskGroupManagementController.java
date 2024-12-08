@@ -1,9 +1,11 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup;
 
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.editor.TaskGroupEditor;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_Task_DTO_Bean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.MapperFX;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_Bean_FXBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_DTO_Bean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_EntityDTO_DTO;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupDTO;
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
 import de.ruu.app.jeeeraaah.client.rs.ClientTaskGroup;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
@@ -67,8 +69,16 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 		editorLocalRoot = editor.getLocalRoot();
 
 		TableViewConfigurator.configure(tv);
-		client.findAll().forEach(tg -> tv.getItems().add(MapperFX.INSTANCE.map(Map_Task_DTO_Bean.INSTANCE.map(tg))));
-
+		client.findAll().forEach
+		(
+				tg ->
+				{
+					TaskGroupDTO    taskGroupDTO    = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(tg);
+					TaskGroupBean   taskGroupBean   = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
+					TaskGroupFXBean taskGroupFXBean = Map_TaskGroup_Bean_FXBean  .INSTANCE.map(taskGroupBean);
+					tv.getItems().add(taskGroupFXBean);
+				}
+		);
 		btnAdd .setOnAction(e -> onAdd (e));
 		btnExit.setOnAction(e -> onExit(e));
 	}
@@ -77,7 +87,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 	{
 		// populate editor with new item, call to getService() has to be done after call to getLocalRoot() to make sure
 		// internal java fx bindings can be establihed (see initialize)
-		TaskGroupBean taskGroupBean   = new TaskGroupBean("new task group");
+		TaskGroupBean       taskGroupBean   = new TaskGroupBean("new task group");
 		TaskGroupFXBean     taskGroupFXBean = taskGroupBean.toFXSource();
 		editor.getService().taskGroup(taskGroupFXBean);
 
@@ -98,12 +108,13 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 			taskGroupBean   = taskGroupFXBean.toFXSource();
 
 			// create a task group dto from task group bean (which is a task group dto)
-			TaskGroupEntityDTO taskGroupDTO = taskGroupBean.toDTOSource();
+			TaskGroupEntityDTO taskGroupEntityDTO = taskGroupBean.toDTO();
 
 			// let client create a new item in db
-			TaskGroupEntityDTO taskGroupEntityDTO = client.create(taskGroupDTO);
-			// create bean from dto
-			taskGroupBean = Map_Task_DTO_Bean.INSTANCE.map(client.create(taskGroupDTO));
+			taskGroupEntityDTO = client.create(taskGroupEntityDTO);
+			// create fx bean from entity dto
+			TaskGroupDTO taskGroupDTO = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(taskGroupEntityDTO);
+			taskGroupBean             = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
 			// create fx bean from bean
 			taskGroupFXBean = taskGroupBean.toFXSource();
 

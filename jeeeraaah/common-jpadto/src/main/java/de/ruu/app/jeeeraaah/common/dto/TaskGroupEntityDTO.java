@@ -132,20 +132,33 @@ public class TaskGroupEntityDTO
 	// mapstruct callbacks
 	//////////////////////
 
-	protected void beforeMapping(@NonNull TaskGroupEntityJPA source)
+	public void beforeMapping(@NonNull TaskGroupEntityJPA source)
 	{
 		super.beforeMapping(source); // maps id and version
 		if (source.tasks().isPresent())
 		{
-			for (TaskEntityJPA taskBean : source.tasks().get())
+			for (TaskEntityJPA task : source.tasks().get())
 			{
-				addTask(Map_Task_JPA_DTO.INSTANCE.map(taskBean));
+				addTask(Map_Task_JPA_DTO.INSTANCE.map(task));
 			}
 		}
 		// mapping of other fields is done via mapstruct using java-beans accessors
 	}
 
-	protected void afterMapping (@NonNull TaskGroupEntityJPA source) { }
+//	public void beforeMapping(@NonNull TaskGroupEntity<TaskEntityDTO> source)
+//	{
+//		super.beforeMapping(source); // maps id and version
+//		if (source.tasks().isPresent())
+//		{
+//			for (TaskEntityDTO task : source.tasks().get())
+//			{
+//				addTask(Map_Task_JPA_DTO.INSTANCE.map(task));
+//			}
+//		}
+//		// mapping of other fields is done via mapstruct using java-beans accessors
+//	}
+
+	public void afterMapping (@NonNull TaskGroupEntityJPA source) { }
 
 	@Override public @NonNull TaskGroupEntityJPA toSource() { return Map_TaskGroup_JPA_DTO.INSTANCE.map(this); }
 

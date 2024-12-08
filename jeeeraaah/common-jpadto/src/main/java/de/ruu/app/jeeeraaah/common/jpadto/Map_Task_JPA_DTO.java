@@ -43,8 +43,7 @@ public abstract class Map_Task_JPA_DTO
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping
-	void beforeMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
+	@BeforeMapping void beforeMapping(TaskEntityDTO source, @MappingTarget TaskEntityJPA target)
 	{
 		target.beforeMapping(source); // invoke callback for mapping
 	}
