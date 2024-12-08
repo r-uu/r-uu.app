@@ -139,7 +139,7 @@ public class TaskGroupBean implements TaskGroupEntity<TaskBean>
 	/** {@link TaskGroupDTO} -> {@link TaskGroupBean} */
 	@AfterMapping void afterMapping(@NonNull TaskGroupDTO source) { }
 
-	@NonNull public TaskGroupDTO toDTO() { return Map_TaskGroup_DTO_Bean.INSTANCE.map(this); }
+	@NonNull public TaskGroupDTO toDTO() { return Map_TaskGroup_Bean_DTO.INSTANCE.map(this); }
 
 	/** {@link TaskGroupFXBean} -> {@link TaskGroupBean} */
 	@BeforeMapping void beforeMapping(@NonNull TaskGroupFXBean source)

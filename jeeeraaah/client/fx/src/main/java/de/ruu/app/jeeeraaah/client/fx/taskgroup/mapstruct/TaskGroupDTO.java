@@ -2,20 +2,12 @@ package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.dto.TaskEntityDTO;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
-import de.ruu.app.jeeeraaah.common.jpa.TaskEntityJPA;
-import de.ruu.app.jeeeraaah.common.jpa.TaskGroupEntityJPA;
-import de.ruu.app.jeeeraaah.common.jpadto.Map_Task_JPA_DTO;
-import de.ruu.lib.util.BooleanFunctions;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import org.apache.poi.sl.draw.geom.GuideIf;
-import org.apache.poi.ss.formula.functions.T;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
-import org.mapstruct.ObjectFactory;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -59,7 +51,7 @@ public class TaskGroupDTO extends TaskGroupEntityDTO
 	// mappings
 	///////////
 
-	public @NonNull TaskGroupBean      toBean     () { return Map_TaskGroup_DTO_Bean     .INSTANCE.map(this); }
+	public @NonNull TaskGroupBean      toBean     () { return Map_TaskGroup_Bean_DTO.INSTANCE.map(this); }
 	public @NonNull TaskGroupEntityDTO toEntityDTO() { return Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(this); }
 
 	//////////////////////

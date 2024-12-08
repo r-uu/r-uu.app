@@ -1,12 +1,8 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup;
 
 import de.ruu.app.jeeeraaah.client.fx.taskgroup.editor.TaskGroupEditor;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_Bean_FXBean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_DTO_Bean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_EntityDTO_DTO;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupBean;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupDTO;
-import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.TaskGroupFXBean;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.*;
+import de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct.Map_TaskGroup_Bean_DTO;
 import de.ruu.app.jeeeraaah.client.rs.ClientTaskGroup;
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.lib.fx.comp.DefaultFXCViewController;
@@ -74,7 +70,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 				tg ->
 				{
 					TaskGroupDTO    taskGroupDTO    = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(tg);
-					TaskGroupBean   taskGroupBean   = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
+					TaskGroupBean   taskGroupBean   = Map_TaskGroup_Bean_DTO.INSTANCE.map(taskGroupDTO);
 					TaskGroupFXBean taskGroupFXBean = Map_TaskGroup_Bean_FXBean  .INSTANCE.map(taskGroupBean);
 					tv.getItems().add(taskGroupFXBean);
 				}
@@ -114,7 +110,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 			taskGroupEntityDTO = client.create(taskGroupEntityDTO);
 			// create fx bean from entity dto
 			TaskGroupDTO taskGroupDTO = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(taskGroupEntityDTO);
-			taskGroupBean             = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
+			taskGroupBean             = Map_TaskGroup_Bean_DTO.INSTANCE.map(taskGroupDTO);
 			// create fx bean from bean
 			taskGroupFXBean = taskGroupBean.toFXSource();
 

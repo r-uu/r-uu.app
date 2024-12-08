@@ -16,10 +16,7 @@ public abstract class Map_Task_Bean_FXBean
 {
 	public final static Map_Task_Bean_FXBean INSTANCE = Mappers.getMapper(Map_Task_Bean_FXBean.class);
 
-	private final static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
-
-	public abstract @NonNull TaskBean        map(@NonNull TaskFXBean      input);
-	public abstract @NonNull TaskFXBean      map(@NonNull TaskBean        input);
+	public abstract @NonNull TaskFXBean map(@NonNull TaskBean        input);
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskBean source, @MappingTarget TaskFXBean target)

@@ -18,8 +18,7 @@ public abstract class Map_TaskGroup_EntityDTO_DTO
 {
 	public final static Map_TaskGroup_EntityDTO_DTO INSTANCE = Mappers.getMapper(Map_TaskGroup_EntityDTO_DTO.class);
 
-	public abstract @NonNull TaskGroupDTO       map(@NonNull TaskGroupEntityDTO source);
-	public abstract @NonNull TaskGroupEntityDTO map(@NonNull TaskGroupDTO       source);
+	public abstract @NonNull TaskGroupDTO map(@NonNull TaskGroupEntityDTO input);
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskGroupEntityDTO source, @MappingTarget TaskGroupDTO target)
@@ -32,11 +31,7 @@ public abstract class Map_TaskGroup_EntityDTO_DTO
 		target.afterMapping(source); // invoke callback for mapping
 	}
 
-	@ObjectFactory @NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupDTO       input)
-	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupEntityDTO(input);
-	}
-	@ObjectFactory @NonNull TaskGroupDTO       lookupOrCreate(@NonNull TaskGroupEntityDTO input)
+	@ObjectFactory @NonNull TaskGroupDTO lookupOrCreate(@NonNull TaskGroupEntityDTO input)
 	{
 		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupDTO(input);
 	}
