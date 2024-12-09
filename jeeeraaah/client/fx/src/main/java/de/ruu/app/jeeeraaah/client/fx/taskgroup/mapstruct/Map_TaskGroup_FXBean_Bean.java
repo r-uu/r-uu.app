@@ -1,14 +1,11 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 /** {@link TaskGroupFXBean} <-> {@link TaskGroupBean} */
-@Slf4j
-@Mapper
-public abstract class Map_TaskGroup_FXBean_Bean
+@Mapper public abstract class Map_TaskGroup_FXBean_Bean
 {
 	public final static Map_TaskGroup_FXBean_Bean INSTANCE = Mappers.getMapper(Map_TaskGroup_FXBean_Bean.class);
 
@@ -28,6 +25,6 @@ public abstract class Map_TaskGroup_FXBean_Bean
 	/** object factory will be called by mapstruct */
 	@ObjectFactory @NonNull TaskGroupBean lookupOrCreate(@NonNull TaskGroupFXBean input)
 	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupBean(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupBean(input);
 	}
 }

@@ -1,7 +1,6 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
 import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
-import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.AfterMapping;
@@ -33,6 +32,6 @@ public abstract class Map_TaskGroup_EntityDTO_DTO
 
 	@ObjectFactory @NonNull TaskGroupDTO lookupOrCreate(@NonNull TaskGroupEntityDTO input)
 	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupDTO(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupDTO(input);
 	}
 }

@@ -340,7 +340,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 	// mappings
 	///////////
 
-	public @NonNull TaskDTO toDTO() { return Map_Task_DTO_Bean.INSTANCE.map(this); }
+	public @NonNull TaskDTO toDTO() { return Map_Task_Bean_DTO.INSTANCE.map(this); }
 
 	/**
 	 * Maps optional return values of {@link TaskFXBean} field accessors to java bean style fields. This cannot be done
@@ -354,7 +354,7 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		version = source.version();
 		// mapping of other fields is done via mapstruct using java-beans accessors
 
-		taskGroup(Map_TaskGroup_Bean_FXBean.INSTANCE.map(source.taskGroup()));
+		taskGroup(Map_TaskGroup_FXBean_Bean.INSTANCE.map(source.taskGroup()));
 	//	name(source.name());
 
 		source.description    ().ifPresent(this::description);
@@ -365,11 +365,11 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 		source.effortEstimated().ifPresent(this::effortEstimated);
 		source.effortActual   ().ifPresent(this::effortActual);
 
-		source.parent().map(t -> parent(Map_Task_Bean_FXBean.INSTANCE.map(t)));
+		source.parent().map(t -> parent(Map_Task_FXBean_Bean.INSTANCE.map(t)));
 
-		source.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (Map_Task_Bean_FXBean.INSTANCE.map(t))));
-		source.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(Map_Task_Bean_FXBean.INSTANCE.map(t))));
-		source.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Map_Task_Bean_FXBean.INSTANCE.map(t))));
+		source.children    ().ifPresent(ts -> ts.forEach(t -> addChild      (Map_Task_FXBean_Bean.INSTANCE.map(t))));
+		source.predecessors().ifPresent(ts -> ts.forEach(t -> addPredecessor(Map_Task_FXBean_Bean.INSTANCE.map(t))));
+		source.successors  ().ifPresent(ts -> ts.forEach(t -> addSuccessor  (Map_Task_FXBean_Bean.INSTANCE.map(t))));
 	}
 	@AfterMapping public void afterMappingFX(@NonNull TaskFXBean source) { }
 
@@ -456,41 +456,41 @@ public class TaskBean implements TaskEntity<TaskGroupBean, TaskBean>
 
 	private void lookupOrMapParent(@NonNull TaskDTO parent)
 	{
-		Optional<TaskBean> optionalParent = Map_Task_DTO_Bean.INSTANCE.getFromContext(parent);
+		Optional<TaskBean> optionalParent = ObjectDictionaryAndFactory.INSTANCE.lookupTaskBean(parent);
 		optionalParent.ifPresentOrElse
 		(
-				(p) -> parent(p),
-				()            -> parent(Map_Task_DTO_Bean.INSTANCE.map(parent))
+				(t) -> parent(t),
+				( ) -> parent(Map_Task_DTO_Bean.INSTANCE.map(parent))
 		);
 	}
 
 	private void lookupOrMapChild(@NonNull TaskDTO child)
 	{
-		Optional<TaskBean> optionalChild = Map_Task_DTO_Bean.INSTANCE.getFromContext(child);
+		Optional<TaskBean> optionalChild = ObjectDictionaryAndFactory.INSTANCE.lookupTaskBean(child);
 		optionalChild.ifPresentOrElse
 		(
-				(c) -> addChild(c),
-				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(child))
+				(t) -> addChild(t),
+				( ) -> addChild(Map_Task_DTO_Bean.INSTANCE.map(child))
 		);
 	}
 
 	private void lookupOrMapPredecessor(@NonNull TaskDTO predecessor)
 	{
-		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(predecessor);
+		Optional<TaskBean> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskBean(predecessor);
 		optionalPredecessor.ifPresentOrElse
 		(
-				(p) -> addPredecessor(p),
-				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(predecessor))
+				(t) -> addPredecessor(t),
+				( ) -> addChild(Map_Task_DTO_Bean.INSTANCE.map(predecessor))
 		);
 	}
 
 	private void lookupOrMapSuccessor(@NonNull TaskDTO successor)
 	{
-		Optional<TaskBean> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(successor);
+		Optional<TaskBean> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskBean(successor);
 		optionalPredecessor.ifPresentOrElse
 		(
-				(s) -> addPredecessor(s),
-				()            -> addChild(Map_Task_DTO_Bean.INSTANCE.map(successor))
+				(t) -> addPredecessor(t),
+				( ) -> addChild(Map_Task_DTO_Bean.INSTANCE.map(successor))
 		);
 	}
 }

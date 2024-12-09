@@ -83,7 +83,7 @@ public class TaskDTO extends TaskEntityDTO
 
 	private void lookupOrMapParent(@NonNull TaskEntityDTO parent)
 	{
-		Optional<TaskDTO> optionalParent = Map_Task_EntityDTO_DTO.INSTANCE.getFromContext(parent);
+		Optional<TaskDTO> optionalParent = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(parent);
 		optionalParent.ifPresentOrElse
 				(
 						(p) -> parent(p),
@@ -93,7 +93,7 @@ public class TaskDTO extends TaskEntityDTO
 
 	private void lookupOrMapChild(@NonNull TaskEntityDTO child)
 	{
-		Optional<TaskDTO> optionalChild = Map_Task_EntityDTO_DTO.INSTANCE.getFromContext(child);
+		Optional<TaskDTO> optionalChild = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(child);
 		optionalChild.ifPresentOrElse
 				(
 						(c) -> addChild(c),
@@ -103,7 +103,7 @@ public class TaskDTO extends TaskEntityDTO
 
 	private void lookupOrMapPredecessor(@NonNull TaskEntityDTO predecessor)
 	{
-		Optional<TaskDTO> optionalPredecessor = Map_Task_EntityDTO_DTO.INSTANCE.getFromContext(predecessor);
+		Optional<TaskDTO> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(predecessor);
 		optionalPredecessor.ifPresentOrElse
 				(
 						(p) -> addPredecessor(p),
@@ -113,7 +113,7 @@ public class TaskDTO extends TaskEntityDTO
 
 	private void lookupOrMapSuccessor(@NonNull TaskEntityDTO successor)
 	{
-		Optional<TaskDTO> optionalPredecessor = Map_Task_EntityDTO_DTO.INSTANCE.getFromContext(successor);
+		Optional<TaskDTO> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(successor);
 		optionalPredecessor.ifPresentOrElse
 				(
 						(s) -> addSuccessor(s),
@@ -127,41 +127,41 @@ public class TaskDTO extends TaskEntityDTO
 
 	private void lookupOrMapParent(@NonNull TaskBean parent)
 	{
-		Optional<TaskDTO> optionalParent = Map_Task_DTO_Bean.INSTANCE.getFromContext(parent);
+		Optional<TaskDTO> optionalParent = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(parent);
 		optionalParent.ifPresentOrElse
 				(
 						(p) -> parent(p),
-						( ) -> parent(Map_Task_DTO_Bean.INSTANCE.map(parent))
+						( ) -> parent(Map_Task_Bean_DTO.INSTANCE.map(parent))
 				);
 	}
 
 	private void lookupOrMapChild(@NonNull TaskBean child)
 	{
-		Optional<TaskDTO> optionalChild = Map_Task_DTO_Bean.INSTANCE.getFromContext(child);
+		Optional<TaskDTO> optionalChild = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(child);
 		optionalChild.ifPresentOrElse
 				(
 						(c) -> addChild(c),
-						( ) -> addChild(Map_Task_EntityDTO_DTO.INSTANCE.map(child))
+						( ) -> addChild(Map_Task_Bean_DTO.INSTANCE.map(child))
 				);
 	}
 
 	private void lookupOrMapPredecessor(@NonNull TaskBean predecessor)
 	{
-		Optional<TaskDTO> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(predecessor);
+		Optional<TaskDTO> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(predecessor);
 		optionalPredecessor.ifPresentOrElse
 				(
 						(p) -> addPredecessor(p),
-						( ) -> addPredecessor(Map_Task_EntityDTO_DTO.INSTANCE.map(predecessor))
+						( ) -> addPredecessor(Map_Task_Bean_DTO.INSTANCE.map(predecessor))
 				);
 	}
 
 	private void lookupOrMapSuccessor(@NonNull TaskBean successor)
 	{
-		Optional<TaskDTO> optionalPredecessor = Map_Task_DTO_Bean.INSTANCE.getFromContext(successor);
+		Optional<TaskDTO> optionalPredecessor = ObjectDictionaryAndFactory.INSTANCE.lookupTaskDTO(successor);
 		optionalPredecessor.ifPresentOrElse
 				(
 						(s) -> addSuccessor(s),
-						( ) -> addSuccessor(Map_Task_EntityDTO_DTO.INSTANCE.map(successor))
+						( ) -> addSuccessor(Map_Task_Bean_DTO.INSTANCE.map(successor))
 				);
 	}
 }

@@ -51,7 +51,7 @@ public class TaskGroupDTO extends TaskGroupEntityDTO
 	// mappings
 	///////////
 
-	public @NonNull TaskGroupBean      toBean     () { return Map_TaskGroup_Bean_DTO.INSTANCE.map(this); }
+	public @NonNull TaskGroupBean      toBean     () { return Map_TaskGroup_DTO_Bean     .INSTANCE.map(this); }
 	public @NonNull TaskGroupEntityDTO toEntityDTO() { return Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(this); }
 
 	//////////////////////
@@ -85,7 +85,7 @@ public class TaskGroupDTO extends TaskGroupEntityDTO
 		{
 			for (TaskBean task : source.tasks().get())
 			{
-				addTask(Map_Task_DTO_Bean.INSTANCE.map(task));
+				addTask(Map_Task_Bean_DTO.INSTANCE.map(task));
 			}
 		}
 		// mapping of other fields is done via mapstruct using java-beans accessors

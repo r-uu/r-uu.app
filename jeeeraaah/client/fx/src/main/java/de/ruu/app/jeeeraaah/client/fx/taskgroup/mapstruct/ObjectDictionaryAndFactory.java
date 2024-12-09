@@ -5,16 +5,23 @@ import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import de.ruu.lib.mapstruct.ReferenceCycleTracking;
 import lombok.NonNull;
 
-public final class ObjectFactories
+import java.util.Optional;
+
+public final class ObjectDictionaryAndFactory
 {
-	public final static ObjectFactories INSTANCE = new ObjectFactories();
+	public final static ObjectDictionaryAndFactory INSTANCE = new ObjectDictionaryAndFactory();
 
 	private final static ReferenceCycleTracking CONTEXT = new ReferenceCycleTracking();
 
-	private ObjectFactories() { }
+	private ObjectDictionaryAndFactory() { }
+
+	@NonNull Optional<TaskDTO> lookupTaskDTO(TaskEntityDTO task) { return Optional.of(CONTEXT.get(task, TaskDTO.class)); }
+
+	@NonNull Optional<TaskDTO> lookupTaskDTO(TaskBean task) { return Optional.of(CONTEXT.get(task, TaskDTO.class)); }
+
+	@NonNull Optional<TaskBean> lookupTaskBean(TaskDTO task) { return Optional.of(CONTEXT.get(task, TaskBean.class)); }
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupEntityDTO lookupOrCreateTaskGroupEntityDTO(@NonNull TaskGroupDTO input)
 	{
 		TaskGroupEntityDTO result = CONTEXT.get(input, TaskGroupEntityDTO.class);
@@ -28,7 +35,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupDTO lookupOrCreateTaskGroupDTO(@NonNull TaskGroupEntityDTO input)
 	{
 		TaskGroupDTO result = CONTEXT.get(input, TaskGroupDTO.class);
@@ -42,7 +48,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupDTO lookupOrCreateTaskGroupDTO(@NonNull TaskGroupBean input)
 	{
 		TaskGroupDTO result = CONTEXT.get(input, TaskGroupDTO.class);
@@ -56,7 +61,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupBean lookupOrCreateTaskGroupBean(@NonNull TaskGroupDTO input)
 	{
 		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
@@ -70,7 +74,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupBean lookupOrCreateTaskGroupBean(@NonNull TaskGroupFXBean input)
 	{
 		TaskGroupBean result = CONTEXT.get(input, TaskGroupBean.class);
@@ -83,7 +86,6 @@ public final class ObjectFactories
 		return result;
 	}
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskGroupFXBean lookupOrCreateTaskGroupFXBean(@NonNull TaskGroupBean input)
 	{
 		TaskGroupFXBean result = CONTEXT.get(input, TaskGroupFXBean.class);
@@ -96,10 +98,7 @@ public final class ObjectFactories
 		return result;
 	}
 
-	/// ///////////////////////////////////////////////////////////////////////////////////////
-
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskEntityDTO lookupOrCreateTaskEntityDTO(@NonNull TaskDTO input)
 	{
 		TaskEntityDTO result = CONTEXT.get(input, TaskEntityDTO.class);
@@ -114,7 +113,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskDTO lookupOrCreateTaskDTO(@NonNull TaskEntityDTO input)
 	{
 		TaskDTO result = CONTEXT.get(input, TaskDTO.class);
@@ -129,7 +127,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskDTO lookupOrCreateTaskDTO(@NonNull TaskBean input)
 	{
 		TaskDTO result = CONTEXT.get(input, TaskDTO.class);
@@ -144,7 +141,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskBean lookupOrCreateTaskBean(@NonNull TaskDTO input)
 	{
 		TaskBean result = CONTEXT.get(input, TaskBean.class);
@@ -159,7 +155,6 @@ public final class ObjectFactories
 	}
 
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskBean lookupOrCreateTaskBean(@NonNull TaskFXBean input)
 	{
 		TaskBean result = CONTEXT.get(input, TaskBean.class);
@@ -173,7 +168,6 @@ public final class ObjectFactories
 		return result;
 	}
 	/** object factory will be called by mapstruct */
-//	@ObjectFactory
 	@NonNull TaskFXBean lookupOrCreateTaskFXBean(@NonNull TaskBean input)
 	{
 		TaskFXBean result = CONTEXT.get(input, TaskFXBean.class);

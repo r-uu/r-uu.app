@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
-/** {@link TaskGroupDTO} <-> {@link TaskGroupBean} */
+/** {@link TaskGroupBean} -> {@link TaskGroupDTO} */
 @Slf4j
 @Mapper
 public abstract class Map_TaskGroup_Bean_DTO
@@ -32,6 +32,6 @@ public abstract class Map_TaskGroup_Bean_DTO
 	/** object factory will be called by mapstruct */
 	@ObjectFactory @NonNull TaskGroupBean lookupOrCreate(@NonNull TaskGroupDTO  input)
 	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupBean(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupBean(input);
 	}
 }

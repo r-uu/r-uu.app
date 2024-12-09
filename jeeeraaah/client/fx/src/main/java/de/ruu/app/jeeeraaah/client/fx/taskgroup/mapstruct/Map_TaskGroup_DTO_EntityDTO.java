@@ -17,6 +17,6 @@ public abstract class Map_TaskGroup_DTO_EntityDTO
 
 	@ObjectFactory @NonNull TaskGroupEntityDTO lookupOrCreate(@NonNull TaskGroupDTO input)
 	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupEntityDTO(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupEntityDTO(input);
 	}
 }

@@ -27,6 +27,6 @@ public abstract class Map_TaskGroup_DTO_Bean
 
 	@ObjectFactory @NonNull TaskGroupDTO  lookupOrCreate(@NonNull TaskGroupBean input)
 	{
-		return ObjectFactories.INSTANCE.lookupOrCreateTaskGroupDTO(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupDTO(input);
 	}
 }

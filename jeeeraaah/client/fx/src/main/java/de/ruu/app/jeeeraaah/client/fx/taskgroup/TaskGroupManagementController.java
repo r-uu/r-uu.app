@@ -70,7 +70,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 				tg ->
 				{
 					TaskGroupDTO    taskGroupDTO    = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(tg);
-					TaskGroupBean   taskGroupBean   = Map_TaskGroup_Bean_DTO.INSTANCE.map(taskGroupDTO);
+					TaskGroupBean   taskGroupBean   = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
 					TaskGroupFXBean taskGroupFXBean = Map_TaskGroup_Bean_FXBean  .INSTANCE.map(taskGroupBean);
 					tv.getItems().add(taskGroupFXBean);
 				}
@@ -110,7 +110,7 @@ class TaskGroupManagementController extends DefaultFXCViewController implements 
 			taskGroupEntityDTO = client.create(taskGroupEntityDTO);
 			// create fx bean from entity dto
 			TaskGroupDTO taskGroupDTO = Map_TaskGroup_EntityDTO_DTO.INSTANCE.map(taskGroupEntityDTO);
-			taskGroupBean             = Map_TaskGroup_Bean_DTO.INSTANCE.map(taskGroupDTO);
+			taskGroupBean             = Map_TaskGroup_DTO_Bean     .INSTANCE.map(taskGroupDTO);
 			// create fx bean from bean
 			taskGroupFXBean = taskGroupBean.toFXSource();
 

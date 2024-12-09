@@ -8,35 +8,30 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.factory.Mappers;
 
-/** {@link TaskBean} <-> {@link TaskFXBean} */
-@Mapper public abstract class Map_Task_Bean_FXBean
+/** {@link TaskFXBean} <-> {@link TaskBean} */
+@Mapper public abstract class Map_Task_FXBean_Bean
 {
-	public final static Map_Task_Bean_FXBean INSTANCE = Mappers.getMapper(Map_Task_Bean_FXBean.class);
+	public final static Map_Task_FXBean_Bean INSTANCE = Mappers.getMapper(Map_Task_FXBean_Bean.class);
 
-	public abstract @NonNull TaskFXBean map(@NonNull TaskBean input);
+	public abstract @NonNull TaskBean map(@NonNull TaskFXBean input);
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@BeforeMapping void beforeMapping(TaskBean source, @MappingTarget TaskFXBean target)
+	@BeforeMapping void beforeMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-		target.beforeMapping(source); // invoke callback for mapping
+		target.beforeMappingFX(source); // invoke callback for mapping
 	}
 
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
-	@AfterMapping void afterMapping(TaskBean source, @MappingTarget TaskFXBean target)
+	@AfterMapping void afterMapping(TaskFXBean source, @MappingTarget TaskBean target)
 	{
-		target.afterMapping(source); // invoke callback for mapping
+		target.afterMappingFX(source); // invoke callback for mapping
 	}
 
 	/** object factory will be called by mapstruct */
-	@ObjectFactory @NonNull TaskFXBean lookupOrCreate(@NonNull TaskBean input)
+	@ObjectFactory @NonNull TaskBean lookupOrCreate(@NonNull TaskFXBean input)
 	{
-		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskFXBean(input);
+		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskBean(input);
 	}
-
-//	@ObjectFactory @NonNull TaskGroupDTO  lookupOrCreate(@NonNull TaskGroupBean input)
-//	{
-//		return ObjectDictionaryAndFactory.INSTANCE.lookupOrCreateTaskGroupDTO(input);
-//	}
 //
 //	/** object factory will be called by mapstruct */
 //	@ObjectFactory
