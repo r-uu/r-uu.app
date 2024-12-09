@@ -19,9 +19,6 @@ abstract class Map_Task_EntityDTO_DTO
 
 	public abstract @NonNull TaskDTO map(@NonNull TaskEntityDTO source);
 
-//	Optional<TaskDTO>       getFromContext(TaskEntityDTO dto) { return Optional.ofNullable(CONTEXT.get(dto, TaskDTO      .class)); }
-//	Optional<TaskEntityDTO> getFromContext(TaskDTO       dto) { return Optional.ofNullable(CONTEXT.get(dto, TaskEntityDTO.class)); }
-
 	/** annotating parameter {@code target} with {@link MappingTarget} is essential for this method being called */
 	@BeforeMapping void beforeMapping(TaskEntityDTO source, @MappingTarget TaskDTO target)
 	{
