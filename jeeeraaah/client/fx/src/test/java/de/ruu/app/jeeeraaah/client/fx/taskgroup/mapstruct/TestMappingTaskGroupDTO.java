@@ -1,6 +1,5 @@
 package de.ruu.app.jeeeraaah.client.fx.taskgroup.mapstruct;
 
-import de.ruu.app.jeeeraaah.common.dto.TaskGroupEntityDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,6 +34,18 @@ class TestMappingTaskGroupDTO
 		TaskGroupDTO  reMapped = mapped.toDTO();
 
 		assertThat(reMapped, is(dto));
+	}
+
+	@Test void dtoWithChildren()
+	{
+		String name  = "name";
+		int    count = 3;
+
+		TaskGroupDTO group = createDTO(name);
+		createTasks(group, 3);
+
+		assertThat(group.tasks().isPresent(), is(true));
+		assertThat(group.tasks().get().size(), is(count));
 	}
 
 	private void assertIs(TaskGroupBean bean, TaskGroupDTO dto)
